@@ -1,0 +1,410 @@
+---
+description: Pipeline for parsing ServerPilot PHP error logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the ServerPilot PHP error log entry. ServerPilot documents only that
+  # "the format of entries varies based on the type of log message" and that
+  # "some log entries may span multiple lines", so the shape below is PHP's own
+  # `error_log` format, which is what the per-app PHP-FPM pool writes:
+  #   [DD-Mon-YYYY HH:MM:SS ZONE] PHP SEVERITY:  MESSAGE
+  #
+  # Four things about that format drive the three patterns below.
+  #
+  #   * The bracketed prefix is built by PHP with the date format
+  #     `d-M-Y H:i:s e`, so the trailing token is a timezone *identifier*
+  #     (`UTC`, `America/New_York`, `EST`, or a `+HH:MM` differential). It is
+  #     captured straight into ECS `event.timezone`, whose documented accepted
+  #     forms are exactly those three, and the date processors further down use
+  #     it. The token sits in an optional group because an application that
+  #     writes its own entries through `error_log()` can produce a bracketed
+  #     timestamp with nothing after the seconds.
+  #
+  #   * The severity is matched as an explicit alternation rather than as a
+  #     generic run of words. PHP's severity strings are a closed set produced
+  #     by a single `switch` in `php_error_cb`, and several of them contain a
+  #     space (`Fatal error`, `Parse error`, `Recoverable fatal error`,
+  #     `Strict Standards`), so a one-word token would not do. An alternation of
+  #     the real values is also what keeps the pattern from mistaking the first
+  #     colon of an arbitrary non-PHP entry for a severity delimiter.
+  #
+  #   * PHP emits *two* spaces after the severity colon. The separator is
+  #     matched as one-or-more spaces so that a SAPI or PHP version that emits
+  #     one still parses, and so that the leading run of spaces never becomes
+  #     part of `message`.
+  #
+  #   * `PHP message:` is not a severity. It is the prefix PHP's SAPI error
+  #     logger puts in front of a message that carries no error level at all, so
+  #     it gets its own pattern: the prefix is consumed (it is transport
+  #     bookkeeping, not part of what the application said) and no `log.level`
+  #     is set. The third pattern is the fallback for an entry that is not
+  #     prefixed with `PHP ` in any form, which is what a direct `error_log()`
+  #     call from application code produces.
+  #
+  # The message capture is multiline-aware because the agent's multiline parser
+  # folds continuation lines (the `Stack trace:` block of an uncaught
+  # exception) into a single event, and the patterns anchor with `\A`/`\Z` so
+  # that grok's per-line `$` cannot truncate the capture and drop the trace.
+  - grok:
+      field: event.original
+      tag: grok_php_error
+      pattern_definitions:
+        SP_PHP_TIME: '\d{2}-[A-Za-z]{3}-\d{4} \d{2}:\d{2}:\d{2}'
+        SP_PHP_ZONE: '[A-Za-z0-9_/+:-]+'
+        SP_PHP_SEVERITY: '(?:Fatal error|Recoverable fatal error|Parse error|Unknown error|Strict Standards|Warning|Notice|Deprecated)'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A\[%{SP_PHP_TIME:_tmp.time}(?: %{SP_PHP_ZONE:event.timezone})?\] PHP %{SP_PHP_SEVERITY:log.level}: +%{SP_MULTILINE:message}\Z'
+        - '\A\[%{SP_PHP_TIME:_tmp.time}(?: %{SP_PHP_ZONE:event.timezone})?\] PHP message: +%{SP_MULTILINE:message}\Z'
+        - '\A\[%{SP_PHP_TIME:_tmp.time}(?: %{SP_PHP_ZONE:event.timezone})?\] %{SP_MULTILINE:message}\Z'
+      if: ctx.event?.original != null
+
+  # PHP title-cases its severity strings for human display; the underlying
+  # constants are `E_WARNING`, `E_NOTICE`, `E_DEPRECATED` and friends. ECS asks
+  # for the source's own textual severity, so the token is kept verbatim apart
+  # from case, including the space in a value such as `fatal error`.
+  # Lowercasing is what makes the field join with the `log.level` values
+  # `nginx_error` and `apache_error` record. Mapping `Fatal error` on to a
+  # shorter invented token is deliberately not done: it would collapse
+  # `E_ERROR` and `E_PARSE` into one value. The normalised, queryable view is
+  # `event.severity` and `event.type`, set further down.
+  - lowercase:
+      field: log.level
+      tag: lowercase_log_level
+      ignore_missing: true
+      description: Normalises the case of the PHP severity string so that it joins with the lower-case log levels the Nginx and Apache error streams record.
+
+  # An uncaught exception is reported as
+  #   Uncaught CLASS: MESSAGE in FILE:LINE
+  # and the class is the single most useful thing in the entry: it is the stable
+  # key to group and alert on while the message text and the line number move
+  # around. ECS `error.type` is documented as "the type of the error, for
+  # example the class name of the exception", which is literally this value.
+  #
+  # Writing it to ECS `error.*` is safe even though this package reserves ECS
+  # `error.message` for ingest failures: the pipeline's `on_failure` block
+  # writes only `error.message`, `event.kind: pipeline_error` and the
+  # `preserve_original_event` tag, and never touches `error.type` or
+  # `error.stack_trace`. A document that carries a parsed exception therefore
+  # still has `event.kind: event`, and the two cases stay distinguishable.
+  #
+  # The second pattern covers an exception thrown with an empty message, which
+  # PHP renders without the colon after the class name. Class names are matched
+  # with backslashes allowed so that a namespaced class is captured whole.
+  - grok:
+      field: message
+      tag: grok_php_exception_class
+      pattern_definitions:
+        SP_PHP_CLASS: '[A-Za-z_\\][A-Za-z0-9_\\]*'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\AUncaught %{SP_PHP_CLASS:error.type}: %{SP_MULTILINE}\Z'
+        - '\AUncaught %{SP_PHP_CLASS:error.type} in %{SP_MULTILINE}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the class of an uncaught exception into ECS `error.type`. Entries that are not uncaught exceptions are left untouched.
+
+  # Everything after the `Stack trace:` marker is the trace in plain text, which
+  # is what ECS `error.stack_trace` is for. The trailing `thrown in FILE on line
+  # N` line PHP appends after the last frame is kept inside the capture: it is
+  # part of the block PHP writes for the exception, and cutting it off would
+  # leave the stack trace looking truncated.
+  #
+  # `message` keeps the whole multiline body as PHP wrote it, so the trace is
+  # present in both fields. That is the same trade already accepted for
+  # `log.origin.file.*` below, which also restates a tail that stays inside
+  # `message`: `message` is the human-readable log body, and the ECS fields are
+  # the structured projection that the error views and alerting rules query.
+  - grok:
+      field: message
+      tag: grok_php_stack_trace
+      pattern_definitions:
+        SP_MULTILINE_LAZY: '(?:.|\n|\t)*?'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A%{SP_MULTILINE_LAZY}\nStack trace:\n%{SP_MULTILINE:error.stack_trace}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the plain-text stack trace of an uncaught exception into ECS `error.stack_trace`. Entries without a stack trace are left untouched.
+
+  # PHP names the application source file and line that raised the diagnostic
+  # either as `in FILE on line N` or, inside the header line of an uncaught
+  # exception, as `in FILE:N`. The first form is tried first because it is the
+  # one that terminates a multiline stack trace, so for an uncaught exception
+  # the location recorded is the `thrown in` location rather than the one
+  # embedded in the exception header. Not every entry has a tail at all:
+  # start-up and configuration failures ("Unable to start session: no storage
+  # module chosen") name no file, and both patterns simply fail to match there.
+  #
+  # ECS `log.origin.file.*` is the home, the same choice `apache_error` makes
+  # for the PHP diagnostics it relays through `proxy_fcgi`, so a diagnostic
+  # lands in the same field whichever hop logged it. The full path is stored
+  # rather than the bare file name because its segments carry the sysuser and
+  # app, and ECS has no directory companion for `log.origin.file`.
+  - grok:
+      field: message
+      tag: grok_php_origin
+      pattern_definitions:
+        SP_MULTILINE_LAZY: '(?:.|\n|\t)*?'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A%{SP_MULTILINE_LAZY} in (?<log.origin.file.name>/[^ :]+) on line %{NONNEGINT:log.origin.file.line:long}%{SP_MULTILINE}\Z'
+        - '\A%{SP_MULTILINE_LAZY} in (?<log.origin.file.name>/[^ :]+):%{NONNEGINT:log.origin.file.line:long}%{SP_MULTILINE}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the application source file and line the PHP diagnostic reports. Entries that carry no source location are left untouched.
+
+  # ServerPilot records the owning app and system user only in the log file path,
+  # and the PHP version only in the log file name:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_phpX.Y.error.log
+  # The entry itself carries no PHP version at all, so the file name is the only
+  # signal available, and it is what makes it possible to find every app whose
+  # errors are being raised by an end-of-life PHP release.
+  #
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  # The version-bearing pattern is tried first and the plain pattern second, so a
+  # log file whose name does not embed a version still yields the system user and
+  # app name, and a path that does not follow the ServerPilot layout at all
+  # simply leaves all three fields unset without raising an error.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]*_php(?<serverpilot.php.version>[0-9]+(?:\.[0-9]+)?)\.[^/]+\Z'
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app, and the PHP version serving the app, from the log file path.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # PHP's timezone identifiers and the JDK's are almost the same set, because
+  # both come from the IANA database, but the JDK's compiler drops the handful of
+  # fixed-offset legacy zones whose names collide with timezone *abbreviations*,
+  # `EST`, `MST` and `HST`. Those three are valid values for PHP's
+  # `date.timezone`, so a ServerPilot app can legitimately log one of them and
+  # `ZoneId.of("EST")` will then refuse it. Each is a fixed offset with no
+  # daylight saving rule of its own, so it is substituted with that offset,
+  # which ECS also accepts as an `event.timezone` value. The substitution is
+  # made on a copy: `event.timezone` keeps the identifier PHP actually logged.
+  - set:
+      field: _tmp.timezone
+      tag: set_tmp_timezone
+      copy_from: event.timezone
+      if: ctx.event?.timezone != null
+      description: Copies the logged timezone identifier so that the date processors can parse with a substituted value without altering `event.timezone`.
+  - set:
+      field: _tmp.timezone
+      tag: set_tmp_timezone_est
+      value: '-05:00'
+      if: ctx._tmp?.timezone == 'EST'
+  - set:
+      field: _tmp.timezone
+      tag: set_tmp_timezone_mst
+      value: '-07:00'
+      if: ctx._tmp?.timezone == 'MST'
+  - set:
+      field: _tmp.timezone
+      tag: set_tmp_timezone_hst
+      value: '-10:00'
+      if: ctx._tmp?.timezone == 'HST'
+
+  # Unlike the Nginx and Apache error streams and unlike `php_slow`, a PHP
+  # error log entry states its own timezone, so this stream's agent template
+  # carries no `add_locale` and the pipeline must not assume UTC: ServerPilot
+  # defaults PHP's `date.timezone` to UTC, but it is configurable per app, so
+  # the token can legitimately read `America/New_York` or `EST`. The zone the
+  # entry stated stays in `event.timezone`.
+  #
+  # Two things can go wrong, and both are handled rather than allowed to fail the
+  # document:
+  #
+  #   * The entry has no zone token at all (an application that wrote its own
+  #     bracketed timestamp through `error_log()`). `_tmp.timezone` is then unset
+  #     and the second `date` processor parses the timestamp with the `date`
+  #     processor default of UTC.
+  #
+  #   * The zone token is present but Elasticsearch still cannot resolve it,
+  #     because the value is corrupt or because it is some future PHP identifier
+  #     the JDK does not carry. `ZoneId` resolution happens per document for a
+  #     templated `timezone`, so this surfaces as a runtime failure of the first
+  #     `date` processor, and its `on_failure` re-parses the same timestamp as
+  #     UTC so that the document still gets a usable `@timestamp` instead of
+  #     being lost. Nothing is written to `error.message`: this package reserves
+  #     that field for ingest pipeline failures, and a document that parsed
+  #     cleanly apart from one unresolvable token is not one. The unresolved
+  #     value stays in `event.timezone`, so these documents are found by querying
+  #     `event.timezone` for values outside the set an estate expects.
+  - date:
+      field: _tmp.time
+      tag: date_php_error_time_with_timezone
+      target_field: '@timestamp'
+      formats:
+        - dd-MMM-yyyy HH:mm:ss
+      timezone: '{{{_tmp.timezone}}}'
+      if: ctx._tmp?.time != null && ctx._tmp?.timezone != null
+      on_failure:
+        - date:
+            field: _tmp.time
+            tag: date_php_error_time_unresolvable_timezone_fallback
+            target_field: '@timestamp'
+            formats:
+              - dd-MMM-yyyy HH:mm:ss
+            timezone: UTC
+            on_failure:
+              - append:
+                  field: error.message
+                  tag: append_date_php_error_time_unresolvable_timezone_fallback_failure
+                  value: '{{{_ingest.on_failure_message}}}'
+  - date:
+      field: _tmp.time
+      tag: date_php_error_time_utc_fallback
+      target_field: '@timestamp'
+      formats:
+        - dd-MMM-yyyy HH:mm:ss
+      if: ctx._tmp?.time != null && ctx._tmp?.timezone == null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_php_error_time_utc_fallback_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+
+  # `web`, as in `nginx_access`, `nginx_error` and `apache_error`. This is the
+  # error log of the per-app PHP-FPM pool, so every entry is raised by a worker
+  # serving requests through the Nginx -> Apache -> PHP-FPM chain, and ECS
+  # pairs `web` with both `error` and `info`, which are exactly the two
+  # `event.type` values derived below. `apache_error` already relays these same
+  # PHP diagnostics into `web`. `process` was rejected: it covers process
+  # lifecycle, not diagnostics a running process emits about its own code.
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+
+  # A PHP error log is dominated by entries that are not failures: `Notice`,
+  # `Deprecated` and `Strict Standards` records vastly outnumber the fatals on a
+  # busy app, so a constant `event.type` would make every deprecation notice look
+  # like an error. The PHP severity carries both a numeric severity and the
+  # failure/informational distinction, so it drives both fields, mirroring what
+  # `apache_error` does with the Apache log level.
+  #
+  # The numeric values are syslog severities, not PHP's own `E_*` bit values.
+  # PHP's severity strings are many-to-one with the constants (`E_ERROR`,
+  # `E_CORE_ERROR`, `E_COMPILE_ERROR` and `E_USER_ERROR` all print as `Fatal
+  # error`), so the `E_*` value cannot be recovered from the line, whereas a
+  # syslog severity is comparable with what the Nginx and Apache error streams
+  # record. The threshold is `apache_error`'s: syslog `warning` (4) and above
+  # is `event.type: [error]`, `notice` (5) and below is `[info]`, so a PHP
+  # `Warning` lands on `error` the same way an Apache `warn` does.
+  - script:
+      lang: painless
+      tag: script_set_severity_and_event_type
+      description: Maps the PHP severity to its numeric syslog severity and to the matching ECS event type.
+      if: ctx.log?.level != null
+      params:
+        fatal error:
+          severity: 3
+          type: error
+        recoverable fatal error:
+          severity: 3
+          type: error
+        parse error:
+          severity: 3
+          type: error
+        unknown error:
+          severity: 3
+          type: error
+        warning:
+          severity: 4
+          type: error
+        notice:
+          severity: 5
+          type: info
+        deprecated:
+          severity: 5
+          type: info
+        strict standards:
+          severity: 5
+          type: info
+      source: |-
+        def mapping = params[ctx.log.level];
+        if (mapping == null) {
+          return;
+        }
+        if (ctx.event == null) {
+          ctx.event = new HashMap();
+        }
+        ctx.event.severity = mapping.severity;
+        ctx.event.type = [mapping.type];
+
+  # An entry with no severity at all is either a `PHP message:` record from the
+  # SAPI error logger or a line an application wrote with `error_log()`. Neither
+  # states a level, so neither gets an `event.severity`, and both are reported as
+  # informational rather than being left without an `event.type`.
+  - append:
+      field: event.type
+      tag: append_event_type_info_without_log_level
+      value: info
+      allow_duplicates: false
+      if: ctx.log?.level == null
+      description: Reports an entry that states no PHP severity as informational.
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

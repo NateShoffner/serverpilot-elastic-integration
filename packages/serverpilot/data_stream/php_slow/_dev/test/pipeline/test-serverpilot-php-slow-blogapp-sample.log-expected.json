@@ -1,0 +1,144 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T19:37:19.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 19:37:19]  [pool blogapp] pid 3969\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/index.php\n[0x00007f185ee134e0] mysqli_query() /srv/users/serverpilot/apps/blogapp/public/db.php:789\n[0x00007f185ee13400] getBlogPostTags() /srv/users/serverpilot/apps/blogapp/public/example.php:123\n",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 789,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/db.php"
+                    },
+                    "function": "mysqli_query"
+                }
+            },
+            "process": {
+                "pid": 3969
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 2,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 789,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/db.php"
+                                },
+                                "function": "mysqli_query"
+                            },
+                            {
+                                "file": {
+                                    "line": 123,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/example.php"
+                                },
+                                "function": "getBlogPostTags"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/index.php",
+                        "stack_trace": "mysqli_query() /srv/users/serverpilot/apps/blogapp/public/db.php:789\ngetBlogPostTags() /srv/users/serverpilot/apps/blogapp/public/example.php:123"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T19:42:55.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 19:42:55]  [pool blogapp] pid 3970\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/wp-cron.php\n[0x00007f185ee20a10] curl_exec() /srv/users/serverpilot/apps/blogapp/public/wp-includes/class-http.php:1402\n[0x00007f185ee20900] wp_remote_get() /srv/users/serverpilot/apps/blogapp/public/wp-cron.php:88",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 1402,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/wp-includes/class-http.php"
+                    },
+                    "function": "curl_exec"
+                }
+            },
+            "process": {
+                "pid": 3970
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 2,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 1402,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/wp-includes/class-http.php"
+                                },
+                                "function": "curl_exec"
+                            },
+                            {
+                                "file": {
+                                    "line": 88,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/wp-cron.php"
+                                },
+                                "function": "wp_remote_get"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/wp-cron.php",
+                        "stack_trace": "curl_exec() /srv/users/serverpilot/apps/blogapp/public/wp-includes/class-http.php:1402\nwp_remote_get() /srv/users/serverpilot/apps/blogapp/public/wp-cron.php:88"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,355 @@
+---
+description: Pipeline for parsing ServerPilot Apache error logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the ServerPilot Apache error log line. ServerPilot documents the
+  # format as:
+  #   [DATE_TIME] [MODULE:LOG_LEVEL] [pid PROCESS_ID:tid THREAD_ID] [client IP_ADDRESS] LOG_MESSAGE
+  #
+  # Three parts are variable and all three are handled inside this single
+  # pattern:
+  #
+  #   * `MODULE` is the Apache module that emitted the record. It is optional in
+  #     the pattern because Apache logs a bare `[:LOG_LEVEL]` for records that no
+  #     module claims.
+  #
+  #   * `:tid THREAD_ID` is only present on threaded MPMs. ServerPilot runs
+  #     `mpm_event`, so it is always there in practice, but a `prefork` server
+  #     logs `[pid PROCESS_ID]` alone, so the thread half sits in an optional
+  #     group.
+  #
+  #   * `[client IP_ADDRESS]` is only present on request-scoped messages. Server
+  #     lifecycle records (`AH00489: ... resuming normal operations`) have no
+  #     client block at all, so the whole token is an optional group. The raw
+  #     address is captured into `_tmp.client` and split below, because the
+  #     `IP:PORT` form has to be told apart from a bare or bracketed IPv6
+  #     address before an `IP` pattern can be applied to it.
+  #
+  # The message capture is multiline-aware because the agent's multiline parser
+  # folds continuation lines (PHP stack traces relayed through `proxy_fcgi`)
+  # into a single event, and the pattern anchors with `\A`/`\Z` so that grok's
+  # per-line `$` cannot truncate it.
+  - grok:
+      field: event.original
+      tag: grok_apache_error
+      pattern_definitions:
+        SP_APACHE_TIME: '[A-Za-z]{3} [A-Za-z]{3} \d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? \d{4}'
+        SP_APACHE_MODULE: '[^:\]]+'
+        SP_APACHE_LOG_LEVEL: '(?:emerg|alert|crit|error|warn|notice|info|debug|trace[1-8])'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A\[%{SP_APACHE_TIME:_tmp.time}\] \[(?:%{SP_APACHE_MODULE:serverpilot.apache.module})?:%{SP_APACHE_LOG_LEVEL:log.level}\] \[pid %{NONNEGINT:process.pid:long}(?::tid %{NONNEGINT:process.thread.id:long})?\](?: \[client %{DATA:_tmp.client}\])? %{SP_MULTILINE:message}\Z'
+      if: ctx.event?.original != null
+
+  # The client token is logged as `IP_ADDRESS:PORT`, but the port is always `0`
+  # on a ServerPilot server: Nginx is the front end and proxies to Apache over
+  # the loopback, and `mod_remoteip` restores the client address from the
+  # forwarded header without a port to go with it. It is therefore matched but
+  # never captured: storing a constant `0` in `source.port` would look like a
+  # real ephemeral port to anything reading the field. The address itself is a
+  # genuine client address and is kept.
+  - grok:
+      field: _tmp.client
+      tag: grok_client_address
+      patterns:
+        - '^\[%{IP:source.ip}\]:%{NONNEGINT}$'
+        - '^%{IP:source.ip}:%{NONNEGINT}$'
+        - '^%{IP:source.ip}$'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the client address from the `[client ...]` token, discarding the always-zero port Apache logs beside it.
+
+  # Most Apache error messages begin with an `AHxxxxx` diagnostic code that
+  # identifies the exact log statement in the Apache source. The code is kept in
+  # the vendor namespace: the pipeline's `on_failure` block owns ECS
+  # `error.message`, so writing a parsed application error there would make a
+  # successfully parsed Apache failure indistinguishable from an ingest failure.
+  # Only the code is extracted. The human-readable text it prefixes is already
+  # the value of `message`, so there is no `serverpilot.apache.error.message`
+  # counterpart to duplicate it into.
+  - grok:
+      field: message
+      tag: grok_apache_error_code
+      pattern_definitions:
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A(?<serverpilot.apache.error.code>AH[0-9]{4,6}):%{SP_MULTILINE}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the `AHxxxxx` diagnostic code Apache prefixes to most error messages. Messages without one are left untouched.
+
+  # `php:*` records, and PHP diagnostics relayed through `proxy_fcgi`, name the
+  # application source file and line that raised the diagnostic. PHP writes it
+  # either as `in <path> on line <n>` or, inside an uncaught-exception message,
+  # as `in <path>:<n>`; the first form is tried first because it is the one that
+  # terminates a multiline stack trace.
+  #
+  # ECS `log.origin.file.*` is the right home for this even though the file
+  # belongs to the monitored app rather than to Apache. `log.origin` describes
+  # the source code that originated the log event, which is exactly what PHP is
+  # reporting here. Apache's error log is only the transport. The ECS note on
+  # the field excludes the *log file* (which stays in `log.file.path`), not
+  # third-party application code; pointing `log.origin` at application source is
+  # the normal case for any application log. The full path is stored rather than
+  # the bare file name because the path segments carry the sysuser and app the
+  # file belongs to, which is what makes the location actionable, and ECS has no
+  # directory companion for `log.origin.file`.
+  - grok:
+      field: message
+      tag: grok_php_origin
+      pattern_definitions:
+        SP_MULTILINE_LAZY: '(?:.|\n|\t)*?'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A%{SP_MULTILINE_LAZY} in (?<log.origin.file.name>/[^ :]+) on line %{NONNEGINT:log.origin.file.line:long}%{SP_MULTILINE}\Z'
+        - '\A%{SP_MULTILINE_LAZY} in (?<log.origin.file.name>/[^ :]+):%{NONNEGINT:log.origin.file.line:long}%{SP_MULTILINE}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the application source file and line a PHP diagnostic reports. Messages that carry no PHP source location are left untouched.
+
+  # ServerPilot records the owning app and system user only in the log file path:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_apache.error.log
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app from the log file path.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # Apache error log timestamps carry neither a UTC offset nor a timezone name, so
+  # they can only be read correctly with the timezone of the server that wrote
+  # them. The agent stream template stamps that timezone into `event.timezone`
+  # with an `add_locale` processor; the first `date` processor below uses it.
+  # `event.timezone` is absent when no agent is in the path (pipeline tests, or a
+  # document replayed from another shipper), and the second `date` processor then
+  # falls back to the `date` processor default of UTC.
+  #
+  # ServerPilot's `ErrorLogFormat` logs the time to microsecond precision, so the
+  # first format consumes all six fraction digits; parsing would fail outright if
+  # it did not. ECS `@timestamp` is a `date`, which stores milliseconds, so the
+  # sub-millisecond part is truncated on indexing and remains available in
+  # `event.original`. The second format covers an Apache server left on the
+  # stock `ErrorLogFormat`, which logs whole seconds.
+  - date:
+      field: _tmp.time
+      tag: date_apache_error_time_with_timezone
+      target_field: '@timestamp'
+      formats:
+        - EEE MMM dd HH:mm:ss.SSSSSS yyyy
+        - EEE MMM dd HH:mm:ss yyyy
+      timezone: '{{{event.timezone}}}'
+      if: ctx._tmp?.time != null && ctx.event?.timezone != null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_apache_error_time_with_timezone_failure
+            value: '{{{_ingest.on_failure_message}}}'
+  - date:
+      field: _tmp.time
+      tag: date_apache_error_time_utc_fallback
+      target_field: '@timestamp'
+      formats:
+        - EEE MMM dd HH:mm:ss.SSSSSS yyyy
+        - EEE MMM dd HH:mm:ss yyyy
+      if: ctx._tmp?.time != null && ctx.event?.timezone == null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_apache_error_time_utc_fallback_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  # ServerPilot loads `mod_remoteip` so that Apache logs the real client address
+  # rather than the Nginx loopback peer, so the `[client ...]` token is both the
+  # transport source and the client of the request (the log line carries no
+  # proxy chain of its own). `client.ip` is the enrichment target, mirroring the
+  # other log streams in this package.
+  - set:
+      field: client.ip
+      tag: set_client_ip_from_source
+      copy_from: source.ip
+      if: ctx.source?.ip != null
+
+  - geoip:
+      field: client.ip
+      tag: geoip_client_geo
+      target_field: client.geo
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.geo == null
+  - geoip:
+      database_file: GeoLite2-ASN.mmdb
+      field: client.ip
+      tag: geoip_client_asn
+      target_field: client.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.as == null
+  - rename:
+      field: client.as.asn
+      tag: rename_client_as_number
+      target_field: client.as.number
+      ignore_missing: true
+  - rename:
+      field: client.as.organization_name
+      tag: rename_client_as_organization_name
+      target_field: client.as.organization.name
+      ignore_missing: true
+
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+
+  # Apache log levels are the syslog severities plus the sub-debug `trace1` to
+  # `trace8` levels, so they carry both a numeric severity and the distinction
+  # between a genuine failure and an informational record. `warn` and above
+  # describe something that went wrong and are reported as
+  # `event.type: [error]`; `notice`, `info`, `debug` and the trace levels are
+  # reported as `event.type: [info]`. This matters more here than on an access
+  # log: an Apache error log carries a steady stream of `notice`-level server
+  # lifecycle records that are not errors at all. The trace levels sit below
+  # syslog `debug` and have no numeric code of their own, so they share
+  # `debug`'s.
+  - script:
+      lang: painless
+      tag: script_set_severity_and_event_type
+      description: Maps the Apache log level to its numeric syslog severity and to the matching ECS event type.
+      if: ctx.log?.level != null
+      params:
+        emerg:
+          severity: 0
+          type: error
+        alert:
+          severity: 1
+          type: error
+        crit:
+          severity: 2
+          type: error
+        error:
+          severity: 3
+          type: error
+        warn:
+          severity: 4
+          type: error
+        notice:
+          severity: 5
+          type: info
+        info:
+          severity: 6
+          type: info
+        debug:
+          severity: 7
+          type: info
+        trace1:
+          severity: 7
+          type: info
+        trace2:
+          severity: 7
+          type: info
+        trace3:
+          severity: 7
+          type: info
+        trace4:
+          severity: 7
+          type: info
+        trace5:
+          severity: 7
+          type: info
+        trace6:
+          severity: 7
+          type: info
+        trace7:
+          severity: 7
+          type: info
+        trace8:
+          severity: 7
+          type: info
+      source: |-
+        def mapping = params[ctx.log.level];
+        if (mapping == null) {
+          return;
+        }
+        if (ctx.event == null) {
+          ctx.event = new HashMap();
+        }
+        ctx.event.severity = mapping.severity;
+        ctx.event.type = [mapping.type];
+
+  - append:
+      field: related.ip
+      tag: append_source_ip_to_related_ip
+      value: '{{{source.ip}}}'
+      allow_duplicates: false
+      if: ctx.source?.ip != null
+  - append:
+      field: related.ip
+      tag: append_client_ip_to_related_ip
+      value: '{{{client.ip}}}'
+      allow_duplicates: false
+      if: ctx.client?.ip != null
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

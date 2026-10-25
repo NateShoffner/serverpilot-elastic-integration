@@ -1,0 +1,101 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T01:21:18.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.31"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/07 01:21:18 [error] 1920147#1920147: *99341 open() \"/srv/users/serverpilot/apps/mysite/public/favicon.ico\" failed (2: No such file or directory), client: 192.0.2.31, server: mysite.example.com, request: \"GET /favicon.ico HTTP/1.1\", host: \"mysite.example.com\"",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/mysite/mysite_nginx.error.log"
+                },
+                "level": "error"
+            },
+            "message": "open() \"/srv/users/serverpilot/apps/mysite/public/favicon.ico\" failed (2: No such file or directory)",
+            "process": {
+                "pid": 1920147,
+                "thread": {
+                    "id": 1920147
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.31"
+                ]
+            },
+            "server": {
+                "domain": "mysite.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "mysite"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "99341"
+                    },
+                    "error": {
+                        "code": "2",
+                        "message": "No such file or directory"
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "mysite"
+            },
+            "source": {
+                "ip": "192.0.2.31"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "mysite.example.com",
+                "original": "/favicon.ico",
+                "path": "/favicon.ico",
+                "scheme": "http"
+            }
+        }
+    ]
+}

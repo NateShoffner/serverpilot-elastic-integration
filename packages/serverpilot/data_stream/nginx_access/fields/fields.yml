@@ -1,0 +1,21 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the request was served for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the request was served for. Derived from the log file path.
+    - name: nginx.upstream.response.bytes
+      type: long
+      unit: byte
+      description: >-
+        Total length in bytes of the responses Nginx obtained from the upstream server. When Nginx retried a failed upstream the lengths of all attempts are summed. Not set when Nginx served the response itself, for example for static files, or when no attempt reported a length.
+    - name: nginx.upstream.response.duration
+      type: long
+      unit: nanos
+      description: >-
+        Total time in nanoseconds Nginx spent receiving responses from the upstream server. When Nginx retried a failed upstream the times of all attempts are summed. Not set when Nginx served the response itself, for example for static files, or when no attempt reported a time.

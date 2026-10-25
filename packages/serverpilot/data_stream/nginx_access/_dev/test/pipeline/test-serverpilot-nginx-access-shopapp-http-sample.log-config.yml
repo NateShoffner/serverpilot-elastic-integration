@@ -1,0 +1,6 @@
+fields:
+  tags:
+    - preserve_original_event
+  log:
+    file:
+      path: /srv/users/appowner/log/shopapp/shopapp_nginx.access.log

@@ -1,0 +1,31 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the message was logged for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the message was logged for. Derived from the log file path.
+    - name: nginx.connection.id
+      type: keyword
+      description: >-
+        Identifier Nginx assigned to the connection the message was logged for. Not set for worker and startup messages, which are not scoped to a connection.
+    - name: nginx.server
+      type: keyword
+      description: >-
+        Raw `server:` token of the log line when it is the listening socket rather than a server name, for example `0.0.0.0:443`. Nginx logs the socket instead of a server name when the connection failed before a request line was read, such as on a TLS handshake failure. When the token is a server name it is mapped to `server.domain` instead.
+    - name: nginx.upstream.url
+      type: keyword
+      description: >-
+        URL of the upstream Nginx was proxying the request to, which on a ServerPilot server is the local Apache instance on 127.0.0.1:81. Not set when Nginx served the request itself or failed before choosing an upstream.
+    - name: nginx.error.code
+      type: keyword
+      description: >-
+        Numeric errno Nginx reported for the failure, taken from the parenthesised errno pair in the message, for example `110` in `(110: Connection timed out)`. Kept in the vendor namespace because ECS `error.message` is reserved for ingest pipeline failures in this package.
+    - name: nginx.error.message
+      type: keyword
+      description: >-
+        Text Nginx reported alongside the errno, for example `Connection timed out`. Kept in the vendor namespace because ECS `error.message` is reserved for ingest pipeline failures in this package.

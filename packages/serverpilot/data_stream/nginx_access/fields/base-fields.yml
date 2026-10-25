@@ -1,0 +1,16 @@
+- name: data_stream.type
+  external: ecs
+- name: data_stream.dataset
+  external: ecs
+- name: data_stream.namespace
+  external: ecs
+- name: event.module
+  external: ecs
+  type: constant_keyword
+  value: serverpilot
+- name: event.dataset
+  external: ecs
+  type: constant_keyword
+  value: serverpilot.nginx_access
+- name: '@timestamp'
+  external: ecs

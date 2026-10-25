@@ -1,0 +1,199 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T18:08:03.000+02:00",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.77"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:08:03 [warn] 1859207#0: *1379281 a client request body is buffered to a temporary file /var/lib/nginx-sp/body/0000000123, client: 192.0.2.77, server: blogapp.example.com, request: \"POST /blog/wp-admin/async-upload.php HTTP/1.1\", host: \"blogapp.example.com\"",
+                "severity": 4,
+                "timezone": "+02:00",
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "POST"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.error.log"
+                },
+                "level": "warn"
+            },
+            "message": "a client request body is buffered to a temporary file /var/lib/nginx-sp/body/0000000123",
+            "process": {
+                "pid": 1859207,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.77"
+                ]
+            },
+            "server": {
+                "domain": "blogapp.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1379281"
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "192.0.2.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog/wp-admin/async-upload.php",
+                "path": "/blog/wp-admin/async-upload.php",
+                "scheme": "http"
+            }
+        },
+        {
+            "@timestamp": "2025-03-06T18:09:44.000+02:00",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.45"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:09:44 [crit] 1859208#0: *1379299 connect() to 127.0.0.1:81 failed (111: Connection refused) while connecting to upstream, client: 203.0.113.45, server: blogapp.example.com, request: \"GET / HTTP/1.1\", upstream: \"http://127.0.0.1:81/\", host: \"blogapp.example.com\"",
+                "severity": 2,
+                "timezone": "+02:00",
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.error.log"
+                },
+                "level": "crit"
+            },
+            "message": "connect() to 127.0.0.1:81 failed (111: Connection refused) while connecting to upstream",
+            "process": {
+                "pid": 1859208,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.45"
+                ]
+            },
+            "server": {
+                "domain": "blogapp.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1379299"
+                    },
+                    "error": {
+                        "code": "111",
+                        "message": "Connection refused"
+                    },
+                    "upstream": {
+                        "url": "http://127.0.0.1:81/"
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.45"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/",
+                "path": "/",
+                "scheme": "http"
+            }
+        }
+    ]
+}

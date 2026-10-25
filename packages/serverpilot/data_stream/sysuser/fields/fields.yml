@@ -1,0 +1,19 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the system user. Source field `id`. The `app` data stream references this value as `sysuserid`.
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Operating system account name. Source field `name`. The account's home directory is always `/srv/users/<name>`, which is where ServerPilot writes every app's logs, so this is the join key between this data stream and the seven on-host log data streams, where the same value is parsed out of `log.file.path`. Every ServerPilot server has a `serverpilot` user by default.
+    - name: server.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the server this system user exists on. Source field `serverid`. Joins to `serverpilot.server.id` in the `server` data stream.
+    - name: sysuser.created
+      type: date
+      description: >-
+        When the system user was created. Source field `datecreated`, which is Unix epoch **seconds**, not milliseconds. The API reference documents this field as optional, so it can be absent.

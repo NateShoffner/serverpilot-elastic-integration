@@ -1,0 +1,64 @@
+{
+    "@timestamp": "2026-10-12T07:15:01.041Z",
+    "agent": {
+        "ephemeral_id": "fd279c41-4fdc-4dd7-865e-8807ee3a0dce",
+        "id": "d8aa5617-511f-48c0-81a6-46ea369be06d",
+        "name": "elastic-agent-60702",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.sysuser",
+        "namespace": "61250",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "d8aa5617-511f-48c0-81a6-46ea369be06d",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "iam"
+        ],
+        "dataset": "serverpilot.sysuser",
+        "ingested": "2026-10-12T07:15:04Z",
+        "kind": "asset",
+        "module": "serverpilot",
+        "original": "{\"datecreated\":1700000000,\"id\":\"s1Y2z3A4b5C6d7E8\",\"name\":\"serverpilot\",\"serverid\":\"a1B2c3D4e5F6g7H8\"}",
+        "type": [
+            "user",
+            "info"
+        ]
+    },
+    "input": {
+        "type": "cel"
+    },
+    "related": {
+        "user": [
+            "serverpilot"
+        ]
+    },
+    "serverpilot": {
+        "server": {
+            "id": "a1B2c3D4e5F6g7H8"
+        },
+        "sysuser": {
+            "created": "2023-11-14T22:13:20.000Z",
+            "id": "s1Y2z3A4b5C6d7E8",
+            "name": "serverpilot"
+        }
+    },
+    "tags": [
+        "preserve_original_event",
+        "forwarded",
+        "serverpilot-sysuser"
+    ],
+    "user": {
+        "name": "serverpilot"
+    }
+}

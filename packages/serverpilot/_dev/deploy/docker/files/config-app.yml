@@ -1,0 +1,147 @@
+---
+# Mock of the ServerPilot v1 management API for the `app` data stream.
+#
+# GET /apps has no pagination, no cursor and no "changed since" filter: the
+# complete app collection comes back in a single response wrapped in a `data`
+# key. There is therefore no multi-page flow to model. The rules below model
+# the response variants the CEL program must handle, selected by prefixing the
+# base URL:
+#
+#   {url} = http://host:port           -> 200, three apps (happy path)
+#   {url} = http://host:port/empty     -> 200, empty `data` array
+#   {url} = http://host:port/error     -> 500 server error
+#   {url} = http://host:port/malformed -> 200 with a non-JSON body
+#   any base URL without valid Basic auth -> 401 Unauthorized
+#
+# All data is synthetic. `sysuserid` and `serverid` values match
+# config-sysuser.yml and config-server.yml, and the app names match the apps in
+# the filestream data streams' sample logs.
+# The Basic credential matched below is
+# base64("example-client-id:example-api-key").
+#
+# SECURITY: the two TLS-enabled apps below carry `ssl.key`, `ssl.cert` and
+# `ssl.cacerts`. The real API returns these, and `ssl.key` is the app's TLS
+# PRIVATE KEY. They are present here deliberately as a permanent regression
+# guard: the CEL program drops all three, so if that drop is ever removed the
+# key material will show up in mito output and in indexed system-test
+# documents and the test will make it obvious. The values are obviously
+# synthetic and are not real key material.
+rules:
+  # --- Empty collection. ---
+  - path: /empty/apps
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"data":[]}
+  # --- Server-side failure. ---
+  - path: /error/apps
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 500
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Internal Server Error"}}
+  # --- Malformed body: 200 status but not JSON. ---
+  - path: /malformed/apps
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'text/html'
+        body: |-
+          <html><head><title>502 Bad Gateway</title></head><body>502 Bad Gateway</body></html>
+  # --- Happy path: the full app inventory.
+  #
+  # blogapp:   AutoSSL on, HTTPS forced, multiple domains, current PHP.
+  # shopapp:   AutoSSL on, HTTPS not forced, `cacerts` null, current PHP.
+  # legacyapp: `ssl` is null (no certificate at all) and the runtime is an
+  #            end-of-life PHP release, which is the case the
+  #            serverpilot.app.runtime.version field exists to surface.
+  - path: /apps
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {{ minify_json `
+          {
+            "data": [
+              {
+                "id": "p1T2u3V4w5X6y7Z8",
+                "name": "blogapp",
+                "datecreated": 1700000500,
+                "sysuserid": "s1Y2z3A4b5C6d7E8",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "runtime": "php8.3",
+                "domains": ["blogapp.example.com", "www.blogapp.example.com"],
+                "ssl": {
+                  "key": "-----BEGIN PRIVATE KEY-----\nEXAMPLEPRIVATEKEYMATERIALTHISMUSTNEVERBEINDEXED\n-----END PRIVATE KEY-----\n",
+                  "cert": "-----BEGIN CERTIFICATE-----\nEXAMPLECERTIFICATEBLOBFORBLOGAPP\n-----END CERTIFICATE-----\n",
+                  "cacerts": "-----BEGIN CERTIFICATE-----\nEXAMPLEINTERMEDIATECABLOB\n-----END CERTIFICATE-----\n",
+                  "auto": true,
+                  "force": true
+                }
+              },
+              {
+                "id": "p9A0b1C2d3E4f5G6",
+                "name": "shopapp",
+                "datecreated": 1710000500,
+                "sysuserid": "s9F0g1H2i3J4k5L6",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "runtime": "php8.4",
+                "domains": ["shop.example.com"],
+                "ssl": {
+                  "key": "-----BEGIN PRIVATE KEY-----\nEXAMPLEPRIVATEKEYMATERIALTHISMUSTNEVERBEINDEXED\n-----END PRIVATE KEY-----\n",
+                  "cert": "-----BEGIN CERTIFICATE-----\nEXAMPLECERTIFICATEBLOBFORSHOPAPP\n-----END CERTIFICATE-----\n",
+                  "cacerts": null,
+                  "auto": true,
+                  "force": false
+                }
+              },
+              {
+                "id": "p7H8i9J0k1L2m3N4",
+                "name": "legacyapp",
+                "datecreated": 1680000500,
+                "sysuserid": "s7M8n9O0p1Q2r3S4",
+                "serverid": "i9J0k1L2m3N4o5P6",
+                "runtime": "php7.4",
+                "domains": ["legacy.example.net"],
+                "ssl": null
+              }
+            ]
+          }
+          ` }}
+  # --- Catch-all for any /apps request without valid Basic credentials.
+  #
+  # Must stay last: elastic/stream matches top-down, first match wins, and this
+  # rule places no constraint on the Authorization header.
+  - path: /apps
+    methods: ['GET']
+    responses:
+      - status_code: 401
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Unauthorized"}}

@@ -1,0 +1,165 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T17:59:58.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 17:59:58 [notice] 1859200#1859200: using the \"epoll\" event method",
+                "severity": 5,
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-error.log"
+                },
+                "level": "notice"
+            },
+            "message": "using the \"epoll\" event method",
+            "process": {
+                "pid": 1859200,
+                "thread": {
+                    "id": 1859200
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T17:59:58.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 17:59:58 [emerg] 1859200#1859200: bind() to 0.0.0.0:443 failed (98: Address already in use)",
+                "severity": 0,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-error.log"
+                },
+                "level": "emerg"
+            },
+            "message": "bind() to 0.0.0.0:443 failed (98: Address already in use)",
+            "process": {
+                "pid": 1859200,
+                "thread": {
+                    "id": 1859200
+                }
+            },
+            "serverpilot": {
+                "nginx": {
+                    "error": {
+                        "code": "98",
+                        "message": "Address already in use"
+                    }
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T18:30:15.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.131"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:30:15 [error] 1859301#0: *1380052 FastCGI sent in stderr: \"PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42\nStack trace:\n#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()\n#1 {main}\n  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42\" while reading response header from upstream, client: 203.0.113.131, server: shop.example.com, request: \"GET /index.php HTTP/1.1\", upstream: \"http://127.0.0.1:81/index.php\", host: \"shop.example.com\", referrer: \"https://shop.example.com/cart\"",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET",
+                    "referrer": "https://shop.example.com/cart"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-error.log"
+                },
+                "level": "error"
+            },
+            "message": "FastCGI sent in stderr: \"PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42\nStack trace:\n#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()\n#1 {main}\n  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42\" while reading response header from upstream",
+            "process": {
+                "pid": 1859301,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.131"
+                ]
+            },
+            "server": {
+                "domain": "shop.example.com"
+            },
+            "serverpilot": {
+                "nginx": {
+                    "connection": {
+                        "id": "1380052"
+                    },
+                    "upstream": {
+                        "url": "http://127.0.0.1:81/index.php"
+                    }
+                }
+            },
+            "source": {
+                "ip": "203.0.113.131"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/index.php",
+                "path": "/index.php"
+            }
+        }
+    ]
+}

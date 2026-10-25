@@ -1,0 +1,420 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T11:52:33.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.10"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 125000000,
+                "kind": "event",
+                "original": "203.0.113.10 - [04/Mar/2025:06:52:33 -0500] \"GET /index.php\" 200 1395 - 1955 24792 0.125 2097152 1.50% 0.50% \"/blog\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 1395
+                    },
+                    "status_code": 200
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 1955
+                },
+                "pid": 24792
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.10"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.5
+                        },
+                        "user": {
+                            "percent": 1.5
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 2097152
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.10"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/blog",
+                "path": "/blog"
+            }
+        },
+        {
+            "@timestamp": "2025-03-04T11:53:02.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.23"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 1000000,
+                "kind": "event",
+                "original": "198.51.100.23 - [04/Mar/2025:06:53:02 -0500] \"GET /index.php\" 200 0 - 1955 24793 0.001 2097152 0.00% 0.00%  \"/blog/index.php\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 0
+                    },
+                    "status_code": 200
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 1955
+                },
+                "pid": 24793
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.23"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.0
+                        },
+                        "user": {
+                            "percent": 0.0
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 2097152
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "198.51.100.23"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/blog/index.php",
+                "path": "/blog/index.php"
+            }
+        },
+        {
+            "@timestamp": "2025-03-04T11:54:11.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.77"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 2843000000,
+                "kind": "event",
+                "original": "192.0.2.77 - [04/Mar/2025:06:54:11 -0500] \"POST /wp-admin/admin-ajax.php\" 500 1196 - 1955 24794 2.843 33554432 12.75% 3.25% \"/blog/wp-admin/admin-ajax.php\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "POST"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 1196
+                    },
+                    "status_code": 500
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 1955
+                },
+                "pid": 24794
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.77"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 3.25
+                        },
+                        "user": {
+                            "percent": 12.75
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 33554432
+                        }
+                    },
+                    "request_uri": "/wp-admin/admin-ajax.php",
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "192.0.2.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/blog/wp-admin/admin-ajax.php",
+                "path": "/blog/wp-admin/admin-ajax.php"
+            }
+        },
+        {
+            "@timestamp": "2025-03-04T11:55:19.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.45"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 67000000,
+                "kind": "event",
+                "original": "203.0.113.45 - [04/Mar/2025:06:55:19 -0500] \"GET /index.php\" 404 564 - 1955 24795 0.067 4194304 0.25% 0.00% \"/blog/missing-page\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 564
+                    },
+                    "status_code": 404
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 1955
+                },
+                "pid": 24795
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.45"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.0
+                        },
+                        "user": {
+                            "percent": 0.25
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 4194304
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.45"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/blog/missing-page",
+                "path": "/blog/missing-page"
+            }
+        }
+    ]
+}

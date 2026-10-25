@@ -1,0 +1,111 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T00:06:40.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.88"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 318000000,
+                "kind": "event",
+                "original": "203.0.113.88 - - [07/Mar/2025:00:06:40 +0000] \"GET /blog/2025/03/release-notes HTTP/2.0\" 200 24980 \"https://www.example.net/links\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15\" \"-\" 521 0.318 \"24980\" \"0.318\" \"blogapp.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 521,
+                    "method": "GET",
+                    "referrer": "https://www.example.net/links"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 24980
+                    },
+                    "status_code": 200
+                },
+                "version": "2.0"
+            },
+            "log": {
+                "file": {
+                    "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_nginx.access_ssl.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.88"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 24980,
+                            "duration": 318000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.88"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog/2025/03/release-notes",
+                "path": "/blog/2025/03/release-notes",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Mac"
+                },
+                "name": "Safari",
+                "original": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15",
+                "os": {
+                    "full": "Mac OS X 10.15.7",
+                    "name": "Mac OS X",
+                    "version": "10.15.7"
+                },
+                "version": "18.3"
+            }
+        }
+    ]
+}

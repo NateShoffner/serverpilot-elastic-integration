@@ -1,0 +1,19 @@
+# elastic-package build output (repo root only, not packages/*/_dev/build)
+/build/
+*.tar.gz
+
+# Local development scratch, deliberately untracked. `notes/` holds research
+# briefs on ServerPilot's API and log layout; `tools/` holds the scripts that
+# generate dashboard design data, render the dashboard screenshots and replay
+# real log files through an installed pipeline; `DESIGN.md` records why the
+# load-bearing decisions were made. The package is self-contained without any
+# of them: every decision they explain is also in the field descriptions, which
+# ship with the package and render into its documentation.
+/notes/
+/tools/
+/DESIGN.md
+
+# Raw captures copied in for anonymization work still hold a real server's
+# hostnames, addresses and request paths. The committed fixtures and sample
+# events use RFC 5737 documentation addresses throughout.
+_research/

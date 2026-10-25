@@ -1,0 +1,81 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T20:05:02.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 20:05:02]  [pool shopapp] pid 4188\nscript_filename = /srv/users/appowner/apps/shopapp/public/index.php\n[0x00007f9a1c0134e0] PDO->query() /srv/users/appowner/apps/shopapp/public/system/library/db/pdo.php:52\n[0x00007f9a1c013400] getProductsByCategory() /srv/users/appowner/apps/shopapp/public/catalog/model/catalog/product.php:318\n[0x00007f9a1c013300] index() /srv/users/appowner/apps/shopapp/public/catalog/controller/product/category.php:77",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 52,
+                        "name": "/srv/users/appowner/apps/shopapp/public/system/library/db/pdo.php"
+                    },
+                    "function": "PDO->query"
+                }
+            },
+            "process": {
+                "pid": 4188
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 3,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 52,
+                                    "name": "/srv/users/appowner/apps/shopapp/public/system/library/db/pdo.php"
+                                },
+                                "function": "PDO->query"
+                            },
+                            {
+                                "file": {
+                                    "line": 318,
+                                    "name": "/srv/users/appowner/apps/shopapp/public/catalog/model/catalog/product.php"
+                                },
+                                "function": "getProductsByCategory"
+                            },
+                            {
+                                "file": {
+                                    "line": 77,
+                                    "name": "/srv/users/appowner/apps/shopapp/public/catalog/controller/product/category.php"
+                                },
+                                "function": "index"
+                            }
+                        ],
+                        "pool": "shopapp",
+                        "script_filename": "/srv/users/appowner/apps/shopapp/public/index.php",
+                        "stack_trace": "PDO->query() /srv/users/appowner/apps/shopapp/public/system/library/db/pdo.php:52\ngetProductsByCategory() /srv/users/appowner/apps/shopapp/public/catalog/model/catalog/product.php:318\nindex() /srv/users/appowner/apps/shopapp/public/catalog/controller/product/category.php:77"
+                    },
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

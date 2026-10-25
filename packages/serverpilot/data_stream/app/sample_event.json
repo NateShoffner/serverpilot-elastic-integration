@@ -1,0 +1,74 @@
+{
+    "@timestamp": "2026-10-12T07:20:23.331Z",
+    "agent": {
+        "ephemeral_id": "37196893-2772-4200-a9b4-5d9af9486ae1",
+        "id": "f6ea76c8-7611-4a70-b6f7-5432c89fb534",
+        "name": "elastic-agent-91903",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.app",
+        "namespace": "63108",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "f6ea76c8-7611-4a70-b6f7-5432c89fb534",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "configuration"
+        ],
+        "dataset": "serverpilot.app",
+        "ingested": "2026-10-12T07:20:27Z",
+        "kind": "asset",
+        "module": "serverpilot",
+        "original": "{\"datecreated\":1700000500,\"domains\":[\"blogapp.example.com\",\"www.blogapp.example.com\"],\"id\":\"p1T2u3V4w5X6y7Z8\",\"name\":\"blogapp\",\"runtime\":\"php8.3\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"ssl\":{\"auto\":true,\"force\":true},\"sysuserid\":\"s1Y2z3A4b5C6d7E8\"}",
+        "type": [
+            "info"
+        ]
+    },
+    "input": {
+        "type": "cel"
+    },
+    "serverpilot": {
+        "app": {
+            "created": "2023-11-14T22:21:40.000Z",
+            "domains": [
+                "blogapp.example.com",
+                "www.blogapp.example.com"
+            ],
+            "id": "p1T2u3V4w5X6y7Z8",
+            "name": "blogapp",
+            "runtime": {
+                "name": "php8.3",
+                "version": "8.3"
+            },
+            "ssl": {
+                "auto": true,
+                "enabled": true,
+                "force": true
+            }
+        },
+        "server": {
+            "id": "a1B2c3D4e5F6g7H8"
+        },
+        "sysuser": {
+            "id": "s1Y2z3A4b5C6d7E8"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "tags": [
+        "preserve_original_event",
+        "forwarded",
+        "serverpilot-app"
+    ]
+}

@@ -1,0 +1,150 @@
+---
+description: Pipeline for parsing ServerPilot database inventory records from the ServerPilot management API.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - remove:
+      field:
+        - organization
+        - division
+        - team
+      ignore_missing: true
+      if: ctx.organization instanceof String && ctx.division instanceof String && ctx.team instanceof String
+      tag: remove_agentless_tags
+      description: >-
+        Removes the fields added by Agentless as metadata,
+        as they can collide with ECS fields.
+  - terminate:
+      tag: data_collection_error
+      if: ctx.error?.message != null && ctx.message == null && ctx.event?.original == null
+      description: error message set and no data to process.
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # The CEL program emits one event per database from `GET /dbs`, with the database
+  # object encoded as a JSON string in `message`. A database user's password is
+  # accepted by the create and update endpoints but is never returned on a read, so
+  # there is no secret in this payload and none is created here.
+  - json:
+      field: event.original
+      tag: parse_json
+      target_field: json
+      if: ctx.event?.original != null
+
+  - rename:
+      field: json.id
+      tag: rename_database_id
+      target_field: serverpilot.database.id
+      ignore_missing: true
+  - rename:
+      field: json.name
+      tag: rename_database_name
+      target_field: serverpilot.database.name
+      ignore_missing: true
+  - rename:
+      field: json.appid
+      tag: rename_app_id
+      target_field: serverpilot.app.id
+      ignore_missing: true
+      description: >-
+        `GET /dbs` reports only the owning app's identifier, not its name, so this
+        stream cannot and must not set `service.name`. Resolve the app name through
+        `serverpilot.app.id` against the `app` data stream.
+  - rename:
+      field: json.serverid
+      tag: rename_server_id
+      target_field: serverpilot.server.id
+      ignore_missing: true
+  - rename:
+      field: json.user.id
+      tag: rename_database_user_id
+      target_field: serverpilot.database.user.id
+      ignore_missing: true
+  - rename:
+      field: json.user.name
+      tag: rename_database_user_name
+      target_field: serverpilot.database.user.name
+      ignore_missing: true
+
+  # The owner of a ServerPilot database is a MySQL account, which is what ECS
+  # `user.name` describes: the short name or login of the user the event concerns.
+  # Setting it makes these records usable from the Security solution's user pivots
+  # and lets them line up with the `mysql` integration, which also reports MySQL
+  # account names in `user.name`. The vendor field stays authoritative, which is the
+  # same arrangement the package uses for `service.name` and `serverpilot.app.name`.
+  #
+  # `user.id` is deliberately not set: the ServerPilot `user.id` is an opaque control
+  # plane identifier rather than anything MySQL itself knows about, so writing it to
+  # ECS `user.id` would invite joins that cannot succeed.
+  - set:
+      field: user.name
+      tag: set_user_name_from_database_user_name
+      copy_from: serverpilot.database.user.name
+      if: ctx.serverpilot?.database?.user?.name != null
+
+  # `GET /dbs` is a point-in-time inventory listing, so `event.kind` is `asset`
+  # rather than `event`. `database` is the category because the subject of the record
+  # is a database, and `info` is the only type that fits a listing: nothing happened,
+  # the record simply describes current state. No `event.outcome` is set for the same
+  # reason.
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: asset
+  - append:
+      field: event.category
+      tag: append_event_category_database
+      value: database
+      allow_duplicates: false
+  - append:
+      field: event.type
+      tag: append_event_type_info
+      value: info
+      allow_duplicates: false
+
+  - append:
+      field: related.user
+      tag: append_user_name_to_related_user
+      value: '{{{user.name}}}'
+      allow_duplicates: false
+      if: ctx.user?.name != null
+
+  - remove:
+      field: json
+      tag: remove_json
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

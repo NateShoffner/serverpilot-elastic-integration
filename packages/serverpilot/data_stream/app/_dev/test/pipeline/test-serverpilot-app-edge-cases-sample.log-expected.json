@@ -1,0 +1,96 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "configuration"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1720000500,\"domains\":[\"api.example.org\"],\"id\":\"pE1f2G3h4I5j6K7L\",\"name\":\"apiapp\",\"runtime\":\"nodejs20\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"ssl\":{\"auto\":false,\"force\":false},\"sysuserid\":\"s9F0g1H2i3J4k5L6\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "created": "2024-07-03T09:55:00.000Z",
+                    "domains": [
+                        "api.example.org"
+                    ],
+                    "id": "pE1f2G3h4I5j6K7L",
+                    "name": "apiapp",
+                    "runtime": {
+                        "name": "nodejs20"
+                    },
+                    "ssl": {
+                        "auto": false,
+                        "enabled": true,
+                        "force": false
+                    }
+                },
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                },
+                "sysuser": {
+                    "id": "s9F0g1H2i3J4k5L6"
+                }
+            },
+            "service": {
+                "name": "apiapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "configuration"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1730000500,\"domains\":[\"staging.example.org\"],\"id\":\"pM8n9O0p1Q2r3S4T\",\"name\":\"stagingapp\",\"runtime\":\"php8\",\"serverid\":\"i9J0k1L2m3N4o5P6\",\"ssl\":{\"auto\":true},\"sysuserid\":\"s7M8n9O0p1Q2r3S4\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "created": "2024-10-27T03:41:40.000Z",
+                    "domains": [
+                        "staging.example.org"
+                    ],
+                    "id": "pM8n9O0p1Q2r3S4T",
+                    "name": "stagingapp",
+                    "runtime": {
+                        "name": "php8",
+                        "version": "8"
+                    },
+                    "ssl": {
+                        "auto": true,
+                        "enabled": true
+                    }
+                },
+                "server": {
+                    "id": "i9J0k1L2m3N4o5P6"
+                },
+                "sysuser": {
+                    "id": "s7M8n9O0p1Q2r3S4"
+                }
+            },
+            "service": {
+                "name": "stagingapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

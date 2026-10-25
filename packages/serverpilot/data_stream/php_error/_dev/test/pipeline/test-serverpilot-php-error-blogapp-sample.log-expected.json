@@ -1,0 +1,200 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T13:36:41.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:36:41 UTC] PHP Warning:  Invalid argument supplied for foreach() in /srv/users/serverpilot/apps/blogapp/public/example.php on line 123",
+                "severity": 4,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.error.log"
+                },
+                "level": "warning",
+                "origin": {
+                    "file": {
+                        "line": 123,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/example.php"
+                    }
+                }
+            },
+            "message": "Invalid argument supplied for foreach() in /srv/users/serverpilot/apps/blogapp/public/example.php on line 123",
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:40:02.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:40:02 UTC] PHP Notice:  Undefined index: example_key in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 57",
+                "severity": 5,
+                "timezone": "UTC",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.error.log"
+                },
+                "level": "notice",
+                "origin": {
+                    "file": {
+                        "line": 57,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/lib/helpers.php"
+                    }
+                }
+            },
+            "message": "Undefined index: example_key in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 57",
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:45:18.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "error": {
+                "stack_trace": "#0 /srv/users/serverpilot/apps/blogapp/public/index.php(42): example_wrapper()\n#1 {main}\n  thrown in /srv/users/serverpilot/apps/blogapp/public/index.php on line 42",
+                "type": "Error"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:45:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function example_missing() in /srv/users/serverpilot/apps/blogapp/public/index.php:42\nStack trace:\n#0 /srv/users/serverpilot/apps/blogapp/public/index.php(42): example_wrapper()\n#1 {main}\n  thrown in /srv/users/serverpilot/apps/blogapp/public/index.php on line 42",
+                "severity": 3,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.error.log"
+                },
+                "level": "fatal error",
+                "origin": {
+                    "file": {
+                        "line": 42,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/index.php"
+                    }
+                }
+            },
+            "message": "Uncaught Error: Call to undefined function example_missing() in /srv/users/serverpilot/apps/blogapp/public/index.php:42\nStack trace:\n#0 /srv/users/serverpilot/apps/blogapp/public/index.php(42): example_wrapper()\n#1 {main}\n  thrown in /srv/users/serverpilot/apps/blogapp/public/index.php on line 42",
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:50:33.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:50:33 UTC] PHP Deprecated:  Implicit conversion from float 1.5 to int loses precision in /srv/users/serverpilot/apps/blogapp/public/calc.php on line 88",
+                "severity": 5,
+                "timezone": "UTC",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.error.log"
+                },
+                "level": "deprecated",
+                "origin": {
+                    "file": {
+                        "line": 88,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/calc.php"
+                    }
+                }
+            },
+            "message": "Implicit conversion from float 1.5 to int loses precision in /srv/users/serverpilot/apps/blogapp/public/calc.php on line 88",
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

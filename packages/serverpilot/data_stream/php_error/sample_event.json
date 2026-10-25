@@ -1,0 +1,98 @@
+{
+    "@timestamp": "2025-03-04T13:36:41.000Z",
+    "agent": {
+        "ephemeral_id": "a3729dea-b9d7-4ee0-8f86-cf46ae69dd93",
+        "id": "f8ccb948-167d-4c4c-9c9f-3fb63c0e262e",
+        "name": "elastic-agent-25660",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.php_error",
+        "namespace": "45212",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "f8ccb948-167d-4c4c-9c9f-3fb63c0e262e",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.php_error",
+        "ingested": "2026-10-12T08:54:32Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "[04-Mar-2025 13:36:41 UTC] PHP Warning:  Invalid argument supplied for foreach() in /srv/users/serverpilot/apps/blogapp/public/example.php on line 123",
+        "severity": 4,
+        "timezone": "UTC",
+        "type": [
+            "error"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-25660",
+        "ip": [
+            "192.168.192.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-C0-02"
+        ],
+        "name": "elastic-agent-25660",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "inode": "4503599631129772",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_php8.3.error.log"
+        },
+        "level": "warning",
+        "offset": 0,
+        "origin": {
+            "file": {
+                "line": 123,
+                "name": "/srv/users/serverpilot/apps/blogapp/public/example.php"
+            }
+        }
+    },
+    "message": "Invalid argument supplied for foreach() in /srv/users/serverpilot/apps/blogapp/public/example.php on line 123",
+    "serverpilot": {
+        "app": {
+            "name": "blogapp"
+        },
+        "php": {
+            "version": "8.3"
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-php-error"
+    ]
+}

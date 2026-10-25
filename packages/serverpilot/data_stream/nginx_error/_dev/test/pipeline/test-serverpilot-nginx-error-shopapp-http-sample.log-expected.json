@@ -1,0 +1,291 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T18:20:11.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.131"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:20:11 [error] 1859301#0: *1380004 FastCGI sent in stderr: \"PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted\" while reading response header from upstream, client: 203.0.113.131, server: shop.example.com, request: \"GET /index.php?route=product/search HTTP/1.1\", upstream: \"http://127.0.0.1:81/index.php?route=product/search\", host: \"shop.example.com\"",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.error.log"
+                },
+                "level": "error"
+            },
+            "message": "FastCGI sent in stderr: \"PHP message: PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted\" while reading response header from upstream",
+            "process": {
+                "pid": 1859301,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.131"
+                ]
+            },
+            "server": {
+                "domain": "shop.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1380004"
+                    },
+                    "upstream": {
+                        "url": "http://127.0.0.1:81/index.php?route=product/search"
+                    }
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "203.0.113.131"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/index.php?route=product/search",
+                "path": "/index.php",
+                "query": "route=product/search",
+                "scheme": "http"
+            }
+        },
+        {
+            "@timestamp": "2025-03-06T18:22:47.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.244"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:22:47 [error] 1859301#0: *1380019 limiting requests, excess: 10.520 by zone \"example_zone\", client: 192.0.2.244, server: shop.example.com, request: \"POST /index.php?route=checkout/cart.add HTTP/1.1\", host: \"shop.example.com\"",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "POST"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.error.log"
+                },
+                "level": "error"
+            },
+            "message": "limiting requests, excess: 10.520 by zone \"example_zone\"",
+            "process": {
+                "pid": 1859301,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.244"
+                ]
+            },
+            "server": {
+                "domain": "shop.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1380019"
+                    }
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "192.0.2.244"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/index.php?route=checkout/cart.add",
+                "path": "/index.php",
+                "query": "route=checkout/cart.add",
+                "scheme": "http"
+            }
+        },
+        {
+            "@timestamp": "2025-03-06T18:25:02.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.61"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:25:02 [alert] 1859302#0: *1380033 1024 worker_connections are not enough while connecting to upstream, client: 198.51.100.61, server: shop.example.com, request: \"GET / HTTP/1.1\", upstream: \"http://127.0.0.1:81/\", host: \"shop.example.com\"",
+                "severity": 1,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.error.log"
+                },
+                "level": "alert"
+            },
+            "message": "1024 worker_connections are not enough while connecting to upstream",
+            "process": {
+                "pid": 1859302,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.61"
+                ]
+            },
+            "server": {
+                "domain": "shop.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1380033"
+                    },
+                    "upstream": {
+                        "url": "http://127.0.0.1:81/"
+                    }
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "198.51.100.61"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/",
+                "path": "/",
+                "scheme": "http"
+            }
+        }
+    ]
+}

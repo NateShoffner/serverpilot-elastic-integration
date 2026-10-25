@@ -1,0 +1,1615 @@
+{
+    "attributes": {
+        "controlGroupInput": {
+            "autoApplySelections": true,
+            "chainingSystem": "HIERARCHICAL",
+            "ignoreParentSettingsJSON": {
+                "ignoreFilters": false,
+                "ignoreQuery": false,
+                "ignoreTimerange": false,
+                "ignoreValidations": false
+            },
+            "labelPosition": "oneLine",
+            "panelsJSON": {
+                "ctl-0237-4a1b-9c2d-000000000237": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "serverpilot.server.name",
+                        "grow": true,
+                        "id": "ctl-0237-4a1b-9c2d-000000000237",
+                        "searchTechnique": "prefix",
+                        "title": "Server",
+                        "width": "medium"
+                    },
+                    "grow": true,
+                    "order": 0,
+                    "type": "optionsListControl",
+                    "width": "medium"
+                },
+                "ctl-0238-4a1b-9c2d-000000000238": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "serverpilot.app.runtime.name",
+                        "grow": true,
+                        "id": "ctl-0238-4a1b-9c2d-000000000238",
+                        "searchTechnique": "prefix",
+                        "title": "Runtime",
+                        "width": "small"
+                    },
+                    "grow": true,
+                    "order": 1,
+                    "type": "optionsListControl",
+                    "width": "small"
+                },
+                "ctl-0239-4a1b-9c2d-000000000239": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "serverpilot.server.plan",
+                        "grow": true,
+                        "id": "ctl-0239-4a1b-9c2d-000000000239",
+                        "searchTechnique": "prefix",
+                        "title": "Plan",
+                        "width": "small"
+                    },
+                    "grow": true,
+                    "order": 2,
+                    "type": "optionsListControl",
+                    "width": "small"
+                }
+            }
+        },
+        "description": "Servers, apps, databases and system users from the ServerPilot API, with their security posture flags.",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": {
+                "filter": [
+                    {
+                        "$state": {
+                            "store": "appState"
+                        },
+                        "meta": {
+                            "alias": null,
+                            "disabled": false,
+                            "index": "logs-*",
+                            "key": "data_stream.dataset",
+                            "negate": false,
+                            "params": [
+                                "serverpilot.server",
+                                "serverpilot.app",
+                                "serverpilot.database",
+                                "serverpilot.sysuser"
+                            ],
+                            "type": "phrases"
+                        },
+                        "query": {
+                            "bool": {
+                                "minimum_should_match": 1,
+                                "should": [
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.server"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.app"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.database"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.sysuser"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "query": {
+                    "language": "kuery",
+                    "query": ""
+                }
+            }
+        },
+        "optionsJSON": {
+            "hidePanelTitles": false,
+            "syncColors": false,
+            "syncCursor": true,
+            "syncTooltips": false,
+            "useMargins": true
+        },
+        "panelsJSON": [
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "layout": "horizontal",
+                        "links": [
+                            {
+                                "destinationRefName": "link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+                                "id": "lnk-0001-4a1b-9c2d-000000000110",
+                                "label": "App traffic overview",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 0,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+                                "id": "lnk-0002-4a1b-9c2d-000000000111",
+                                "label": "PHP health",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 1,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+                                "id": "lnk-0003-4a1b-9c2d-000000000112",
+                                "label": "Web server errors",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 2,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+                                "id": "lnk-0004-4a1b-9c2d-000000000113",
+                                "label": "Inventory and posture",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 3,
+                                "type": "dashboardLink"
+                            }
+                        ],
+                        "references": [
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7001",
+                                "name": "link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+                                "name": "link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7003",
+                                "name": "link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+                                "name": "link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+                                "type": "dashboard"
+                            }
+                        ]
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 3,
+                    "i": "nav-0100-4a1b-9c2d-000000000100",
+                    "w": 48,
+                    "x": 0,
+                    "y": 0
+                },
+                "panelIndex": "nav-0100-4a1b-9c2d-000000000100",
+                "title": "",
+                "type": "links"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0187-4a1b-9c2d-000000000187",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0187-4a1b-9c2d-000000000187": {
+                                            "columnOrder": [
+                                                "c-0188-4a1b-9c2d-000000000188"
+                                            ],
+                                            "columns": {
+                                                "c-0188-4a1b-9c2d-000000000188": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.server\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "Servers",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.server.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0187-4a1b-9c2d-000000000187",
+                                "layerType": "data",
+                                "metricAccessor": "c-0188-4a1b-9c2d-000000000188",
+                                "subtitle": "Distinct server ids"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0189-4a1b-9c2d-000000000189",
+                    "w": 12,
+                    "x": 0,
+                    "y": 3
+                },
+                "panelIndex": "p-0189-4a1b-9c2d-000000000189",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0190-4a1b-9c2d-000000000190",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0190-4a1b-9c2d-000000000190": {
+                                            "columnOrder": [
+                                                "c-0191-4a1b-9c2d-000000000191"
+                                            ],
+                                            "columns": {
+                                                "c-0191-4a1b-9c2d-000000000191": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.app\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "Apps",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.app.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0190-4a1b-9c2d-000000000190",
+                                "layerType": "data",
+                                "metricAccessor": "c-0191-4a1b-9c2d-000000000191",
+                                "subtitle": "Distinct app ids"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0192-4a1b-9c2d-000000000192",
+                    "w": 12,
+                    "x": 12,
+                    "y": 3
+                },
+                "panelIndex": "p-0192-4a1b-9c2d-000000000192",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0193-4a1b-9c2d-000000000193",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0193-4a1b-9c2d-000000000193": {
+                                            "columnOrder": [
+                                                "c-0194-4a1b-9c2d-000000000194"
+                                            ],
+                                            "columns": {
+                                                "c-0194-4a1b-9c2d-000000000194": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.database\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "Databases",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.database.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0193-4a1b-9c2d-000000000193",
+                                "layerType": "data",
+                                "metricAccessor": "c-0194-4a1b-9c2d-000000000194",
+                                "subtitle": "Distinct database ids"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0195-4a1b-9c2d-000000000195",
+                    "w": 12,
+                    "x": 24,
+                    "y": 3
+                },
+                "panelIndex": "p-0195-4a1b-9c2d-000000000195",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0196-4a1b-9c2d-000000000196",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0196-4a1b-9c2d-000000000196": {
+                                            "columnOrder": [
+                                                "c-0197-4a1b-9c2d-000000000197"
+                                            ],
+                                            "columns": {
+                                                "c-0197-4a1b-9c2d-000000000197": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.sysuser\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "System users",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.sysuser.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0196-4a1b-9c2d-000000000196",
+                                "layerType": "data",
+                                "metricAccessor": "c-0197-4a1b-9c2d-000000000197",
+                                "subtitle": "Distinct sysuser ids"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0198-4a1b-9c2d-000000000198",
+                    "w": 12,
+                    "x": 36,
+                    "y": 3
+                },
+                "panelIndex": "p-0198-4a1b-9c2d-000000000198",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0199-4a1b-9c2d-000000000199",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0199-4a1b-9c2d-000000000199": {
+                                            "columnOrder": [
+                                                "c-0200-4a1b-9c2d-000000000200",
+                                                "c-0201-4a1b-9c2d-000000000201",
+                                                "c-0202-4a1b-9c2d-000000000202",
+                                                "c-0203-4a1b-9c2d-000000000203",
+                                                "c-0204-4a1b-9c2d-000000000204",
+                                                "c-0205-4a1b-9c2d-000000000205"
+                                            ],
+                                            "columns": {
+                                                "c-0200-4a1b-9c2d-000000000200": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "App",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "fallback": true,
+                                                            "type": "alphabetical"
+                                                        },
+                                                        "orderDirection": "asc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 50
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.name"
+                                                },
+                                                "c-0201-4a1b-9c2d-000000000201": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "Runtime",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.runtime.name"
+                                                },
+                                                "c-0202-4a1b-9c2d-000000000202": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "TLS configured",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.ssl.enabled"
+                                                },
+                                                "c-0203-4a1b-9c2d-000000000203": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "AutoSSL",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.ssl.auto"
+                                                },
+                                                "c-0204-4a1b-9c2d-000000000204": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "Force HTTPS",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.ssl.force"
+                                                },
+                                                "c-0205-4a1b-9c2d-000000000205": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "System user id",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.sysuser.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.app\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0200-4a1b-9c2d-000000000200",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0201-4a1b-9c2d-000000000201",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0202-4a1b-9c2d-000000000202",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0203-4a1b-9c2d-000000000203",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0204-4a1b-9c2d-000000000204",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0205-4a1b-9c2d-000000000205",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0199-4a1b-9c2d-000000000199",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 20
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "p-0206-4a1b-9c2d-000000000206",
+                    "w": 26,
+                    "x": 0,
+                    "y": 11
+                },
+                "panelIndex": "p-0206-4a1b-9c2d-000000000206",
+                "title": "Apps",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0207-4a1b-9c2d-000000000207",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0207-4a1b-9c2d-000000000207": {
+                                            "columnOrder": [
+                                                "c-0208-4a1b-9c2d-000000000208",
+                                                "c-0209-4a1b-9c2d-000000000209",
+                                                "c-0210-4a1b-9c2d-000000000210",
+                                                "c-0211-4a1b-9c2d-000000000211",
+                                                "c-0212-4a1b-9c2d-000000000212"
+                                            ],
+                                            "columns": {
+                                                "c-0208-4a1b-9c2d-000000000208": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Server",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "fallback": true,
+                                                            "type": "alphabetical"
+                                                        },
+                                                        "orderDirection": "asc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 50
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.name"
+                                                },
+                                                "c-0209-4a1b-9c2d-000000000209": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "Plan",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.plan"
+                                                },
+                                                "c-0210-4a1b-9c2d-000000000210": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "Auto updates",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.autoupdates"
+                                                },
+                                                "c-0211-4a1b-9c2d-000000000211": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "Firewall",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.firewall"
+                                                },
+                                                "c-0212-4a1b-9c2d-000000000212": {
+                                                    "customLabel": true,
+                                                    "dataType": "boolean",
+                                                    "isBucketed": false,
+                                                    "label": "Deny unknown",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.deny_unknown_domains"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.server\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0208-4a1b-9c2d-000000000208",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0209-4a1b-9c2d-000000000209",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0210-4a1b-9c2d-000000000210",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0211-4a1b-9c2d-000000000211",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0212-4a1b-9c2d-000000000212",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0207-4a1b-9c2d-000000000207",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 20
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "p-0213-4a1b-9c2d-000000000213",
+                    "w": 22,
+                    "x": 26,
+                    "y": 11
+                },
+                "panelIndex": "p-0213-4a1b-9c2d-000000000213",
+                "title": "Servers",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0214-4a1b-9c2d-000000000214",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0214-4a1b-9c2d-000000000214": {
+                                            "columnOrder": [
+                                                "c-0216-4a1b-9c2d-000000000216",
+                                                "c-0215-4a1b-9c2d-000000000215"
+                                            ],
+                                            "columns": {
+                                                "c-0215-4a1b-9c2d-000000000215": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Apps",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.app.id"
+                                                },
+                                                "c-0216-4a1b-9c2d-000000000216": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "PHP version",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0215-4a1b-9c2d-000000000215",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 12
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.runtime.version"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.app\""
+                            },
+                            "visualization": {
+                                "layers": [
+                                    {
+                                        "categoryDisplay": "default",
+                                        "emptySizeRatio": 0.3,
+                                        "layerId": "l-0214-4a1b-9c2d-000000000214",
+                                        "layerType": "data",
+                                        "legendDisplay": "show",
+                                        "legendPosition": "right",
+                                        "legendSize": "auto",
+                                        "metrics": [
+                                            "c-0215-4a1b-9c2d-000000000215"
+                                        ],
+                                        "nestedLegend": false,
+                                        "numberDisplay": "percent",
+                                        "primaryGroups": [
+                                            "c-0216-4a1b-9c2d-000000000216"
+                                        ]
+                                    }
+                                ],
+                                "shape": "donut"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsPie"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0217-4a1b-9c2d-000000000217",
+                    "w": 16,
+                    "x": 0,
+                    "y": 27
+                },
+                "panelIndex": "p-0217-4a1b-9c2d-000000000217",
+                "title": "Apps by PHP runtime",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0218-4a1b-9c2d-000000000218",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0218-4a1b-9c2d-000000000218": {
+                                            "columnOrder": [
+                                                "c-0220-4a1b-9c2d-000000000220",
+                                                "c-0219-4a1b-9c2d-000000000219"
+                                            ],
+                                            "columns": {
+                                                "c-0219-4a1b-9c2d-000000000219": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Apps",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.app.id"
+                                                },
+                                                "c-0220-4a1b-9c2d-000000000220": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "TLS configured",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0219-4a1b-9c2d-000000000219",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 3
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.ssl.enabled"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.app\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "None",
+                                "gridlinesVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0219-4a1b-9c2d-000000000219"
+                                        ],
+                                        "layerId": "l-0218-4a1b-9c2d-000000000218",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "bar_horizontal",
+                                        "showGridlines": false,
+                                        "xAccessor": "c-0220-4a1b-9c2d-000000000220"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": false,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "bar_horizontal",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "show"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0221-4a1b-9c2d-000000000221",
+                    "w": 16,
+                    "x": 16,
+                    "y": 27
+                },
+                "panelIndex": "p-0221-4a1b-9c2d-000000000221",
+                "title": "Apps by TLS posture",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0222-4a1b-9c2d-000000000222",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0222-4a1b-9c2d-000000000222": {
+                                            "columnOrder": [
+                                                "c-0224-4a1b-9c2d-000000000224",
+                                                "c-0223-4a1b-9c2d-000000000223"
+                                            ],
+                                            "columns": {
+                                                "c-0223-4a1b-9c2d-000000000223": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Servers",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.server.id"
+                                                },
+                                                "c-0224-4a1b-9c2d-000000000224": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Plan",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0223-4a1b-9c2d-000000000223",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 6
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.plan"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.server\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "None",
+                                "gridlinesVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0223-4a1b-9c2d-000000000223"
+                                        ],
+                                        "layerId": "l-0222-4a1b-9c2d-000000000222",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "bar_horizontal",
+                                        "showGridlines": false,
+                                        "xAccessor": "c-0224-4a1b-9c2d-000000000224"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": false,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "bar_horizontal",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "show"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0225-4a1b-9c2d-000000000225",
+                    "w": 16,
+                    "x": 32,
+                    "y": 27
+                },
+                "panelIndex": "p-0225-4a1b-9c2d-000000000225",
+                "title": "Servers by plan",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0226-4a1b-9c2d-000000000226",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0226-4a1b-9c2d-000000000226": {
+                                            "columnOrder": [
+                                                "c-0227-4a1b-9c2d-000000000227",
+                                                "c-0228-4a1b-9c2d-000000000228",
+                                                "c-0229-4a1b-9c2d-000000000229",
+                                                "c-0230-4a1b-9c2d-000000000230"
+                                            ],
+                                            "columns": {
+                                                "c-0227-4a1b-9c2d-000000000227": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Database",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "fallback": true,
+                                                            "type": "alphabetical"
+                                                        },
+                                                        "orderDirection": "asc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 50
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.database.name"
+                                                },
+                                                "c-0228-4a1b-9c2d-000000000228": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "Database user",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.database.user.name"
+                                                },
+                                                "c-0229-4a1b-9c2d-000000000229": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "App id",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.id"
+                                                },
+                                                "c-0230-4a1b-9c2d-000000000230": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "Server id",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.database\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0227-4a1b-9c2d-000000000227",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0228-4a1b-9c2d-000000000228",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0229-4a1b-9c2d-000000000229",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0230-4a1b-9c2d-000000000230",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0226-4a1b-9c2d-000000000226",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 20
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "p-0231-4a1b-9c2d-000000000231",
+                    "w": 26,
+                    "x": 0,
+                    "y": 42
+                },
+                "panelIndex": "p-0231-4a1b-9c2d-000000000231",
+                "title": "Databases",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0232-4a1b-9c2d-000000000232",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0232-4a1b-9c2d-000000000232": {
+                                            "columnOrder": [
+                                                "c-0233-4a1b-9c2d-000000000233",
+                                                "c-0234-4a1b-9c2d-000000000234",
+                                                "c-0235-4a1b-9c2d-000000000235"
+                                            ],
+                                            "columns": {
+                                                "c-0233-4a1b-9c2d-000000000233": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "System user",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "fallback": true,
+                                                            "type": "alphabetical"
+                                                        },
+                                                        "orderDirection": "asc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 50
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.sysuser.name"
+                                                },
+                                                "c-0234-4a1b-9c2d-000000000234": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "System user id",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.sysuser.id"
+                                                },
+                                                "c-0235-4a1b-9c2d-000000000235": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": false,
+                                                    "label": "Server id",
+                                                    "operationType": "last_value",
+                                                    "params": {
+                                                        "showArrayValues": false,
+                                                        "sortField": "@timestamp"
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.server.id"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.sysuser\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0233-4a1b-9c2d-000000000233",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0234-4a1b-9c2d-000000000234",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0235-4a1b-9c2d-000000000235",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0232-4a1b-9c2d-000000000232",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 20
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "p-0236-4a1b-9c2d-000000000236",
+                    "w": 22,
+                    "x": 26,
+                    "y": 42
+                },
+                "panelIndex": "p-0236-4a1b-9c2d-000000000236",
+                "title": "System users",
+                "type": "lens"
+            }
+        ],
+        "timeRestore": false,
+        "title": "[Logs ServerPilot] Inventory and posture"
+    },
+    "coreMigrationVersion": "8.8.0",
+    "created_at": "2026-10-24T19:38:44.509Z",
+    "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+    "references": [
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0237-4a1b-9c2d-000000000237:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0238-4a1b-9c2d-000000000238:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0239-4a1b-9c2d-000000000239:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0189-4a1b-9c2d-000000000189:indexpattern-datasource-layer-l-0187-4a1b-9c2d-000000000187",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0192-4a1b-9c2d-000000000192:indexpattern-datasource-layer-l-0190-4a1b-9c2d-000000000190",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0195-4a1b-9c2d-000000000195:indexpattern-datasource-layer-l-0193-4a1b-9c2d-000000000193",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0198-4a1b-9c2d-000000000198:indexpattern-datasource-layer-l-0196-4a1b-9c2d-000000000196",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0206-4a1b-9c2d-000000000206:indexpattern-datasource-layer-l-0199-4a1b-9c2d-000000000199",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0213-4a1b-9c2d-000000000213:indexpattern-datasource-layer-l-0207-4a1b-9c2d-000000000207",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0217-4a1b-9c2d-000000000217:indexpattern-datasource-layer-l-0214-4a1b-9c2d-000000000214",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0221-4a1b-9c2d-000000000221:indexpattern-datasource-layer-l-0218-4a1b-9c2d-000000000218",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0225-4a1b-9c2d-000000000225:indexpattern-datasource-layer-l-0222-4a1b-9c2d-000000000222",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0231-4a1b-9c2d-000000000231:indexpattern-datasource-layer-l-0226-4a1b-9c2d-000000000226",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0236-4a1b-9c2d-000000000236:indexpattern-datasource-layer-l-0232-4a1b-9c2d-000000000232",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "dashboard",
+    "typeMigrationVersion": "10.3.0"
+}

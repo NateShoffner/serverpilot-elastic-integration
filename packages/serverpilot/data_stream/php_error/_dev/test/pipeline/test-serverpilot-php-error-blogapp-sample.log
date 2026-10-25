@@ -1,0 +1,8 @@
+[04-Mar-2025 13:36:41 UTC] PHP Warning:  Invalid argument supplied for foreach() in /srv/users/serverpilot/apps/blogapp/public/example.php on line 123
+[04-Mar-2025 13:40:02 UTC] PHP Notice:  Undefined index: example_key in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 57
+[04-Mar-2025 13:45:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function example_missing() in /srv/users/serverpilot/apps/blogapp/public/index.php:42
+Stack trace:
+#0 /srv/users/serverpilot/apps/blogapp/public/index.php(42): example_wrapper()
+#1 {main}
+  thrown in /srv/users/serverpilot/apps/blogapp/public/index.php on line 42
+[04-Mar-2025 13:50:33 UTC] PHP Deprecated:  Implicit conversion from float 1.5 to int loses precision in /srv/users/serverpilot/apps/blogapp/public/calc.php on line 88

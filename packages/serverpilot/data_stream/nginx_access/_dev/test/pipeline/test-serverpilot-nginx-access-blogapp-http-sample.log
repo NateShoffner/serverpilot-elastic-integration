@@ -1,0 +1,4 @@
+203.0.113.10 - - [07/Mar/2025:00:03:34 +0000] "GET /blog HTTP/1.1" 302 1395 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" "-" 340 0.125 "1395" "0.125" "blogapp.example.com"
+198.51.100.23 - - [07/Mar/2025:00:04:02 +0000] "GET /blog/wp-content/themes/example/style.css HTTP/1.1" 200 18422 "http://blogapp.example.com/blog" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" "-" 412 0.000 "-" "-" "blogapp.example.com"
+192.0.2.77 - - [07/Mar/2025:00:04:11 +0000] "GET /blog/missing-page HTTP/1.1" 404 564 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" "203.0.113.200, 198.51.100.5" 389 0.067 "564" "0.067" "blogapp.example.com"
+203.0.113.45 - - [07/Mar/2025:00:05:19 +0000] "HEAD /blog/feed HTTP/1.1" 304 - "-" "FeedFetcher-Example/1.0" "-" 298 0.004 "0" "0.004" "blogapp.example.com"

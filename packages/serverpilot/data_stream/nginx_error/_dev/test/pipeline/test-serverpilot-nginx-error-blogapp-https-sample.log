@@ -1,0 +1,2 @@
+2025/03/06 18:11:20 [error] 1859209#0: *1379310 SSL_do_handshake() failed (SSL: error:0A000412:SSL routines::sslv3 alert bad certificate) while SSL handshaking, client: 198.51.100.140, server: 0.0.0.0:443
+2025/03/06 18:12:05 [info] 1859209#0: *1379322 client closed connection while waiting for request, client: 192.0.2.19, server: 0.0.0.0:443

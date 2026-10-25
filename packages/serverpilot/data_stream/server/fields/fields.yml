@@ -1,0 +1,43 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: server.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the server. Source field `id`. This is the join key between this data stream and the `sysuser`, `app`, and `database` data streams, where the same value appears as `serverid`.
+    - name: server.name
+      type: keyword
+      description: >-
+        Name the server was given when it was connected to ServerPilot. Source field `name`. This is not necessarily the server's hostname.
+    - name: server.plan
+      type: keyword
+      description: >-
+        ServerPilot plan the server is on. Source field `plan`. The documented values are `economy`, `business`, and `first_class`, but this is mapped as a free keyword rather than an enum because ServerPilot can introduce new plan names.
+    - name: server.autoupdates
+      type: boolean
+      description: >-
+        Whether ServerPilot applies unattended security updates to the server's operating system packages. Source field `autoupdates`.
+    - name: server.firewall
+      type: boolean
+      description: >-
+        Whether the ServerPilot-managed firewall is enabled on the server. Source field `firewall`.
+    - name: server.deny_unknown_domains
+      type: boolean
+      description: >-
+        Whether the server rejects requests for domains that are not configured on any of its apps, rather than serving them from the first matching app. Source field `deny_unknown_domains`.
+    - name: server.available_runtimes
+      type: keyword
+      description: >-
+        PHP runtimes available on the server, for example `php8.3`. Source field `available_runtimes`, which is an array. Mapped as a free keyword rather than an enum: the API reference still documents only `php5.6` through `php7.2` while ServerPilot ships considerably newer runtimes, so the value set cannot be treated as closed.
+    - name: server.last_address
+      type: ip
+      description: >-
+        IP address the server last connected to ServerPilot from. Source field `lastaddress`, which is `null` for a server that has never connected.
+    - name: server.last_connection
+      type: date
+      description: >-
+        When the server last connected to ServerPilot. Source field `lastconn`, which is Unix epoch **seconds**, not milliseconds.
+    - name: server.created
+      type: date
+      description: >-
+        When the server was connected to ServerPilot. Source field `datecreated`, which is Unix epoch **seconds**, not milliseconds.

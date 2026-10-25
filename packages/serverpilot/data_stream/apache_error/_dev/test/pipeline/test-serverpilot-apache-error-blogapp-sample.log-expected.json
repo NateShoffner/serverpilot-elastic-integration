@@ -1,0 +1,294 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T15:01:27.248Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.10"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:01:27.248409 2025] [core:alert] [pid 5667:tid 139635493631744] [client 203.0.113.10:0] /srv/users/serverpilot/apps/blogapp/public/.htaccess: RewriteRule: bad argument line 'example_invalid_value'",
+                "severity": 1,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "alert"
+            },
+            "message": "/srv/users/serverpilot/apps/blogapp/public/.htaccess: RewriteRule: bad argument line 'example_invalid_value'",
+            "process": {
+                "pid": 5667,
+                "thread": {
+                    "id": 139635493631744
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.10"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "module": "core"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.10"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:04:02.881Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.23"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:04:02.881204 2025] [authz_core:error] [pid 5668:tid 139635493631745] [client 198.51.100.23:0] AH01630: client denied by server configuration: /srv/users/serverpilot/apps/blogapp/public/wp-config.php",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "error"
+            },
+            "message": "AH01630: client denied by server configuration: /srv/users/serverpilot/apps/blogapp/public/wp-config.php",
+            "process": {
+                "pid": 5668,
+                "thread": {
+                    "id": 139635493631745
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.23"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH01630"
+                    },
+                    "module": "authz_core"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "198.51.100.23"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:06:45.113Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.77"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:06:45.113900 2025] [proxy_fcgi:error] [pid 5669:tid 139635493631746] [client 192.0.2.77:0] AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function example_missing() in /srv/users/serverpilot/apps/blogapp/public/index.php:42'",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "error",
+                "origin": {
+                    "file": {
+                        "line": 42,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/index.php"
+                    }
+                }
+            },
+            "message": "AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught Error: Call to undefined function example_missing() in /srv/users/serverpilot/apps/blogapp/public/index.php:42'",
+            "process": {
+                "pid": 5669,
+                "thread": {
+                    "id": 139635493631746
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.77"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH01071"
+                    },
+                    "module": "proxy_fcgi"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "192.0.2.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:09:10.552Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:09:10.552001 2025] [mpm_event:notice] [pid 5660:tid 139635493631744] AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations",
+                "severity": 5,
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "notice"
+            },
+            "message": "AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations",
+            "process": {
+                "pid": 5660,
+                "thread": {
+                    "id": 139635493631744
+                }
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH00489"
+                    },
+                    "module": "mpm_event"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

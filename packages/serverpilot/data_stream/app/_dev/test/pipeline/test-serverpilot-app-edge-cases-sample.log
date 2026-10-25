@@ -1,0 +1,2 @@
+{"datecreated":1720000500,"domains":["api.example.org"],"id":"pE1f2G3h4I5j6K7L","name":"apiapp","runtime":"nodejs20","serverid":"a1B2c3D4e5F6g7H8","ssl":{"auto":false,"force":false},"sysuserid":"s9F0g1H2i3J4k5L6"}
+{"datecreated":1730000500,"domains":["staging.example.org"],"id":"pM8n9O0p1Q2r3S4T","name":"stagingapp","runtime":"php8","serverid":"i9J0k1L2m3N4o5P6","ssl":{"auto":true},"sysuserid":"s7M8n9O0p1Q2r3S4"}

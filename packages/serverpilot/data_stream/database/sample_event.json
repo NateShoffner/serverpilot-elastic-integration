@@ -1,0 +1,69 @@
+{
+    "@timestamp": "2026-10-12T07:24:28.655Z",
+    "agent": {
+        "ephemeral_id": "6382508d-5969-4fdd-b0a7-8b061832d63a",
+        "id": "ef8c0a00-357a-473f-8c6e-da7814c82ff7",
+        "name": "elastic-agent-76216",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.database",
+        "namespace": "95692",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "ef8c0a00-357a-473f-8c6e-da7814c82ff7",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "database"
+        ],
+        "dataset": "serverpilot.database",
+        "ingested": "2026-10-12T07:24:32Z",
+        "kind": "asset",
+        "module": "serverpilot",
+        "original": "{\"appid\":\"p1T2u3V4w5X6y7Z8\",\"id\":\"d1O2p3Q4r5S6t7U8\",\"name\":\"blogapp_wp\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"user\":{\"id\":\"u1V2w3X4y5Z6a7B8\",\"name\":\"blogapp_wpuser\"}}",
+        "type": [
+            "info"
+        ]
+    },
+    "input": {
+        "type": "cel"
+    },
+    "related": {
+        "user": [
+            "blogapp_wpuser"
+        ]
+    },
+    "serverpilot": {
+        "app": {
+            "id": "p1T2u3V4w5X6y7Z8"
+        },
+        "database": {
+            "id": "d1O2p3Q4r5S6t7U8",
+            "name": "blogapp_wp",
+            "user": {
+                "id": "u1V2w3X4y5Z6a7B8",
+                "name": "blogapp_wpuser"
+            }
+        },
+        "server": {
+            "id": "a1B2c3D4e5F6g7H8"
+        }
+    },
+    "tags": [
+        "preserve_original_event",
+        "forwarded",
+        "serverpilot-database"
+    ],
+    "user": {
+        "name": "blogapp_wpuser"
+    }
+}

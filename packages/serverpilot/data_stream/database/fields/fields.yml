@@ -1,0 +1,27 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: database.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the database. Source field `id`.
+    - name: database.name
+      type: keyword
+      description: >-
+        MySQL database name. Source field `name`.
+    - name: database.user.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the MySQL user that owns the database. Source field `user.id`.
+    - name: database.user.name
+      type: keyword
+      description: >-
+        MySQL user name that owns the database. Source field `user.name`. The user's password is accepted by the API's create and update endpoints but is never returned on a read, so it is never collected.
+    - name: app.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the app the database belongs to. Source field `appid`. Joins to `serverpilot.app.id` in the `app` data stream. ServerPilot allows up to 1000 databases per app.
+    - name: server.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the server hosting the database. Source field `serverid`. Joins to `serverpilot.server.id` in the `server` data stream.

@@ -1,0 +1,105 @@
+interval: {{interval}}
+resource.tracer:
+  enabled: {{enable_request_tracer}}
+  filename: "../../logs/cel/http-request-trace-*.ndjson"
+  maxbackups: 5
+{{#if proxy_url}}
+resource.proxy_url: {{proxy_url}}
+{{/if}}
+{{#if ssl}}
+resource.ssl: {{ssl}}
+{{/if}}
+{{#if http_client_timeout}}
+resource.timeout: {{http_client_timeout}}
+{{/if}}
+resource.url: {{url}}
+resource.headers:
+  Accept:
+    - application/json
+auth.basic.user: {{client_id}}
+auth.basic.password: {{api_key}}
+redact:
+  fields: ~
+program: |-
+  // ServerPilot GET /dbs returns the account's complete database inventory in
+  // one response, wrapped in a "data" key. The API exposes no pagination
+  // parameters and no "changed since" filter, so this is a single unconditional
+  // request per poll: want_more is always false and there is no cursor state.
+  state.with(
+    get(state.url.trim_right("/") + "/dbs").as(resp,
+      // Success: one event per database.
+      (resp.StatusCode == 200) ?
+        try(resp.Body.decode_json(), "decode_error").as(body,
+          !has(body.decode_error) ?
+            {
+              // Database passwords are accepted on create and update but are never
+              // returned on reads, so there is no secret to drop here.
+              "events": body.?data.orValue([]).map(e,
+                {
+                  "message": e.encode_json(),
+                }
+              ),
+              "want_more": false,
+            }
+          :
+            // 200 with a body that is not JSON, e.g. an intercepting proxy
+            // returning an HTML error page.
+            {
+              "events": {
+                "error": {
+                  "code": string(resp.StatusCode),
+                  "id": string(resp.Status),
+                  "message": "GET /dbs: " + string(body.decode_error),
+                },
+              },
+              "want_more": false,
+            }
+        )
+      :
+        // Authentication failure. Reported separately from transient failures
+        // because retrying cannot fix it: the Client ID or API Key in the policy
+        // is wrong and needs an operator change.
+        (resp.StatusCode == 401) ?
+          {
+            "events": {
+              "error": {
+                "code": string(resp.StatusCode),
+                "id": string(resp.Status),
+                "message": "GET /dbs: " + string(resp.Status) + ": ServerPilot rejected the API credentials. Check the Client ID and API Key in the integration policy; this is a configuration error and will not recover on retry.",
+              },
+            },
+            "want_more": false,
+          }
+        :
+          {
+            // Any other non-200 status, including the transient 5xx class.
+            "events": {
+              "error": {
+                "code": string(resp.StatusCode),
+                "id": string(resp.Status),
+                "message": "GET /dbs: " + (
+                  (size(resp.Body) != 0) ?
+                    string(resp.Body)
+                  :
+                    string(resp.Status) + " (" + string(resp.StatusCode) + ")"
+                ),
+              },
+            },
+            "want_more": false,
+          }
+    )
+  )
+tags:
+{{#if preserve_original_event}}
+  - preserve_original_event
+{{/if}}
+{{#each tags as |tag|}}
+  - {{tag}}
+{{/each}}
+{{#contains "forwarded" tags}}
+publisher_pipeline.disable_host: true
+{{/contains}}
+{{#if processors}}
+processors:
+{{processors}}
+{{/if}}

@@ -1,0 +1,157 @@
+{
+    "@timestamp": "2025-03-04T11:52:33.000Z",
+    "agent": {
+        "ephemeral_id": "0ad89f6d-1409-4bf5-9e67-8e1086000cb7",
+        "id": "c814a3ee-fd2e-46ea-afb6-96f886c65d36",
+        "name": "elastic-agent-72906",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "client": {
+        "as": {
+            "number": 64502,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        },
+        "geo": {
+            "city_name": "Madrid",
+            "continent_name": "Europe",
+            "country_iso_code": "ES",
+            "country_name": "Spain",
+            "location": {
+                "coordinates": [
+                    -3.702500034123659,
+                    40.416389987803996
+                ],
+                "type": "Point"
+            },
+            "region_iso_code": "ES-M",
+            "region_name": "Madrid"
+        },
+        "ip": "203.0.113.10"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.php_access",
+        "namespace": "19878",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "c814a3ee-fd2e-46ea-afb6-96f886c65d36",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.php_access",
+        "duration": 125000000,
+        "ingested": "2026-10-12T08:44:07Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "203.0.113.10 - [04/Mar/2025:06:52:33 -0500] \"GET /index.php\" 200 1395 - 1955 24792 0.125 2097152 1.50% 0.50% \"/blog\"",
+        "outcome": "success",
+        "type": [
+            "access"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-72906",
+        "ip": [
+            "192.168.96.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-60-02"
+        ],
+        "name": "elastic-agent-72906",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "http": {
+        "request": {
+            "method": "GET"
+        },
+        "response": {
+            "body": {
+                "bytes": 1395
+            },
+            "status_code": 200
+        }
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "inode": "3377699722620238",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_php8.3.access.log"
+        },
+        "offset": 0
+    },
+    "process": {
+        "parent": {
+            "pid": 1955
+        },
+        "pid": 24792
+    },
+    "related": {
+        "ip": [
+            "203.0.113.10"
+        ]
+    },
+    "serverpilot": {
+        "app": {
+            "name": "blogapp"
+        },
+        "php": {
+            "cpu": {
+                "system": {
+                    "percent": 0.5
+                },
+                "user": {
+                    "percent": 1.5
+                }
+            },
+            "memory": {
+                "peak": {
+                    "bytes": 2097152
+                }
+            },
+            "request_uri": "/index.php",
+            "version": "8.3"
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "source": {
+        "ip": "203.0.113.10"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-php-access"
+    ],
+    "url": {
+        "original": "/blog",
+        "path": "/blog"
+    }
+}

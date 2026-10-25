@@ -1,0 +1,125 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "host"
+                ],
+                "kind": "asset",
+                "original": "{\"autoupdates\":true,\"available_runtimes\":[\"php7.4\",\"php8.1\",\"php8.2\",\"php8.3\"],\"datecreated\":1700000000,\"deny_unknown_domains\":true,\"firewall\":true,\"id\":\"a1B2c3D4e5F6g7H8\",\"lastaddress\":\"203.0.113.24\",\"lastconn\":1760000000,\"name\":\"web-prod-01\",\"plan\":\"business\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.24"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "autoupdates": true,
+                    "available_runtimes": [
+                        "php7.4",
+                        "php8.1",
+                        "php8.2",
+                        "php8.3"
+                    ],
+                    "created": "2023-11-14T22:13:20.000Z",
+                    "deny_unknown_domains": true,
+                    "firewall": true,
+                    "id": "a1B2c3D4e5F6g7H8",
+                    "last_address": "203.0.113.24",
+                    "last_connection": "2025-10-09T08:53:20.000Z",
+                    "name": "web-prod-01",
+                    "plan": "business"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "host"
+                ],
+                "kind": "asset",
+                "original": "{\"autoupdates\":false,\"available_runtimes\":[\"php8.2\",\"php8.3\",\"php8.4\"],\"datecreated\":1710000000,\"deny_unknown_domains\":false,\"firewall\":false,\"id\":\"i9J0k1L2m3N4o5P6\",\"lastaddress\":null,\"lastconn\":1759900000,\"name\":\"web-stage-02\",\"plan\":\"economy\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "autoupdates": false,
+                    "available_runtimes": [
+                        "php8.2",
+                        "php8.3",
+                        "php8.4"
+                    ],
+                    "created": "2024-03-09T16:00:00.000Z",
+                    "deny_unknown_domains": false,
+                    "firewall": false,
+                    "id": "i9J0k1L2m3N4o5P6",
+                    "last_connection": "2025-10-08T05:06:40.000Z",
+                    "name": "web-stage-02",
+                    "plan": "economy"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "host"
+                ],
+                "kind": "asset",
+                "original": "{\"autoupdates\":true,\"available_runtimes\":[\"php8.3\",\"php8.4\",\"php8.5\"],\"datecreated\":1690000000,\"deny_unknown_domains\":false,\"firewall\":true,\"id\":\"q7R8s9T0u1V2w3X4\",\"lastaddress\":\"198.51.100.57\",\"lastconn\":1759800000,\"name\":\"db-prod-01\",\"plan\":\"first_class\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.57"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "autoupdates": true,
+                    "available_runtimes": [
+                        "php8.3",
+                        "php8.4",
+                        "php8.5"
+                    ],
+                    "created": "2023-07-22T04:26:40.000Z",
+                    "deny_unknown_domains": false,
+                    "firewall": true,
+                    "id": "q7R8s9T0u1V2w3X4",
+                    "last_address": "198.51.100.57",
+                    "last_connection": "2025-10-07T01:20:00.000Z",
+                    "name": "db-prod-01",
+                    "plan": "first_class"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

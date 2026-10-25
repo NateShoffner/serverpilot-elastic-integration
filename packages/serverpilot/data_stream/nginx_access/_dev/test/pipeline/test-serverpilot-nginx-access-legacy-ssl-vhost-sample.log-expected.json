@@ -1,0 +1,210 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T01:12:44.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.21"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 14000000,
+                "kind": "event",
+                "original": "203.0.113.21 - - [07/Mar/2025:01:12:44 +0000] \"GET /v1/status HTTP/1.1\" 200 412 \"-\" \"curl/8.5.0\" \"-\" 198 0.014 \"412\" \"0.014\" \"api.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 198,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 412
+                    },
+                    "status_code": 200
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/api/mysite_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.21"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "api"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 412,
+                            "duration": 14000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "api"
+            },
+            "source": {
+                "ip": "203.0.113.21"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "api.example.com",
+                "original": "/v1/status",
+                "path": "/v1/status",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "curl",
+                "original": "curl/8.5.0",
+                "version": "8.5.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T01:13:09.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.64"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 221000000,
+                "kind": "event",
+                "original": "198.51.100.64 - - [07/Mar/2025:01:13:09 +0000] \"POST /v1/orders HTTP/2.0\" 201 96 \"https://www.example.net/checkout\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 734 0.221 \"96\" \"0.221\" \"api.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 734,
+                    "method": "POST",
+                    "referrer": "https://www.example.net/checkout"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 96
+                    },
+                    "status_code": 201
+                },
+                "version": "2.0"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/api/mysite_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.64"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "api"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 96,
+                            "duration": 221000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "api"
+            },
+            "source": {
+                "ip": "198.51.100.64"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "api.example.com",
+                "original": "/v1/orders",
+                "path": "/v1/orders",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "name": "Linux"
+                },
+                "version": "133.0.0.0"
+            }
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+- name: input.type
+  type: keyword
+  description: Type of filebeat input.
+- name: log.offset
+  type: long
+  description: Log offset.
+- name: log.file.device_id
+  type: keyword
+  description: ID of the device containing the file.
+- name: log.file.inode
+  type: keyword
+  description: Inode number of the file.
+- name: log.file.fingerprint
+  type: keyword
+  description: Fingerprint of the file, used as file identity.

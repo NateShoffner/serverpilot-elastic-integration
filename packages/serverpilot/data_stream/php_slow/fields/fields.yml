@@ -1,0 +1,49 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the slow request was served for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the slow request was served for. Derived from the log file path.
+    - name: php.version
+      type: keyword
+      description: >-
+        PHP version of the PHP-FPM pool that served the slow request, for example `8.3`. ServerPilot runs one PHP-FPM pool per app and embeds the version in the log file name (`APPNAME_php8.3.slow.log`); the log entry itself carries no version, so the file name is the only signal. Use this field to find every app whose slow requests are being served by an end-of-life PHP release. Not set when the log file name does not embed a version.
+    - name: php.slow.pool
+      type: keyword
+      description: >-
+        Name of the PHP-FPM pool that captured the slow request, taken from the `[pool POOLNAME]` token of the entry. On a ServerPilot server the pool is created per app and named after it, so this value is expected to equal `serverpilot.app.name`, which is derived independently from the log file path. When the two disagree the document is tagged `serverpilot_php_slow_pool_app_mismatch`, because that means the assumed ServerPilot log layout does not hold and every path-derived field on the document is suspect. Kept in the vendor namespace because the value is a PHP-FPM pool name from a PHP-FPM-specific taxonomy, not a service or process name.
+    - name: php.slow.script_filename
+      type: keyword
+      description: >-
+        Absolute path of the PHP script that was requested, as PHP-FPM reports it in the `script_filename = ` line of the entry. This is the entry point of the request, which for a front-controller app is typically the front controller (`index.php`) rather than the file that was actually slow; the file being executed when the dump was taken is in `log.origin.file.name`. Kept in the vendor namespace under PHP-FPM's own field name: ECS `file.*` describes filesystem activity and this event is not a file event, and `log.origin.file.*` describes the source location the diagnostic reports, which here is the innermost stack frame rather than the requested script. PHP-FPM captured the entry because the request exceeded the pool's `request_slowlog_timeout`, documented by ServerPilot as five seconds; the entry records no duration, so the event carries none.
+    - name: php.slow.frame_count
+      type: long
+      description: >-
+        Number of stack frames in the captured trace, which is how deep PHP was into the request when the dump was taken. Counts the frames parsed from the entry, which is also the number of lines in `serverpilot.php.slow.stack_trace`; it can be larger than the number of values visible under `serverpilot.php.slow.frames`, whose sub-field arrays are deduplicated by synthetic source. It is `0` for an entry whose frame block was present but held no frame this pipeline recognised, and unset for an entry that carried no frame block at all.
+    - name: php.slow.stack_trace
+      type: wildcard
+      ignore_above: 32766
+      description: >-
+        Captured PHP stack trace as a single ordered value, one frame per line, innermost frame first, in the order PHP-FPM wrote them. Each line is `FUNCTION() FILE:LINE`, or `FUNCTION()` for a frame with no usable source location, which is PHP-FPM's own frame line with only the `[0x...]` heap address removed, so the field reads like the trace in the log file. This is the only field on the document that preserves the trace. `serverpilot.php.slow.frames` does not: this index runs in `logsdb` mode, so each of that field's sub-fields is rebuilt from doc values as its own independently sorted and deduplicated array, which destroys both the frame order and the pairing of a function with its file and line. `event.original` is no fallback either, because `preserve_original_event` defaults to false and the raw entry is then not kept. Rendered from the same parsed frames as `serverpilot.php.slow.frames`, so the two cannot disagree. Unset for an entry that carried no frame block. Mapped as `wildcard`, the type ECS uses for `error.stack_trace`, because it is the only candidate that is safe at every trace depth: `keyword` applies `ignore_above` in characters but Lucene caps a keyword term at 32766 **bytes**, so a trace of that many characters built from non-ASCII paths or class names fails the entire document at index time, and `text` is not backed by doc values so it can neither be aggregated nor reconstructed under synthetic source. `ignore_above` is set to 32766 characters, roughly 320 frames at a typical frame line and four times the 8191 `logsdb` applies by default. A trace longer than that is still stored whole and still readable, because synthetic source keeps an over-limit value in `_ignored_source`; it is only absent from the index, and those documents are findable with `_ignored: serverpilot.php.slow.stack_trace`. The deepest trace the agent will ship, at the stream's `multiline.max_lines` of 5000, is about 520 kB and falls in that case.
+    - name: php.slow.frames
+      type: group
+      description: >-
+        Captured PHP stack trace parsed into one object per frame. Mapped as an ordinary object group rather than as `nested`, because a `nested` field is invisible to ES|QL, cannot be aggregated from the Kibana visualization editors, and indexes every frame as a separate Lucene document. The cost of that choice falls on the stored document, not only on queries: this index runs in `logsdb` mode, so each sub-field below is reconstructed from doc values as its own array, sorted and deduplicated independently of the others. **Neither the frame order nor the pairing of a function with its file and line is preserved in the stored document**, and a function, file or line that recurs in a trace appears once. Use these sub-fields for membership questions that need no correlation, such as "which slow requests have `curl_exec` anywhere in the trace", "which files show up in slow traces" and "top functions in slow traces". For the innermost frame, which ServerPilot documents as typically but not always the bottleneck, as three correlated scalars, use ECS `log.origin.function`, `log.origin.file.name` and `log.origin.file.line`. For the trace in its original order, with every function still attached to its own file and line, use `serverpilot.php.slow.stack_trace`.
+      fields:
+        - name: function
+          type: keyword
+          description: >-
+            Names of the functions, methods and language constructs executing in the captured stack frames. The trailing `()` PHP-FPM renders after every call is stripped, so a method reads `Class->method`, a static call `Class::method`, a closure `{closure}` and an included file `include`. Stored as an independently sorted and deduplicated array, so a value here says the trace contained that function somewhere but is not correlated with `frames.file.name` or `frames.file.line` of the same frame, and gives no indication of depth. The innermost frame's value is also promoted to ECS `log.origin.function`, and the ordered trace is in `serverpilot.php.slow.stack_trace`.
+        - name: file.name
+          type: keyword
+          description: >-
+            Absolute paths of the source files the captured stack frames were executing. Stored as an independently sorted and deduplicated array, so a value here is not correlated with the function or the line of the frame it came from. A frame with no usable source location contributes nothing: PHP-FPM renders an internal or native function with the sentinel `unknown:0`, which is recognised and recorded as an absent location rather than as a file named `unknown` on line zero.
+        - name: file.line
+          type: long
+          description: >-
+            Line numbers within their source files the captured stack frames were executing. Stored as an independently sorted and deduplicated array, so a value here is not correlated with the function or the file of the frame it came from and is of little use on its own; the ordered trace, where each line stays attached to its own function and file, is in `serverpilot.php.slow.stack_trace`. A frame with no usable source location contributes nothing.

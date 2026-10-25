@@ -1,0 +1,168 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T18:11:20.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.140"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:11:20 [error] 1859209#0: *1379310 SSL_do_handshake() failed (SSL: error:0A000412:SSL routines::sslv3 alert bad certificate) while SSL handshaking, client: 198.51.100.140, server: 0.0.0.0:443",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.error_ssl.log"
+                },
+                "level": "error"
+            },
+            "message": "SSL_do_handshake() failed (SSL: error:0A000412:SSL routines::sslv3 alert bad certificate) while SSL handshaking",
+            "process": {
+                "pid": 1859209,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.140"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1379310"
+                    },
+                    "server": "0.0.0.0:443"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "198.51.100.140"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "scheme": "https"
+            }
+        },
+        {
+            "@timestamp": "2025-03-06T18:12:05.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.19"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/06 18:12:05 [info] 1859209#0: *1379322 client closed connection while waiting for request, client: 192.0.2.19, server: 0.0.0.0:443",
+                "severity": 6,
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.error_ssl.log"
+                },
+                "level": "info"
+            },
+            "message": "client closed connection while waiting for request",
+            "process": {
+                "pid": 1859209,
+                "thread": {
+                    "id": 0
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.19"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "1379322"
+                    },
+                    "server": "0.0.0.0:443"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "192.0.2.19"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "scheme": "https"
+            }
+        }
+    ]
+}

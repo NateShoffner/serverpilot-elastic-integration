@@ -1,0 +1,100 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T14:02:11.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 14:02:11 UTC] PHP Warning:  Undefined array key \"example_key\" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57",
+                "severity": 4,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.error.log"
+                },
+                "level": "warning",
+                "origin": {
+                    "file": {
+                        "line": 57,
+                        "name": "/srv/users/appowner/apps/shopapp/public/catalog/controller/example.php"
+                    }
+                }
+            },
+            "message": "Undefined array key \"example_key\" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57",
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T14:09:47.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 14:09:47 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /srv/users/appowner/apps/shopapp/public/system/library/example.php on line 211",
+                "severity": 3,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.error.log"
+                },
+                "level": "fatal error",
+                "origin": {
+                    "file": {
+                        "line": 211,
+                        "name": "/srv/users/appowner/apps/shopapp/public/system/library/example.php"
+                    }
+                }
+            },
+            "message": "Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /srv/users/appowner/apps/shopapp/public/system/library/example.php on line 211",
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+format_version: "3.4.2"
+name: serverpilot
+title: ServerPilot
+version: 0.1.0
+source:
+  license: "Elastic-2.0"
+description: Collect and parse per-app Nginx, Apache, and PHP-FPM logs from ServerPilot-managed servers, plus server, app, database, and system user inventory from the ServerPilot API.
+type: integration
+categories:
+  - web
+  - observability
+conditions:
+  kibana:
+    version: "^8.19.0 || ^9.1.0"
+  elastic:
+    subscription: "basic"
+screenshots:
+  - src: /img/serverpilot-app-traffic-overview.png
+    title: App traffic overview dashboard
+    size: 1800x1298
+    type: image/png
+  - src: /img/serverpilot-php-health.png
+    title: PHP health dashboard
+    size: 1800x1298
+    type: image/png
+icons:
+  - src: /img/serverpilot-logo.png
+    title: ServerPilot logo
+    size: 180x180
+    type: image/png
+policy_templates:
+  - name: app_logs
+    title: ServerPilot App Logs
+    description: Collect per-app Nginx, Apache, and PHP-FPM log files from a ServerPilot-managed server.
+    inputs:
+      - type: filestream
+        title: Collect ServerPilot app logs from the host
+        description: Collect the per-app log files ServerPilot writes under /srv/users/SYSUSER/log/APPNAME/.
+  - name: api
+    title: ServerPilot API
+    description: Collect server, system user, app, and database inventory from the ServerPilot management API.
+    inputs:
+      - type: cel
+        title: Collect inventory from the ServerPilot API
+        description: Collect inventory using the ServerPilot v1 management API.
+        vars:
+          - name: url
+            type: url
+            title: URL
+            description: Base URL of the ServerPilot API.
+            required: true
+            show_user: false
+            default: https://api.serverpilot.io/v1
+          - name: client_id
+            type: text
+            title: Client ID
+            description: ServerPilot API client ID, found under Account > API Credentials in the ServerPilot dashboard.
+            required: true
+            show_user: true
+          - name: api_key
+            type: password
+            title: API Key
+            description: ServerPilot API key, found under Account > API Credentials in the ServerPilot dashboard.
+            required: true
+            show_user: true
+            secret: true
+owner:
+  github: NateShoffner
+  type: community

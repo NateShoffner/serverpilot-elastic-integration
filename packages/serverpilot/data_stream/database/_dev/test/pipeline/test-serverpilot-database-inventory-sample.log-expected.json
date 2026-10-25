@@ -1,0 +1,133 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "database"
+                ],
+                "kind": "asset",
+                "original": "{\"appid\":\"p1T2u3V4w5X6y7Z8\",\"id\":\"d1O2p3Q4r5S6t7U8\",\"name\":\"blogapp_wp\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"user\":{\"id\":\"u1V2w3X4y5Z6a7B8\",\"name\":\"blogapp_wpuser\"}}",
+                "type": [
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "blogapp_wpuser"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "id": "p1T2u3V4w5X6y7Z8"
+                },
+                "database": {
+                    "id": "d1O2p3Q4r5S6t7U8",
+                    "name": "blogapp_wp",
+                    "user": {
+                        "id": "u1V2w3X4y5Z6a7B8",
+                        "name": "blogapp_wpuser"
+                    }
+                },
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "blogapp_wpuser"
+            }
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "database"
+                ],
+                "kind": "asset",
+                "original": "{\"appid\":\"p9A0b1C2d3E4f5G6\",\"id\":\"d9V0w1X2y3Z4a5B6\",\"name\":\"shopapp_store\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"user\":{\"id\":\"u9C0d1E2f3G4h5I6\",\"name\":\"shopapp_storeuser\"}}",
+                "type": [
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "shopapp_storeuser"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "id": "p9A0b1C2d3E4f5G6"
+                },
+                "database": {
+                    "id": "d9V0w1X2y3Z4a5B6",
+                    "name": "shopapp_store",
+                    "user": {
+                        "id": "u9C0d1E2f3G4h5I6",
+                        "name": "shopapp_storeuser"
+                    }
+                },
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "shopapp_storeuser"
+            }
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "database"
+                ],
+                "kind": "asset",
+                "original": "{\"appid\":\"p7H8i9J0k1L2m3N4\",\"id\":\"d7C8d9E0f1G2h3I4\",\"name\":\"legacyapp_data\",\"serverid\":\"i9J0k1L2m3N4o5P6\",\"user\":{\"id\":\"u7J8k9L0m1N2o3P4\",\"name\":\"legacyapp_datauser\"}}",
+                "type": [
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "legacyapp_datauser"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "id": "p7H8i9J0k1L2m3N4"
+                },
+                "database": {
+                    "id": "d7C8d9E0f1G2h3I4",
+                    "name": "legacyapp_data",
+                    "user": {
+                        "id": "u7J8k9L0m1N2o3P4",
+                        "name": "legacyapp_datauser"
+                    }
+                },
+                "server": {
+                    "id": "i9J0k1L2m3N4o5P6"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "legacyapp_datauser"
+            }
+        }
+    ]
+}

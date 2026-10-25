@@ -1,0 +1,7 @@
+2025/03/06 17:59:58 [notice] 1859200#1859200: using the "epoll" event method
+2025/03/06 17:59:58 [emerg] 1859200#1859200: bind() to 0.0.0.0:443 failed (98: Address already in use)
+2025/03/06 18:30:15 [error] 1859301#0: *1380052 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42
+Stack trace:
+#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()
+#1 {main}
+  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42" while reading response header from upstream, client: 203.0.113.131, server: shop.example.com, request: "GET /index.php HTTP/1.1", upstream: "http://127.0.0.1:81/index.php", host: "shop.example.com", referrer: "https://shop.example.com/cart"

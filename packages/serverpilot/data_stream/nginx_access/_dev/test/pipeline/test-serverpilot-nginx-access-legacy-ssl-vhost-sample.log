@@ -1,0 +1,2 @@
+203.0.113.21 - - [07/Mar/2025:01:12:44 +0000] "GET /v1/status HTTP/1.1" 200 412 "-" "curl/8.5.0" "-" 198 0.014 "412" "0.014" "api.example.com"
+198.51.100.64 - - [07/Mar/2025:01:13:09 +0000] "POST /v1/orders HTTP/2.0" 201 96 "https://www.example.net/checkout" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" "-" 734 0.221 "96" "0.221" "api.example.com"

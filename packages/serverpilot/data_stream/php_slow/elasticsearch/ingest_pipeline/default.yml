@@ -1,0 +1,373 @@
+---
+description: Pipeline for parsing ServerPilot PHP-FPM slow request logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the header of a ServerPilot PHP-FPM slow request log entry and
+  # captures the stack frame block that follows it verbatim. PHP-FPM writes an
+  # entry whenever a request runs for longer than the pool's
+  # `request_slowlog_timeout`, which ServerPilot documents as five seconds:
+  #
+  #   [DD-Mon-YYYY HH:MM:SS]  [pool POOLNAME] pid PID
+  #   script_filename = /srv/users/SYSUSER/apps/APPNAME/public/index.php
+  #   [0xADDRESS] FUNCTION() FILE:LINE
+  #   [0xADDRESS] FUNCTION() FILE:LINE
+  #
+  # Every entry in this stream is multiline, which is what drives most of the
+  # shape below.
+  #
+  #   * The patterns are anchored with `\A` and `\Z`, not `^` and `$`. Grok's
+  #     `$` matches at every line end, which would truncate the frame capture
+  #     to the first frame.
+  #
+  #   * PHP-FPM emits two spaces between the closing bracket of the timestamp
+  #     and `[pool`. The separator is matched as one-or-more spaces so that a
+  #     PHP-FPM build which emits one still parses, and so the extra space never
+  #     leaks into the pool name.
+  #
+  #   * Entries are separated by a blank line in the log file. The agent's
+  #     multiline parser is configured negate/match-after, so that blank line is
+  #     appended to the *preceding* event and every entry but the last in a read
+  #     batch arrives with trailing whitespace. The greedy `SP_MULTILINE`
+  #     capture absorbs it and the frame splitter below discards blank lines, so
+  #     no frame-shaped padding is invented and no entry fails to parse because
+  #     of the separator.
+  #
+  #   * The frame count varies from one to many and the frame block has no
+  #     terminator of its own, so the block cannot be parsed frame-by-frame with
+  #     grok. It is captured whole into `_tmp.frames` and split by the script
+  #     processor below.
+  #
+  # The three patterns form a ladder: the usual entry, an entry whose frame
+  # block is missing (PHP-FPM aborted the dump), and a bare header. Anything
+  # that is not a slow log entry at all matches none of them and fails the
+  # document into the pipeline's `on_failure` block, where `event.original`
+  # keeps the unparsed text for triage.
+  - grok:
+      field: event.original
+      tag: grok_php_slow
+      pattern_definitions:
+        SP_PHP_TIME: '\d{2}-[A-Za-z]{3}-\d{4} \d{2}:\d{2}:\d{2}'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - '\A\[%{SP_PHP_TIME:_tmp.time}\] +\[pool %{DATA:serverpilot.php.slow.pool}\] pid %{NONNEGINT:process.pid:long}\nscript_filename = %{DATA:serverpilot.php.slow.script_filename}\n%{SP_MULTILINE:_tmp.frames}\Z'
+        - '\A\[%{SP_PHP_TIME:_tmp.time}\] +\[pool %{DATA:serverpilot.php.slow.pool}\] pid %{NONNEGINT:process.pid:long}\nscript_filename = %{DATA:serverpilot.php.slow.script_filename}\s*\Z'
+        - '\A\[%{SP_PHP_TIME:_tmp.time}\] +\[pool %{DATA:serverpilot.php.slow.pool}\] pid %{NONNEGINT:process.pid:long}\s*\Z'
+      if: ctx.event?.original != null
+
+  # Splits the captured frame block into one object per frame.
+  #
+  # The frames are the substance of this stream: the entry says nothing about
+  # why the request was slow except by showing where it was executing when the
+  # dump was taken. They are emitted in two representations, because neither
+  # one alone covers both needs:
+  #
+  #   * `serverpilot.php.slow.frames`, an array of objects in parse order
+  #     (innermost first), mapped as a plain object and not as `nested`, for
+  #     membership queries and aggregation.
+  #
+  #   * `serverpilot.php.slow.stack_trace`, a single ordered scalar rendered
+  #     from those same frames, for the trace itself.
+  #
+  # Neither choice is obvious and both are load-bearing. Under `logsdb`
+  # synthetic source the three `frames` leaves are reconstructed from doc
+  # values and sorted and deduplicated independently, so the array preserves
+  # neither frame order nor the function-to-file-and-line pairing, and
+  # `event.original` is no fallback because `preserve_original_event` defaults
+  # to false here. The scalar is what keeps the ordered trace. The field
+  # descriptions in `fields.yml` carry the full reasoning for both fields.
+  #
+  # Frame by frame: the leading `[0x...]` heap address is matched but not
+  # captured, since address space randomisation makes it differ per request and
+  # per worker. The trailing `()` is dropped from the function name, so the
+  # field holds `PDO->query`, matching ECS `log.origin.function` being the
+  # *name* of the function; methods, static calls, closures and language
+  # constructs otherwise keep PHP-FPM's form. The rendered `stack_trace` line
+  # puts the `()` back, as `FUNCTION() FILE:LINE`, so it reads like the log
+  # file. A frame with no usable location, which PHP-FPM renders as the
+  # sentinel `unknown:0`, is stored with its function name and no file or line
+  # rather than a file called `unknown` on line zero. A frame line matching
+  # none of this tags the document `serverpilot_php_slow_unparsed_frame`
+  # rather than being discarded.
+  #
+  # The innermost frame is promoted into ECS `log.origin.*`. ServerPilot
+  # documents the topmost frame as "typically (but not always) the
+  # bottleneck", so it is the one actionable datum, and as correlated scalars
+  # it escapes the reordering above. `apache_error` and `php_error` file the
+  # application source location in the same fields. The full path is stored
+  # because its segments carry the sysuser and app, and ECS has no directory
+  # companion for `log.origin.file`.
+  #
+  # A `script` processor is unavoidable here: grok captures write to document
+  # paths rather than into array elements, so no combination of `grok`,
+  # `dissect`, `split` or `foreach` can turn a variable-length multiline block
+  # into an array of objects.
+  - script:
+      lang: painless
+      tag: script_parse_stack_frames
+      description: Splits the captured PHP-FPM stack frame block into one object per frame, renders the same frames into the ordered `stack_trace` scalar, and promotes the innermost frame, the probable bottleneck, into ECS `log.origin.*`.
+      if: ctx._tmp?.time != null
+      params:
+        frame_separator: "\n"
+      source: |-
+        String block = ctx._tmp.frames;
+        def frames = new ArrayList();
+        def rendered = new ArrayList();
+        boolean unparsed = false;
+        if (block != null) {
+          for (String raw : /\n/.split(block)) {
+            String line = raw.trim();
+            if (line.length() == 0) {
+              continue;
+            }
+            def m = /^\[[^\]]*\] ([^ ]+)\(\)(?: (.+):([0-9]+))?$/.matcher(line);
+            if (!m.matches()) {
+              unparsed = true;
+              continue;
+            }
+            String function_name = m.group(1);
+            def frame = new HashMap();
+            frame.put('function', function_name);
+            StringBuilder frame_line = new StringBuilder(function_name).append('()');
+            def file_name = m.group(2);
+            def file_line = m.group(3);
+            if (file_name != null && file_line != null && !('unknown'.equals(file_name) && '0'.equals(file_line))) {
+              def file = new HashMap();
+              file.put('name', file_name);
+              file.put('line', Long.parseLong(file_line));
+              frame.put('file', file);
+              frame_line.append(' ').append(file_name).append(':').append(file_line);
+            }
+            frames.add(frame);
+            rendered.add(frame_line.toString());
+          }
+        }
+        if (ctx.serverpilot == null) {
+          ctx.serverpilot = new HashMap();
+        }
+        if (ctx.serverpilot.php == null) {
+          ctx.serverpilot.php = new HashMap();
+        }
+        if (ctx.serverpilot.php.slow == null) {
+          ctx.serverpilot.php.slow = new HashMap();
+        }
+        // `frame_count` counts the frames of a frame block, so it is only
+        // written for an entry that carried one. Grok rungs 2 and 3 match an
+        // entry with no frame block at all, and writing `0` for those would
+        // make them indistinguishable from an entry whose block was present but
+        // held no frame this pipeline recognised, which is exactly the
+        // distinction `fields.yml` documents for this field. The guard keeps the
+        // field unset in the former case.
+        if (block != null) {
+          ctx.serverpilot.php.slow.frame_count = frames.size();
+        }
+        if (!frames.isEmpty()) {
+          ctx.serverpilot.php.slow.frames = frames;
+          // The ordered, single-scalar rendering of the same frames. Painless
+          // string literals accept only \\, \' and \", so the newline that
+          // separates the frame lines comes from `params` rather than from a
+          // '\n' literal, which is a compile error.
+          StringBuilder trace = new StringBuilder();
+          for (int i = 0; i < rendered.size(); i++) {
+            if (i > 0) {
+              trace.append((String)params.frame_separator);
+            }
+            trace.append((String)rendered.get(i));
+          }
+          ctx.serverpilot.php.slow.stack_trace = trace.toString();
+          def innermost = frames.get(0);
+          if (ctx.log == null) {
+            ctx.log = new HashMap();
+          }
+          if (ctx.log.origin == null) {
+            ctx.log.origin = new HashMap();
+          }
+          ctx.log.origin.function = innermost.get('function');
+          if (innermost.containsKey('file')) {
+            ctx.log.origin.file = new HashMap(innermost.get('file'));
+          }
+        }
+        if (unparsed) {
+          ctx._tmp.unparsed_frame = true;
+        }
+  - append:
+      field: tags
+      tag: append_unparsed_frame_tag
+      value: serverpilot_php_slow_unparsed_frame
+      allow_duplicates: false
+      if: ctx._tmp?.unparsed_frame == true
+      description: Flags an entry that carried a stack frame line this pipeline could not parse, so a PHP-FPM format change or a truncated dump is visible rather than silently dropped.
+
+  # ServerPilot records the owning app and system user only in the log file path,
+  # and the PHP version only in the log file name:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_phpX.Y.slow.log
+  # The entry itself carries no PHP version at all, so the file name is the only
+  # signal available, and it is what makes it possible to find every app whose
+  # slow requests are being served by an end-of-life PHP release.
+  #
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  # The version-bearing pattern is tried first and the plain pattern second, so a
+  # log file whose name does not embed a version still yields the system user and
+  # app name, and a path that does not follow the ServerPilot layout at all
+  # simply leaves all three fields unset without raising an error.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]*_php(?<serverpilot.php.version>[0-9]+(?:\.[0-9]+)?)\.[^/]+\Z'
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app, and the PHP version serving the app, from the log file path.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # On a ServerPilot server the PHP-FPM pool is created per app and named after
+  # it, so the pool name in the entry and the app name in the log file path are
+  # two independent views of the same value and must agree. If they do not, one
+  # of this pipeline's two load-bearing assumptions about the ServerPilot layout
+  # is wrong (either the pool naming or the `/srv/users/*/log/*/` path shape),
+  # and every field derived from the path (`serverpilot.sysuser.name`,
+  # `serverpilot.app.name`, `serverpilot.php.version`, `service.name`) is
+  # suspect for that document. That is worth surfacing rather than silently
+  # resolving in favour of one of the two, so both values are kept as parsed and
+  # the document is tagged. The check is skipped when the path does not follow
+  # the ServerPilot layout at all, because then there is no second opinion to
+  # disagree with.
+  - append:
+      field: tags
+      tag: append_pool_app_mismatch_tag
+      value: serverpilot_php_slow_pool_app_mismatch
+      allow_duplicates: false
+      if: ctx.serverpilot?.php?.slow?.pool != null && ctx.serverpilot?.app?.name != null && ctx.serverpilot.php.slow.pool != ctx.serverpilot.app.name
+      description: Flags an entry whose PHP-FPM pool name disagrees with the app name derived from the log file path, which means the assumed ServerPilot log layout does not hold for that document.
+
+  # The timestamp carries no offset and no zone name, as in `nginx_error` and
+  # `apache_error` and unlike `php_error`. The agent stream template stamps the
+  # host timezone into `event.timezone` with `add_locale` and the first `date`
+  # processor uses it. When no agent is in the path (pipeline tests, or a replay
+  # from another shipper) it is absent and the second `date` processor falls
+  # back to UTC.
+  #
+  # PHP-FPM logs the slow log timestamp to whole seconds only, so there is a
+  # single format.
+  - date:
+      field: _tmp.time
+      tag: date_php_slow_time_with_timezone
+      target_field: '@timestamp'
+      formats:
+        - dd-MMM-yyyy HH:mm:ss
+      timezone: '{{{event.timezone}}}'
+      if: ctx._tmp?.time != null && ctx.event?.timezone != null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_php_slow_time_with_timezone_failure
+            value: '{{{_ingest.on_failure_message}}}'
+  - date:
+      field: _tmp.time
+      tag: date_php_slow_time_utc_fallback
+      target_field: '@timestamp'
+      formats:
+        - dd-MMM-yyyy HH:mm:ss
+      if: ctx._tmp?.time != null && ctx.event?.timezone == null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_php_slow_time_utc_fallback_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+
+  # `web`, as in every other log stream here. Every entry is written by a
+  # PHP-FPM worker serving a request through the Nginx -> Apache -> PHP-FPM
+  # chain, and this stream is a third view of a request `nginx_access` and
+  # `php_access` also record. ECS has no performance or profiling category and
+  # `event.category` is a closed set; `process` covers process lifecycle, not a
+  # diagnostic about the code a running process is executing.
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+
+  # `info` rather than `error`: the entry reports an observation about a
+  # request that was still running, not a failure, and that request may well
+  # have completed successfully. `error` is reserved in this package for the
+  # entries the Nginx, Apache and PHP error streams raise at syslog `warning`
+  # or above. `access` is also wrong, since the entry carries no request line,
+  # method, URL or status code. `event.outcome` and `event.severity` stay unset
+  # for the same reason: the log states no result and carries no level.
+  - append:
+      field: event.type
+      tag: append_event_type_info
+      value: info
+      allow_duplicates: false
+
+  # `event.duration` is deliberately NOT set. A slow log entry proves only that
+  # the request exceeded the pool's `request_slowlog_timeout`; PHP-FPM does not
+  # record how long it actually ran, and the threshold is not a measurement. The
+  # threshold itself is not stored either: ServerPilot documents the default as
+  # five seconds, but it is pool configuration rather than event data, so a
+  # value copied from the documentation into every document would be
+  # indistinguishable from a measured one and would be silently wrong for any
+  # server whose pool configuration differs. The measured duration of the same
+  # request is available in the `php_access` stream, which records PHP-FPM's
+  # `REQUEST_SECONDS` in `event.duration`.
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

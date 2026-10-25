@@ -1,0 +1,104 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T01:14:52.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.21"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "2025/03/07 01:14:52 [error] 1920145#1920145: *99120 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 203.0.113.21, server: api.example.com, request: \"GET /v1/status HTTP/1.1\", upstream: \"http://127.0.0.1:81/v1/status\", host: \"api.example.com\"",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/api/mysite_nginx.error.log"
+                },
+                "level": "error"
+            },
+            "message": "upstream timed out (110: Connection timed out) while reading response header from upstream",
+            "process": {
+                "pid": 1920145,
+                "thread": {
+                    "id": 1920145
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.21"
+                ]
+            },
+            "server": {
+                "domain": "api.example.com"
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "api"
+                },
+                "nginx": {
+                    "connection": {
+                        "id": "99120"
+                    },
+                    "error": {
+                        "code": "110",
+                        "message": "Connection timed out"
+                    },
+                    "upstream": {
+                        "url": "http://127.0.0.1:81/v1/status"
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "api"
+            },
+            "source": {
+                "ip": "203.0.113.21"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "api.example.com",
+                "original": "/v1/status",
+                "path": "/v1/status",
+                "scheme": "https"
+            }
+        }
+    ]
+}

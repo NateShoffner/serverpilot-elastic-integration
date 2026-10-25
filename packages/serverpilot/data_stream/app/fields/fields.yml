@@ -1,0 +1,47 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: app.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the app. Source field `id`. The `database` data stream references this value as `appid`.
+    - name: app.name
+      type: keyword
+      description: >-
+        App name. Source field `name`. ServerPilot writes this app's logs to `/srv/users/<sysuser>/log/<name>/`, so this is the join key between this data stream and the seven on-host log data streams, where the same value is parsed out of `log.file.path`. It is also the value the package-wide `service.name` convention carries.
+    - name: app.created
+      type: date
+      description: >-
+        When the app was created. Source field `datecreated`, which is Unix epoch **seconds**, not milliseconds.
+    - name: app.domains
+      type: keyword
+      description: >-
+        Domains served by the app. Source field `domains`, which is an array. ServerPilot allows up to 300 domains per app.
+    - name: app.runtime.name
+      type: keyword
+      description: >-
+        PHP runtime the app runs under, as reported by the API, for example `php8.3`. Source field `runtime`. Mapped as a free keyword rather than an enum: the API reference still documents only `php5.4` through `php7.2` while ServerPilot ships considerably newer runtimes, so the value set cannot be treated as closed.
+    - name: app.runtime.version
+      type: keyword
+      description: >-
+        Numeric PHP version split out of `runtime`, for example `8.3` from `php8.3`. Derived, not a source field. This exists so that apps running an end-of-life PHP release can be found and alerted on, which is impractical against the prefixed `runtime` string. Compare with `serverpilot.php.version` in the `php_access`, `php_error` and `php_slow` data streams, which is derived from the log filename and should agree with this value.
+    - name: app.ssl.enabled
+      type: boolean
+      description: >-
+        Whether the app has a TLS certificate configured at all. Derived from whether the source `ssl` object is present rather than `null`.
+    - name: app.ssl.auto
+      type: boolean
+      description: >-
+        Whether AutoSSL is enabled, meaning ServerPilot obtains and renews a Let's Encrypt certificate for the app automatically. Source field `ssl.auto`.
+    - name: app.ssl.force
+      type: boolean
+      description: >-
+        Whether the app redirects all HTTP requests to HTTPS. Source field `ssl.force`.
+    - name: sysuser.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the system user that owns the app and that the app's PHP processes run as. Source field `sysuserid`. Joins to `serverpilot.sysuser.id` in the `sysuser` data stream.
+    - name: server.id
+      type: keyword
+      description: >-
+        Opaque ServerPilot identifier for the server hosting the app. Source field `serverid`. Joins to `serverpilot.server.id` in the `server` data stream.

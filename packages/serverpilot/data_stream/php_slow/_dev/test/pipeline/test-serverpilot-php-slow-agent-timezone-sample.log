@@ -1,0 +1,4 @@
+[06-Mar-2025 15:01:27]  [pool blogapp] pid 5667
+script_filename = /srv/users/serverpilot/apps/blogapp/public/index.php
+[0x00007f185ee15220] file_put_contents() /srv/users/serverpilot/apps/blogapp/public/lib/cache.php:205
+[0x00007f185ee15140] example_warm_cache() /srv/users/serverpilot/apps/blogapp/public/index.php:31

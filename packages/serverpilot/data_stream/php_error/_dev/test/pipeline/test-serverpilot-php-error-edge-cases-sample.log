@@ -1,0 +1,8 @@
+[04-Mar-2025 13:55:10 America/New_York] PHP Warning:  Session cannot be started after headers have already been sent in /srv/users/serverpilot/apps/blogapp/public/session.php on line 12
+[04-Mar-2025 09:12:07 EST] PHP Notice:  Only variables should be passed by reference in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 94
+[04-Mar-2025 13:56:02 Example/Not_A_Zone] PHP Deprecated:  Calling example_legacy() is deprecated in /srv/users/serverpilot/apps/blogapp/public/legacy.php on line 7
+[04-Mar-2025 13:57:11 UTC] PHP Fatal error:  Unable to start session: no storage module chosen
+[04-Mar-2025 13:58:44 UTC] PHP Parse error:  syntax error, unexpected token ";" in /srv/users/serverpilot/apps/blogapp/public/broken.php on line 31
+[04-Mar-2025 13:59:09 UTC] PHP Recoverable fatal error:  Object of class Example could not be converted to string in /srv/users/serverpilot/apps/blogapp/public/render.php on line 77
+[04-Mar-2025 14:00:21 UTC] PHP message: Example cache warm-up finished for app blogapp
+[04-Mar-2025 14:01:30 UTC] Example order 10000002 could not be queued, retrying

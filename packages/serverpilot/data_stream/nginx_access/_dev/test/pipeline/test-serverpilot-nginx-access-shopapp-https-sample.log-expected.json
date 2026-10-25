@@ -1,0 +1,326 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T00:12:09.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.52"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 2000000,
+                "kind": "event",
+                "original": "203.0.113.52 - - [07/Mar/2025:00:12:09 +0000] \"GET /image/cache/catalog/example-product-500x500.jpg HTTP/2.0\" 200 68204 \"https://shop.example.com/index.php?route=product/product&product_id=42\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 598 0.002 \"-\" \"-\" \"shop.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 598,
+                    "method": "GET",
+                    "referrer": "https://shop.example.com/index.php?route=product/product&product_id=42"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 68204
+                    },
+                    "status_code": 200
+                },
+                "version": "2.0"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.access_ssl.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.52"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "203.0.113.52"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/image/cache/catalog/example-product-500x500.jpg",
+                "path": "/image/cache/catalog/example-product-500x500.jpg",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Mac"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "full": "Mac OS X 10.15.7",
+                    "name": "Mac OS X",
+                    "version": "10.15.7"
+                },
+                "version": "133.0.0.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:12:44.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.17"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 3207000000,
+                "kind": "event",
+                "original": "198.51.100.88 - - [07/Mar/2025:00:12:44 +0000] \"POST /index.php?route=checkout/confirm HTTP/1.1\" 200 3371 \"https://shop.example.com/index.php?route=checkout/checkout\" \"Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36\" \"203.0.113.17, 198.51.100.9, 192.0.2.3\" 1482 3.207 \"3371\" \"3.207\" \"shop.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 1482,
+                    "method": "POST",
+                    "referrer": "https://shop.example.com/index.php?route=checkout/checkout"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 3371
+                    },
+                    "status_code": 200
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.access_ssl.log"
+                }
+            },
+            "network": {
+                "forwarded_ip": [
+                    "203.0.113.17",
+                    "198.51.100.9",
+                    "192.0.2.3"
+                ]
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.88",
+                    "203.0.113.17",
+                    "198.51.100.9",
+                    "192.0.2.3"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 3371,
+                            "duration": 3207000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "198.51.100.88"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/index.php?route=checkout/confirm",
+                "path": "/index.php",
+                "query": "route=checkout/confirm",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Pixel 9"
+                },
+                "name": "Chrome Mobile",
+                "original": "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36",
+                "os": {
+                    "full": "Android 15",
+                    "name": "Android",
+                    "version": "15"
+                },
+                "version": "133.0.0.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:13:02.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.101"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 501000000,
+                "kind": "event",
+                "original": "192.0.2.101 - - [07/Mar/2025:00:13:02 +0000] \"GET /admin HTTP/1.1\" 502 494 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 318 0.501 \"-\" \"0.501\" \"shop.example.com\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 318,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 494
+                    },
+                    "status_code": 502
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_nginx.access_ssl.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.101"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "duration": 501000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "192.0.2.101"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "shop.example.com",
+                "original": "/admin",
+                "path": "/admin",
+                "scheme": "https"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "full": "Windows 10",
+                    "name": "Windows",
+                    "version": "10"
+                },
+                "version": "133.0.0.0"
+            }
+        }
+    ]
+}

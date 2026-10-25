@@ -1,0 +1,2 @@
+[Thu Mar 06 15:04:02.881204 2025] [authz_core:error] [pid 5668:tid 139635493631745] [client 198.51.100.23:0] AH01630: client denied by server configuration: /srv/users/serverpilot/apps/blogapp/public/wp-config.php
+[Thu Mar 06 15:09:10.552001 2025] [mpm_event:notice] [pid 5660:tid 139635493631744] AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations

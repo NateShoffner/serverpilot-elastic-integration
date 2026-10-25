@@ -1,0 +1,165 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T16:12:33.004Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.131"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 16:12:33.004417 2025] [rewrite:error] [pid 5701:tid 139635493631750] [client 203.0.113.131:0] AH00670: Options FollowSymLinks and SymLinksIfOwnerMatch are both off, so the RewriteRule directive is also forbidden due to its similar ability to circumvent directory restrictions",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_apache.error.log"
+                },
+                "level": "error"
+            },
+            "message": "AH00670: Options FollowSymLinks and SymLinksIfOwnerMatch are both off, so the RewriteRule directive is also forbidden due to its similar ability to circumvent directory restrictions",
+            "process": {
+                "pid": 5701,
+                "thread": {
+                    "id": 139635493631750
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.131"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH00670"
+                    },
+                    "module": "rewrite"
+                },
+                "app": {
+                    "name": "shopapp"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "203.0.113.131"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T16:18:09.772Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.244"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 16:18:09.772300 2025] [php:warn] [pid 5702:tid 139635493631751] [client 192.0.2.244:0] PHP Warning:  Undefined array key \"example_key\" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57",
+                "severity": 4,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_apache.error.log"
+                },
+                "level": "warn",
+                "origin": {
+                    "file": {
+                        "line": 57,
+                        "name": "/srv/users/appowner/apps/shopapp/public/catalog/controller/example.php"
+                    }
+                }
+            },
+            "message": "PHP Warning:  Undefined array key \"example_key\" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57",
+            "process": {
+                "pid": 5702,
+                "thread": {
+                    "id": 139635493631751
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.244"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "module": "php"
+                },
+                "app": {
+                    "name": "shopapp"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "192.0.2.244"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

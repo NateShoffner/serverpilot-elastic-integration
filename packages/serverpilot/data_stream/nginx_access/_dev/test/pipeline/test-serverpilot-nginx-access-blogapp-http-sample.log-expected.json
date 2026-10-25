@@ -1,0 +1,413 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T00:03:34.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.10"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 125000000,
+                "kind": "event",
+                "original": "203.0.113.10 - - [07/Mar/2025:00:03:34 +0000] \"GET /blog HTTP/1.1\" 302 1395 \"-\" \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\" \"-\" 340 0.125 \"1395\" \"0.125\" \"blogapp.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 340,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 1395
+                    },
+                    "status_code": 302
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.10"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 1395,
+                            "duration": 125000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.10"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog",
+                "path": "/blog",
+                "scheme": "http"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Spider"
+                },
+                "name": "Googlebot",
+                "original": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+                "version": "2.1"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:04:02.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.23"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 0,
+                "kind": "event",
+                "original": "198.51.100.23 - - [07/Mar/2025:00:04:02 +0000] \"GET /blog/wp-content/themes/example/style.css HTTP/1.1\" 200 18422 \"http://blogapp.example.com/blog\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 412 0.000 \"-\" \"-\" \"blogapp.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 412,
+                    "method": "GET",
+                    "referrer": "http://blogapp.example.com/blog"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 18422
+                    },
+                    "status_code": 200
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.23"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "198.51.100.23"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog/wp-content/themes/example/style.css",
+                "path": "/blog/wp-content/themes/example/style.css",
+                "scheme": "http"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "full": "Windows 10",
+                    "name": "Windows",
+                    "version": "10"
+                },
+                "version": "133.0.0.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:04:11.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.200"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 67000000,
+                "kind": "event",
+                "original": "192.0.2.77 - - [07/Mar/2025:00:04:11 +0000] \"GET /blog/missing-page HTTP/1.1\" 404 564 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36\" \"203.0.113.200, 198.51.100.5\" 389 0.067 \"564\" \"0.067\" \"blogapp.example.com\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 389,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 564
+                    },
+                    "status_code": 404
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.access.log"
+                }
+            },
+            "network": {
+                "forwarded_ip": [
+                    "203.0.113.200",
+                    "198.51.100.5"
+                ]
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.77",
+                    "203.0.113.200",
+                    "198.51.100.5"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 564,
+                            "duration": 67000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "192.0.2.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog/missing-page",
+                "path": "/blog/missing-page",
+                "scheme": "http"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+                "os": {
+                    "name": "Linux"
+                },
+                "version": "132.0.0.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:05:19.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.45"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 4000000,
+                "kind": "event",
+                "original": "203.0.113.45 - - [07/Mar/2025:00:05:19 +0000] \"HEAD /blog/feed HTTP/1.1\" 304 - \"-\" \"FeedFetcher-Example/1.0\" \"-\" 298 0.004 \"0\" \"0.004\" \"blogapp.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 298,
+                    "method": "HEAD"
+                },
+                "response": {
+                    "status_code": 304
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.45"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 0,
+                            "duration": 4000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "203.0.113.45"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/blog/feed",
+                "path": "/blog/feed",
+                "scheme": "http"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Other",
+                "original": "FeedFetcher-Example/1.0"
+            }
+        }
+    ]
+}

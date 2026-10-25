@@ -1,0 +1,292 @@
+---
+description: Pipeline for parsing ServerPilot PHP-FPM access logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the ServerPilot PHP-FPM access log line. ServerPilot documents the
+  # format as:
+  #   IP_ADDRESS - [DATE_TIME] "METHOD PHP_REQUEST_URI" RESPONSE_CODE
+  #   CONTENT_LENGTH - MASTER_PID CHILD_PID REQUEST_SECONDS PEAK_MEMORY_MB
+  #   USER_CPU_PCT SYSTEM_CPU_PCT "ORIG_REQUEST_URI"
+  #
+  # Notes on the slots that are not simple values:
+  #
+  # * The `-` directly after `IP_ADDRESS` is the remote user PHP-FPM logs from
+  #   the FastCGI `REMOTE_USER` parameter. ServerPilot leaves it unlabelled
+  #   because an app behind HTTP authentication is the exception rather than the
+  #   rule, but Apache does forward the authenticated user, so it is parsed as a
+  #   `(?:-|...)` alternation: the sentinel leaves `user.name` unset and a real
+  #   value is captured.
+  #
+  # * The bare `-` between `CONTENT_LENGTH` and `MASTER_PID` is unlabelled in
+  #   ServerPilot's documentation and is `-` in every observed sample, so there
+  #   is nothing to map it to. It is parsed as an optional slot rather than as a
+  #   hardcoded literal dash so that a ServerPilot format change that starts
+  #   populating it neither breaks the parse nor silently discards the value;
+  #   anything other than the sentinel is kept verbatim in
+  #   `serverpilot.php.unlabelled_field`.
+  #
+  # * `CONTENT_LENGTH` is frequently `0` (PHP produced no body, or the body was
+  #   streamed) and is also given a `(?:-|...)` alternation so that an absent
+  #   length stays unset rather than being stored as a zero-length body.
+  #
+  # * The two CPU percentages carry a literal `%` suffix, which is matched as a
+  #   literal and discarded so that only the numeric value is stored. The
+  #   targets are named `.percent`, not `.pct`, because the value is kept on the
+  #   0-100 scale PHP-FPM logged it on and a `.pct` name declares a 0-1 fraction
+  #   to every Beats and ECS consumer.
+  #
+  # * The whitespace in front of the final quoted field is variable: ServerPilot
+  #   documents the format with two spaces there and real servers emit one or
+  #   two, so it is matched with `\s+` instead of a single literal space.
+  #
+  # The quoted request line is captured raw and split further down because
+  # PHP-FPM writes `-` for it when no request line was available, and because a
+  # malformed request line should not fail the whole parse.
+  #
+  # The pattern anchors with `\A` and `\Z` because several of its captures are
+  # lazy and grok's `$` matches at every line end, so a line that is not
+  # entirely consumed would match a prefix of itself.
+  - grok:
+      field: event.original
+      tag: grok_php_access
+      patterns:
+        - >-
+          \A%{IP:source.ip} (?:-|%{DATA:user.name}) \[%{HTTPDATE:_tmp.time}\]
+          "(?:-|%{DATA:_tmp.request})" %{NUMBER:http.response.status_code:long}
+          (?:-|%{NUMBER:http.response.body.bytes:long})
+          (?:-|%{NOTSPACE:serverpilot.php.unlabelled_field})
+          %{NUMBER:process.parent.pid:long} %{NUMBER:process.pid:long}
+          %{NUMBER:_tmp.request_seconds:double}
+          %{NUMBER:serverpilot.php.memory.peak.bytes:long}
+          %{NUMBER:serverpilot.php.cpu.user.percent:double}%
+          %{NUMBER:serverpilot.php.cpu.system.percent:double}%\s+"(?:-|%{DATA:url.original})"\Z
+      if: ctx.event?.original != null
+
+  # `PHP_REQUEST_URI` is the request URI *after* Apache's `RewriteRule`
+  # processing, which is to say the script PHP actually executed. ECS has no
+  # field for a rewritten URI, and `url.original` is explicitly the unmodified
+  # URL as seen in the event source, so the rewritten value stays in the vendor
+  # namespace and `ORIG_REQUEST_URI` (parsed above) owns `url.original`.
+  #
+  # `_tmp.request` cannot contain a newline (it comes from a `%{DATA}` capture
+  # in the single-line pattern above), but `\A`/`\Z` are used here too for
+  # consistency with the pattern above.
+  - grok:
+      field: _tmp.request
+      tag: grok_request_line
+      patterns:
+        - '\A%{WORD:http.request.method} %{GREEDYDATA:serverpilot.php.request_uri}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the quoted request line into the request method and the post-rewrite request URI PHP executed. Malformed request lines are tolerated; the raw line remains available in `event.original`.
+
+  # ServerPilot documents `ORIG_REQUEST_URI` as the path and query string before
+  # `RewriteRule` processing, which is exactly ECS `url.original`. The sibling
+  # `nginx_access` stream records the same pre-rewrite URI in `url.original`, so
+  # both streams can be queried, joined and charted on one URL, and
+  # `url.path`/`url.query` mean the same thing in each of them.
+  - grok:
+      field: url.original
+      tag: grok_url_original
+      patterns:
+        - '\A%{DATA:url.path}\?%{GREEDYDATA:url.query}\Z'
+        - '\A%{GREEDYDATA:url.path}\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the request URI into its path and query string.
+
+  # ServerPilot records the owning app and system user only in the log file path,
+  # and the PHP version only in the log file name:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_phpX.Y.access.log
+  # The log line itself carries no PHP version at all, so the file name is the
+  # only signal available, and it is what makes it possible to find every app
+  # still being served by an end-of-life PHP release.
+  #
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  # The version-bearing pattern is tried first and the plain pattern second, so a
+  # log file whose name does not embed a version still yields the system user and
+  # app name, and a path that does not follow the ServerPilot layout at all
+  # simply leaves all three fields unset without raising an error.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]*_php(?<serverpilot.php.version>[0-9]+(?:\.[0-9]+)?)\.[^/]+\Z'
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app, and the PHP version serving the app, from the log file path.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # `DATE_TIME` carries an explicit UTC offset, so no `event.timezone` fallback is
+  # needed here, unlike the Nginx and Apache error streams, whose timestamps have
+  # no offset at all.
+  - date:
+      field: _tmp.time
+      tag: date_php_access_time
+      target_field: '@timestamp'
+      formats:
+        - dd/MMM/yyyy:HH:mm:ss Z
+      if: ctx._tmp?.time != null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_php_access_time_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  # ECS requires durations in nanoseconds; PHP-FPM logs fractional seconds.
+  - script:
+      lang: painless
+      tag: script_convert_request_seconds_to_nanos
+      description: Converts the request execution time from the fractional seconds PHP-FPM logs to the nanoseconds ECS `event.duration` requires.
+      if: ctx._tmp?.request_seconds != null
+      source: |-
+        ctx._tmp.event_duration = Math.round(ctx._tmp.request_seconds * 1000000000.0);
+  - rename:
+      field: _tmp.event_duration
+      tag: rename_event_duration
+      target_field: event.duration
+      ignore_missing: true
+
+  # PHP-FPM logs the real client address, which this innermost hop receives from
+  # Apache, which in turn receives it from the Nginx front end. The log line
+  # carries no proxy chain of its own, so `IP_ADDRESS` is both the transport
+  # source and the client of the request. `client.ip` is the enrichment target,
+  # mirroring `nginx_access`.
+  - set:
+      field: client.ip
+      tag: set_client_ip_from_source
+      copy_from: source.ip
+      if: ctx.source?.ip != null
+
+  - geoip:
+      field: client.ip
+      tag: geoip_client_geo
+      target_field: client.geo
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.geo == null
+  - geoip:
+      database_file: GeoLite2-ASN.mmdb
+      field: client.ip
+      tag: geoip_client_asn
+      target_field: client.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.as == null
+  - rename:
+      field: client.as.asn
+      tag: rename_client_as_number
+      target_field: client.as.number
+      ignore_missing: true
+  - rename:
+      field: client.as.organization_name
+      tag: rename_client_as_organization_name
+      target_field: client.as.organization.name
+      ignore_missing: true
+
+  # Nginx and PHP-FPM each log the requests they serve on a ServerPilot server,
+  # so this stream holds one document per request that reached PHP, as
+  # `nginx_access` does for the public hop. Both are genuine web access events
+  # observed at different hops, so both are categorized the same way; they are
+  # distinguished by `event.dataset`.
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+  - append:
+      field: event.type
+      tag: append_event_type_access
+      value: access
+      allow_duplicates: false
+  - set:
+      field: event.outcome
+      tag: set_event_outcome_success
+      value: success
+      if: ctx.http?.response?.status_code != null && ctx.http.response.status_code < 400
+  - set:
+      field: event.outcome
+      tag: set_event_outcome_failure
+      value: failure
+      if: ctx.http?.response?.status_code != null && ctx.http.response.status_code >= 400
+
+  - append:
+      field: related.ip
+      tag: append_source_ip_to_related_ip
+      value: '{{{source.ip}}}'
+      allow_duplicates: false
+      if: ctx.source?.ip != null
+  - append:
+      field: related.ip
+      tag: append_client_ip_to_related_ip
+      value: '{{{client.ip}}}'
+      allow_duplicates: false
+      if: ctx.client?.ip != null
+  - append:
+      field: related.user
+      tag: append_user_name_to_related_user
+      value: '{{{user.name}}}'
+      allow_duplicates: false
+      if: ctx.user?.name != null
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

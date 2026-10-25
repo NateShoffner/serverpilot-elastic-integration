@@ -1,0 +1,365 @@
+---
+description: Pipeline for parsing ServerPilot Nginx error logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the ServerPilot Nginx error log line. Nginx documents the format as:
+  #   DATE TIME [LOG_LEVEL] PROCESS_ID#THREAD_ID: *CONNECTION_ID LOG_MESSAGE
+  #
+  # Two parts are variable and both are handled inside this single pattern:
+  #
+  #   * `*CONNECTION_ID` is only present on connection-scoped messages. Worker and
+  #     startup messages (`[notice] ... using the "epoll" event method`) omit it,
+  #     so the whole `*ID ` token sits in an optional group.
+  #
+  #   * Nginx appends a trailing run of `key: value` pairs to the free-text
+  #     message (`client:`, `server:`, `request:`, `upstream:`, `host:`,
+  #     `referrer:`), always in that order and with any subset present (see
+  #     `ngx_http_log_error_handler`). Each one is therefore an independent
+  #     optional group in that fixed order, and the free-text message is captured
+  #     lazily so the regex engine stops it at the first trailing pair that is
+  #     actually there instead of swallowing the whole tail. Writing one pattern
+  #     per present/absent combination would need 64 alternatives.
+  #
+  # The message capture is multiline-aware because the agent's multiline parser
+  # folds continuation lines (PHP stack traces relayed through FastCGI stderr)
+  # into a single event, and the pattern anchors with `\A`/`\Z` so that grok's
+  # per-line `$` cannot truncate it and drop the trailing `key: value` pairs.
+  - grok:
+      field: event.original
+      tag: grok_nginx_error
+      pattern_definitions:
+        SP_ERROR_TIME: '\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}'
+        SP_LOG_LEVEL: '(?:debug|info|notice|warn|error|crit|alert|emerg)'
+        SP_MULTILINE_LAZY: '(?:.|\n|\t)*?'
+      patterns:
+        - >-
+          \A%{SP_ERROR_TIME:_tmp.time} \[%{SP_LOG_LEVEL:log.level}\]
+          %{NONNEGINT:process.pid:long}#%{NONNEGINT:process.thread.id:long}:(?:
+          \*%{NONNEGINT:serverpilot.nginx.connection.id})?
+          %{SP_MULTILINE_LAZY:message}(?:, client: %{IP:source.ip})?(?:, server:
+          %{DATA:_tmp.server})?(?:, request: "%{DATA:_tmp.request}")?(?:,
+          upstream: "%{DATA:_tmp.upstream}")?(?:, host:
+          "%{DATA:url.domain}")?(?:, referrer: "%{DATA:http.request.referrer}")?\Z
+      if: ctx.event?.original != null
+
+  # The free-text part of most Nginx error messages embeds the errno that caused
+  # the failure, for example `(110: Connection timed out)` or `(2: No such file
+  # or directory)`. Both halves are kept in the vendor namespace: the pipeline's
+  # `on_failure` block owns ECS `error.message`, so writing the Nginx errno text
+  # there would make a parsed-but-failed upstream indistinguishable from an
+  # ingest failure. Only a numeric errno is matched, which skips the
+  # parenthesised OpenSSL diagnostics in `(SSL: error:0A000412:...)`.
+  - grok:
+      field: message
+      tag: grok_nginx_errno
+      pattern_definitions:
+        SP_MULTILINE_LAZY: '(?:.|\n|\t)*?'
+        SP_MULTILINE: '(?:.|\n|\t)*'
+      patterns:
+        - >-
+          \A%{SP_MULTILINE_LAZY}\(%{NONNEGINT:serverpilot.nginx.error.code}:
+          %{DATA:serverpilot.nginx.error.message}\)%{SP_MULTILINE}\Z
+      ignore_missing: true
+      ignore_failure: true
+      description: Extracts the errno number and text that Nginx embeds in the message. Messages without a parenthesised errno are left untouched.
+
+  - grok:
+      field: _tmp.request
+      tag: grok_request_line
+      patterns:
+        - '^%{WORD:http.request.method} %{GREEDYDATA:url.original} HTTP/%{NUMBER:http.version}$'
+        - '^%{WORD:http.request.method} %{GREEDYDATA:url.original}$'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the quoted request line into method, request URI and HTTP version. Malformed request lines are tolerated; the raw line remains available in `event.original`.
+  - grok:
+      field: url.original
+      tag: grok_url_original
+      patterns:
+        - '^%{DATA:url.path}\?%{GREEDYDATA:url.query}$'
+        - '^%{GREEDYDATA:url.path}$'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the request URI into its path and query string.
+
+  # `server:` is the server name Nginx matched for the request, but on connections
+  # that fail before a request line is read (TLS handshake failures, idle
+  # timeouts) Nginx logs the listening socket instead, for example `0.0.0.0:443`.
+  # Only the host-name form is an ECS `server.domain`; the listening-socket form
+  # has no ECS equivalent and stays in the vendor namespace. The two renames are
+  # mutually exclusive, so the value is never stored twice.
+  - rename:
+      field: _tmp.server
+      tag: rename_server_to_server_domain
+      target_field: server.domain
+      ignore_missing: true
+      if: ctx._tmp?.server != null && !ctx._tmp.server.contains(':')
+  - rename:
+      field: _tmp.server
+      tag: rename_server_to_vendor_server
+      target_field: serverpilot.nginx.server
+      ignore_missing: true
+      if: ctx._tmp?.server != null
+      description: Holds the raw `server:` token when it is a listening socket rather than a server name.
+  - rename:
+      field: _tmp.upstream
+      tag: rename_upstream_url
+      target_field: serverpilot.nginx.upstream.url
+      ignore_missing: true
+      description: URL of the upstream Nginx was talking to, which on a ServerPilot server is the local Apache instance.
+
+  # ServerPilot records the owning app and system user only in the log file path:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_nginx.error.log
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  #
+  # The first pattern additionally captures the app-name prefix of the file name,
+  # which the scheme rules below compare against the app directory name. It is
+  # anchored on the known file-name suffix (`_nginx.error.log` or
+  # `_nginx.error_ssl.log`) rather than split on the first underscore, because an
+  # app name may itself contain underscores. The second pattern is the
+  # file-name-agnostic fallback: it still yields the system user and the app for
+  # any other file sitting in an app's log directory.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/(?<_tmp.file_app_name>[^/]+)_nginx\.error(?:_ssl)?\.log\Z'
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app from the log file path, plus the app-name prefix of the log file name.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # The log line carries no scheme, so it is derived from the log file name. Two
+  # ServerPilot vhost layouts are in the field and both are handled:
+  #
+  #   1. The documented layout names the files after the app and marks the TLS
+  #      vhost with an `_ssl` suffix: `APPNAME_nginx.error_ssl.log` holds the
+  #      errors of the HTTPS vhost and `APPNAME_nginx.error.log` those of the
+  #      HTTP vhost.
+  #
+  #   2. Older ServerPilot versions generate the TLS vhost from a template whose
+  #      log file name was never parameterised, so the HTTPS vhost of every app
+  #      logs to a fixed name (observed as `mysite_nginx.error.log`) inside that
+  #      app's own log directory, with no `_ssl` anywhere on the server. Such a
+  #      file is recognised by its app-name prefix differing from the app
+  #      directory it sits in, a comparison rather than a hardcoded `mysite`
+  #      match, so it stays correct if the template name differs, and so an app
+  #      genuinely named `mysite` (prefix and directory agree) is still read as
+  #      HTTP.
+  #
+  # Anything else, including a path that does not match the ServerPilot layout
+  # at all, leaves `url.scheme` unset rather than guessing.
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_https_ssl_suffix
+      value: https
+      if: ctx.log?.file?.path != null && ctx.log.file.path.contains('_nginx.error_ssl')
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_https_template_file_name
+      value: https
+      if: >-
+        ctx.url?.scheme == null && ctx._tmp?.file_app_name != null &&
+        ctx.serverpilot?.app?.name != null &&
+        ctx._tmp.file_app_name != ctx.serverpilot.app.name
+      description: Marks the legacy ServerPilot TLS vhost layout, whose unparameterised log file name does not match the app directory it is written to, as HTTPS.
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_http
+      value: http
+      if: ctx.url?.scheme == null && ctx.log?.file?.path != null && ctx.log.file.path.contains('_nginx.error.log')
+
+  # Nginx error log timestamps carry neither a UTC offset nor a timezone name, so
+  # they can only be read correctly with the timezone of the server that wrote
+  # them. The agent stream template stamps that timezone into `event.timezone`
+  # with an `add_locale` processor; the first `date` processor below uses it.
+  # `event.timezone` is absent when no agent is in the path (pipeline tests, or a
+  # document replayed from another shipper), and the second `date` processor then
+  # falls back to the `date` processor default of UTC.
+  - date:
+      field: _tmp.time
+      tag: date_nginx_error_time_with_timezone
+      target_field: '@timestamp'
+      formats:
+        - yyyy/MM/dd HH:mm:ss
+      timezone: '{{{event.timezone}}}'
+      if: ctx._tmp?.time != null && ctx.event?.timezone != null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_nginx_error_time_with_timezone_failure
+            value: '{{{_ingest.on_failure_message}}}'
+  - date:
+      field: _tmp.time
+      tag: date_nginx_error_time_utc_fallback
+      target_field: '@timestamp'
+      formats:
+        - yyyy/MM/dd HH:mm:ss
+      if: ctx._tmp?.time != null && ctx.event?.timezone == null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_nginx_error_time_utc_fallback_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  # The `client:` token is the peer address of the connection, which is both the
+  # transport source and the client of the request, since the error log carries
+  # no proxy information.
+  - set:
+      field: client.ip
+      tag: set_client_ip_from_source
+      copy_from: source.ip
+      if: ctx.source?.ip != null
+
+  - geoip:
+      field: client.ip
+      tag: geoip_client_geo
+      target_field: client.geo
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.geo == null
+  - geoip:
+      database_file: GeoLite2-ASN.mmdb
+      field: client.ip
+      tag: geoip_client_asn
+      target_field: client.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.as == null
+  - rename:
+      field: client.as.asn
+      tag: rename_client_as_number
+      target_field: client.as.number
+      ignore_missing: true
+  - rename:
+      field: client.as.organization_name
+      tag: rename_client_as_organization_name
+      target_field: client.as.organization.name
+      ignore_missing: true
+
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+
+  # Nginx log levels are the syslog severities, so they carry both a numeric
+  # severity and the distinction between a genuine failure and an informational
+  # worker message. `[warn]` and above describe something that went wrong and are
+  # reported as `event.type: [error]`; `[notice]`, `[info]` and `[debug]` are
+  # reported as `event.type: [info]`.
+  - script:
+      lang: painless
+      tag: script_set_severity_and_event_type
+      description: Maps the Nginx log level to its numeric syslog severity and to the matching ECS event type.
+      if: ctx.log?.level != null
+      params:
+        emerg:
+          severity: 0
+          type: error
+        alert:
+          severity: 1
+          type: error
+        crit:
+          severity: 2
+          type: error
+        error:
+          severity: 3
+          type: error
+        warn:
+          severity: 4
+          type: error
+        notice:
+          severity: 5
+          type: info
+        info:
+          severity: 6
+          type: info
+        debug:
+          severity: 7
+          type: info
+      source: |-
+        def mapping = params[ctx.log.level];
+        if (mapping == null) {
+          return;
+        }
+        if (ctx.event == null) {
+          ctx.event = new HashMap();
+        }
+        ctx.event.severity = mapping.severity;
+        ctx.event.type = [mapping.type];
+
+  - append:
+      field: related.ip
+      tag: append_source_ip_to_related_ip
+      value: '{{{source.ip}}}'
+      allow_duplicates: false
+      if: ctx.source?.ip != null
+  - append:
+      field: related.ip
+      tag: append_client_ip_to_related_ip
+      value: '{{{client.ip}}}'
+      allow_duplicates: false
+      if: ctx.client?.ip != null
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

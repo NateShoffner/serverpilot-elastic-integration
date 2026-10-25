@@ -1,0 +1,75 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T15:01:27.000+02:00",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[06-Mar-2025 15:01:27]  [pool blogapp] pid 5667\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/index.php\n[0x00007f185ee15220] file_put_contents() /srv/users/serverpilot/apps/blogapp/public/lib/cache.php:205\n[0x00007f185ee15140] example_warm_cache() /srv/users/serverpilot/apps/blogapp/public/index.php:31",
+                "timezone": "+02:00",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 205,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/lib/cache.php"
+                    },
+                    "function": "file_put_contents"
+                }
+            },
+            "process": {
+                "pid": 5667
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 2,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 205,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/lib/cache.php"
+                                },
+                                "function": "file_put_contents"
+                            },
+                            {
+                                "file": {
+                                    "line": 31,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/index.php"
+                                },
+                                "function": "example_warm_cache"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/index.php",
+                        "stack_trace": "file_put_contents() /srv/users/serverpilot/apps/blogapp/public/lib/cache.php:205\nexample_warm_cache() /srv/users/serverpilot/apps/blogapp/public/index.php:31"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

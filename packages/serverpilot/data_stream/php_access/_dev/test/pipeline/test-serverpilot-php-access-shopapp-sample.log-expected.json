@@ -1,0 +1,319 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T12:10:12.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.61"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 874000000,
+                "kind": "event",
+                "original": "198.51.100.61 - [04/Mar/2025:07:10:12 -0500] \"GET /index.php\" 200 42117 - 2041 31005 0.874 16777216 4.25% 1.00% \"/index.php?route=product/search&search=example\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 42117
+                    },
+                    "status_code": 200
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31005
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.61"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 1.0
+                        },
+                        "user": {
+                            "percent": 4.25
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 16777216
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "198.51.100.61"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/index.php?route=product/search&search=example",
+                "path": "/index.php",
+                "query": "route=product/search&search=example"
+            }
+        },
+        {
+            "@timestamp": "2025-03-04T12:11:48.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.131"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 3207000000,
+                "kind": "event",
+                "original": "203.0.113.131 - [04/Mar/2025:07:11:48 -0500] \"POST /index.php\" 200 3371 - 2041 31006 3.207 25165824 9.50% 2.75% \"/index.php?route=checkout/confirm\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "POST"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 3371
+                    },
+                    "status_code": 200
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31006
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.131"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 2.75
+                        },
+                        "user": {
+                            "percent": 9.5
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 25165824
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "203.0.113.131"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/index.php?route=checkout/confirm",
+                "path": "/index.php",
+                "query": "route=checkout/confirm"
+            }
+        },
+        {
+            "@timestamp": "2025-03-04T12:12:31.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.244"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 58000000,
+                "kind": "event",
+                "original": "192.0.2.244 - [04/Mar/2025:07:12:31 -0500] \"GET /index.php\" 403 1024 - 2041 31007 0.058 2097152 0.00% 0.00% \"/index.php?route=checkout/cart.add\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 1024
+                    },
+                    "status_code": 403
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/appowner/log/shopapp/shopapp_php8.4.access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31007
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.244"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "shopapp"
+                },
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.0
+                        },
+                        "user": {
+                            "percent": 0.0
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 2097152
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "version": "8.4"
+                },
+                "sysuser": {
+                    "name": "appowner"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "source": {
+                "ip": "192.0.2.244"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/index.php?route=checkout/cart.add",
+                "path": "/index.php",
+                "query": "route=checkout/cart.add"
+            }
+        }
+    ]
+}

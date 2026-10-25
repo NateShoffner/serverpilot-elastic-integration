@@ -1,0 +1,130 @@
+{
+    "@timestamp": "2025-03-06T15:01:27.248Z",
+    "agent": {
+        "ephemeral_id": "f90cf1ed-9e49-48df-9881-09f28db889ee",
+        "id": "870a7d7e-cdce-46a2-bf58-78d9bfde32d5",
+        "name": "elastic-agent-26438",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "client": {
+        "as": {
+            "number": 64502,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        },
+        "geo": {
+            "city_name": "Madrid",
+            "continent_name": "Europe",
+            "country_iso_code": "ES",
+            "country_name": "Spain",
+            "location": {
+                "coordinates": [
+                    -3.702500034123659,
+                    40.416389987803996
+                ],
+                "type": "Point"
+            },
+            "region_iso_code": "ES-M",
+            "region_name": "Madrid"
+        },
+        "ip": "203.0.113.10"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.apache_error",
+        "namespace": "96357",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "870a7d7e-cdce-46a2-bf58-78d9bfde32d5",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.apache_error",
+        "ingested": "2026-10-12T08:52:53Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "[Thu Mar 06 15:01:27.248409 2025] [core:alert] [pid 5667:tid 139635493631744] [client 203.0.113.10:0] /srv/users/serverpilot/apps/blogapp/public/.htaccess: RewriteRule: bad argument line 'example_invalid_value'",
+        "severity": 1,
+        "timezone": "+00:00",
+        "type": [
+            "error"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-26438",
+        "ip": [
+            "192.168.160.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-A0-02"
+        ],
+        "name": "elastic-agent-26438",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "inode": "4222124654387760",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+        },
+        "level": "alert",
+        "offset": 0
+    },
+    "message": "/srv/users/serverpilot/apps/blogapp/public/.htaccess: RewriteRule: bad argument line 'example_invalid_value'",
+    "process": {
+        "pid": 5667,
+        "thread": {
+            "id": 139635493631744
+        }
+    },
+    "related": {
+        "ip": [
+            "203.0.113.10"
+        ]
+    },
+    "serverpilot": {
+        "apache": {
+            "module": "core"
+        },
+        "app": {
+            "name": "blogapp"
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "source": {
+        "ip": "203.0.113.10"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-apache-error"
+    ]
+}

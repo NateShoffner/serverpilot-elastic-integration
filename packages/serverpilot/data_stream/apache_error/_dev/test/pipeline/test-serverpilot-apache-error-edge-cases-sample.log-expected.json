@@ -1,0 +1,188 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T14:58:02.100Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 14:58:02.100233 2025] [core:emerg] [pid 5660:tid 139635493631744] AH00072: make_sock: could not bind to address [::]:81",
+                "severity": 0,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/apache-error.log"
+                },
+                "level": "emerg"
+            },
+            "message": "AH00072: make_sock: could not bind to address [::]:81",
+            "process": {
+                "pid": 5660,
+                "thread": {
+                    "id": 139635493631744
+                }
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH00072"
+                    },
+                    "module": "core"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:30:15.884Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.131"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:30:15.884120 2025] [proxy_fcgi:error] [pid 5705:tid 139635493631752] [client 203.0.113.131:0] AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42\nStack trace:\n#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()\n#1 {main}\n  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42'",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/apache-error.log"
+                },
+                "level": "error",
+                "origin": {
+                    "file": {
+                        "line": 42,
+                        "name": "/srv/users/appowner/apps/shopapp/public/lib/db.php"
+                    }
+                }
+            },
+            "message": "AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42\nStack trace:\n#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()\n#1 {main}\n  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42'",
+            "process": {
+                "pid": 5705,
+                "thread": {
+                    "id": 139635493631752
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.131"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH01071"
+                    },
+                    "module": "proxy_fcgi"
+                }
+            },
+            "source": {
+                "ip": "203.0.113.131"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:31:00.001Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.61"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:31:00.001122 2025] [authz_core:trace1] [pid 5705:tid 139635493631752] [client 198.51.100.61:0] authorization result of Require all granted: granted",
+                "severity": 7,
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/apache-error.log"
+                },
+                "level": "trace1"
+            },
+            "message": "authorization result of Require all granted: granted",
+            "process": {
+                "pid": 5705,
+                "thread": {
+                    "id": 139635493631752
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.61"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "module": "authz_core"
+                }
+            },
+            "source": {
+                "ip": "198.51.100.61"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

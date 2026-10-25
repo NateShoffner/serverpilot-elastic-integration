@@ -1,0 +1,433 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-05T08:01:12.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:01:12]  [pool blogapp] pid 4101\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/report.php\n[0x00007f185ee134e0] example_slow_report() /srv/users/serverpilot/apps/blogapp/public/report.php:14",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 14,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/report.php"
+                    },
+                    "function": "example_slow_report"
+                }
+            },
+            "process": {
+                "pid": 4101
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 1,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 14,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/report.php"
+                                },
+                                "function": "example_slow_report"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/report.php",
+                        "stack_trace": "example_slow_report() /srv/users/serverpilot/apps/blogapp/public/report.php:14"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:04:37.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:04:37]  [pool blogapp] pid 4102\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/index.php\n[0x00007f185ee13b20] PDO->prepare() /srv/users/serverpilot/apps/blogapp/public/lib/db.php:61\n[0x00007f185ee13a40] Example\\Repository::findAll() /srv/users/serverpilot/apps/blogapp/public/lib/repository.php:128\n[0x00007f185ee13960] {closure}() /srv/users/serverpilot/apps/blogapp/public/lib/collection.php:44\n[0x00007f185ee13880] include() /srv/users/serverpilot/apps/blogapp/public/index.php:9",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 61,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/lib/db.php"
+                    },
+                    "function": "PDO->prepare"
+                }
+            },
+            "process": {
+                "pid": 4102
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 4,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 61,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/lib/db.php"
+                                },
+                                "function": "PDO->prepare"
+                            },
+                            {
+                                "file": {
+                                    "line": 128,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/lib/repository.php"
+                                },
+                                "function": "Example\\Repository::findAll"
+                            },
+                            {
+                                "file": {
+                                    "line": 44,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/lib/collection.php"
+                                },
+                                "function": "{closure}"
+                            },
+                            {
+                                "file": {
+                                    "line": 9,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/index.php"
+                                },
+                                "function": "include"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/index.php",
+                        "stack_trace": "PDO->prepare() /srv/users/serverpilot/apps/blogapp/public/lib/db.php:61\nExample\\Repository::findAll() /srv/users/serverpilot/apps/blogapp/public/lib/repository.php:128\n{closure}() /srv/users/serverpilot/apps/blogapp/public/lib/collection.php:44\ninclude() /srv/users/serverpilot/apps/blogapp/public/index.php:9"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:09:55.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:09:55]  [pool blogapp] pid 4103\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/cron.php\n[0x00007f185ee13c10] sleep() unknown:0\n[0x00007f185ee13bf0] example_wait_for_lock()\n[0x00007f185ee13bd0] example_run_cron() /srv/users/serverpilot/apps/blogapp/public/cron.php:21",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "function": "sleep"
+                }
+            },
+            "process": {
+                "pid": 4103
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 3,
+                        "frames": [
+                            {
+                                "function": "sleep"
+                            },
+                            {
+                                "function": "example_wait_for_lock"
+                            },
+                            {
+                                "file": {
+                                    "line": 21,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/cron.php"
+                                },
+                                "function": "example_run_cron"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/cron.php",
+                        "stack_trace": "sleep()\nexample_wait_for_lock()\nexample_run_cron() /srv/users/serverpilot/apps/blogapp/public/cron.php:21"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:14:02.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:14:02]   [pool otherapp] pid 4104\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/index.php\n[0x00007f185ee13d40] file_get_contents() /srv/users/serverpilot/apps/blogapp/public/lib/feed.php:33",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 33,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/lib/feed.php"
+                    },
+                    "function": "file_get_contents"
+                }
+            },
+            "process": {
+                "pid": 4104
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 1,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 33,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/lib/feed.php"
+                                },
+                                "function": "file_get_contents"
+                            }
+                        ],
+                        "pool": "otherapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/index.php",
+                        "stack_trace": "file_get_contents() /srv/users/serverpilot/apps/blogapp/public/lib/feed.php:33"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event",
+                "serverpilot_php_slow_pool_app_mismatch"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:19:48.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:19:48]  [pool blogapp] pid 4105\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/search.php\n+++ dump failed\n[0x00007f185ee13e60] example_search() /srv/users/serverpilot/apps/blogapp/public/search.php:52",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                },
+                "origin": {
+                    "file": {
+                        "line": 52,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/search.php"
+                    },
+                    "function": "example_search"
+                }
+            },
+            "process": {
+                "pid": 4105
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "frame_count": 1,
+                        "frames": [
+                            {
+                                "file": {
+                                    "line": 52,
+                                    "name": "/srv/users/serverpilot/apps/blogapp/public/search.php"
+                                },
+                                "function": "example_search"
+                            }
+                        ],
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/search.php",
+                        "stack_trace": "example_search() /srv/users/serverpilot/apps/blogapp/public/search.php:52"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event",
+                "serverpilot_php_slow_unparsed_frame"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:24:16.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:24:16]  [pool blogapp] pid 4106\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/upload.php",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                }
+            },
+            "process": {
+                "pid": 4106
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "pool": "blogapp",
+                        "script_filename": "/srv/users/serverpilot/apps/blogapp/public/upload.php"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-05T08:29:41.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[05-Mar-2025 08:29:41]  [pool blogapp] pid 4107",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+                }
+            },
+            "process": {
+                "pid": 4107
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "blogapp"
+                },
+                "php": {
+                    "slow": {
+                        "pool": "blogapp"
+                    },
+                    "version": "8.3"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

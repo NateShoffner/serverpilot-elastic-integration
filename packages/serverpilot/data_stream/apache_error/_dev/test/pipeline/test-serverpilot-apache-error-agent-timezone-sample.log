@@ -1,0 +1,2 @@
+[Thu Mar 06 15:01:27.248409 2025] [core:alert] [pid 5667:tid 139635493631744] [client 203.0.113.10:0] /srv/users/serverpilot/apps/blogapp/public/.htaccess: RewriteRule: bad argument line 'example_invalid_value'
+[Thu Mar 06 15:09:10.552001 2025] [mpm_event:notice] [pid 5660:tid 139635493631744] AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations

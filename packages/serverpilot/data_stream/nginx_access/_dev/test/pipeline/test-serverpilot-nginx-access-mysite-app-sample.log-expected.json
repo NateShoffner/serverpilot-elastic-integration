@@ -1,0 +1,110 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T01:20:05.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.31"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 87000000,
+                "kind": "event",
+                "original": "192.0.2.31 - - [07/Mar/2025:01:20:05 +0000] \"GET /index.php HTTP/1.1\" 200 5120 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 302 0.087 \"5120\" \"0.087\" \"mysite.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 302,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 5120
+                    },
+                    "status_code": 200
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/srv/users/serverpilot/log/mysite/mysite_nginx.access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.31"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "name": "mysite"
+                },
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 5120,
+                            "duration": 87000000
+                        }
+                    }
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "mysite"
+            },
+            "source": {
+                "ip": "192.0.2.31"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "mysite.example.com",
+                "original": "/index.php",
+                "path": "/index.php",
+                "scheme": "http"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "full": "Windows 10",
+                    "name": "Windows",
+                    "version": "10"
+                },
+                "version": "133.0.0.0"
+            }
+        }
+    ]
+}

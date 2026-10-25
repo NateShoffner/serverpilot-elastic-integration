@@ -1,0 +1,8 @@
+fields:
+  # `GET /sysusers` is a full-snapshot inventory endpoint with no event timestamp
+  # of its own, so `@timestamp` is the collection time the agent stamps on the
+  # event rather than anything parsed out of the record. It is injected here so
+  # the fixtures model what the CEL input actually delivers.
+  "@timestamp": "2026-10-12T00:00:00.000Z"
+  tags:
+    - preserve_original_event

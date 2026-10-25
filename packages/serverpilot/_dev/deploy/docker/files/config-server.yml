@@ -1,0 +1,135 @@
+---
+# Mock of the ServerPilot v1 management API for the `server` data stream.
+#
+# GET /servers has no pagination, no cursor and no "changed since" filter: the
+# complete server collection comes back in a single response wrapped in a
+# `data` key. There is therefore no multi-page flow to model. Instead the rules
+# below model the response variants the CEL program must handle, selected by
+# prefixing the base URL:
+#
+#   {url} = http://host:port           -> 200, three servers (happy path)
+#   {url} = http://host:port/empty     -> 200, empty `data` array
+#   {url} = http://host:port/error     -> 500 server error
+#   {url} = http://host:port/malformed -> 200 with a non-JSON body
+#   any base URL without valid Basic auth -> 401 Unauthorized
+#
+# The system test uses the unprefixed base URL and valid credentials, so it
+# always takes the happy path. The other rules exist so the error branches can
+# be exercised locally with mito and, later, by script tests.
+#
+# All data is synthetic. IPs come from the RFC 5737 documentation ranges.
+# The Basic credential matched below is
+# base64("example-client-id:example-api-key").
+rules:
+  # --- Empty collection: a ServerPilot account with no connected servers. ---
+  - path: /empty/servers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"data":[]}
+  # --- Server-side failure: transient, retried by the input framework. ---
+  - path: /error/servers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 500
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Internal Server Error"}}
+  # --- Malformed body: 200 status but not JSON (e.g. a proxy error page). ---
+  - path: /malformed/servers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'text/html'
+        body: |-
+          <html><head><title>502 Bad Gateway</title></head><body>502 Bad Gateway</body></html>
+  # --- Happy path: the full server inventory.
+  #
+  # Server three carries an `apikey` field. The real API only returns `apikey`
+  # on server creation, never on this list endpoint, but it is included here as
+  # a regression guard: the CEL program drops it defensively, so it must never
+  # reach Elasticsearch. Server two exercises `lastaddress: null`.
+  - path: /servers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {{ minify_json `
+          {
+            "data": [
+              {
+                "id": "a1B2c3D4e5F6g7H8",
+                "name": "web-prod-01",
+                "plan": "business",
+                "autoupdates": true,
+                "firewall": true,
+                "deny_unknown_domains": true,
+                "available_runtimes": ["php7.4", "php8.1", "php8.2", "php8.3"],
+                "lastaddress": "203.0.113.24",
+                "lastconn": 1760000000,
+                "datecreated": 1700000000
+              },
+              {
+                "id": "i9J0k1L2m3N4o5P6",
+                "name": "web-stage-02",
+                "plan": "economy",
+                "autoupdates": false,
+                "firewall": false,
+                "deny_unknown_domains": false,
+                "available_runtimes": ["php8.2", "php8.3", "php8.4"],
+                "lastaddress": null,
+                "lastconn": 1759900000,
+                "datecreated": 1710000000
+              },
+              {
+                "id": "q7R8s9T0u1V2w3X4",
+                "name": "db-prod-01",
+                "plan": "first_class",
+                "autoupdates": true,
+                "firewall": true,
+                "deny_unknown_domains": false,
+                "available_runtimes": ["php8.3", "php8.4", "php8.5"],
+                "lastaddress": "198.51.100.57",
+                "lastconn": 1759800000,
+                "datecreated": 1690000000,
+                "apikey": "exampleserverapikey0000000000000"
+              }
+            ]
+          }
+          ` }}
+  # --- Catch-all for any /servers request without valid Basic credentials.
+  #
+  # Must stay last: elastic/stream matches top-down, first match wins, and this
+  # rule places no constraint on the Authorization header.
+  - path: /servers
+    methods: ['GET']
+    responses:
+      - status_code: 401
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Unauthorized"}}

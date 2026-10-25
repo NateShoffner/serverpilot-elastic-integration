@@ -1,0 +1,2140 @@
+{
+    "attributes": {
+        "controlGroupInput": {
+            "autoApplySelections": true,
+            "chainingSystem": "HIERARCHICAL",
+            "ignoreParentSettingsJSON": {
+                "ignoreFilters": false,
+                "ignoreQuery": false,
+                "ignoreTimerange": false,
+                "ignoreValidations": false
+            },
+            "labelPosition": "oneLine",
+            "panelsJSON": {
+                "ctl-0135-4a1b-9c2d-000000000135": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "serverpilot.app.name",
+                        "grow": true,
+                        "id": "ctl-0135-4a1b-9c2d-000000000135",
+                        "searchTechnique": "prefix",
+                        "title": "App",
+                        "width": "medium"
+                    },
+                    "grow": true,
+                    "order": 0,
+                    "type": "optionsListControl",
+                    "width": "medium"
+                },
+                "ctl-0136-4a1b-9c2d-000000000136": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "serverpilot.php.version",
+                        "grow": true,
+                        "id": "ctl-0136-4a1b-9c2d-000000000136",
+                        "searchTechnique": "prefix",
+                        "title": "PHP version",
+                        "width": "small"
+                    },
+                    "grow": true,
+                    "order": 1,
+                    "type": "optionsListControl",
+                    "width": "small"
+                },
+                "ctl-0137-4a1b-9c2d-000000000137": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "log.level",
+                        "grow": true,
+                        "id": "ctl-0137-4a1b-9c2d-000000000137",
+                        "searchTechnique": "prefix",
+                        "title": "Error level",
+                        "width": "small"
+                    },
+                    "grow": true,
+                    "order": 2,
+                    "type": "optionsListControl",
+                    "width": "small"
+                }
+            }
+        },
+        "description": "PHP errors, slow requests, and per-request memory and CPU usage across apps.",
+        "kibanaSavedObjectMeta": {
+            "searchSourceJSON": {
+                "filter": [
+                    {
+                        "$state": {
+                            "store": "appState"
+                        },
+                        "meta": {
+                            "alias": null,
+                            "disabled": false,
+                            "index": "logs-*",
+                            "key": "data_stream.dataset",
+                            "negate": false,
+                            "params": [
+                                "serverpilot.php_access",
+                                "serverpilot.php_error",
+                                "serverpilot.php_slow"
+                            ],
+                            "type": "phrases"
+                        },
+                        "query": {
+                            "bool": {
+                                "minimum_should_match": 1,
+                                "should": [
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.php_access"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.php_error"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "data_stream.dataset": "serverpilot.php_slow"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "query": {
+                    "language": "kuery",
+                    "query": ""
+                }
+            }
+        },
+        "optionsJSON": {
+            "hidePanelTitles": false,
+            "syncColors": false,
+            "syncCursor": true,
+            "syncTooltips": false,
+            "useMargins": true
+        },
+        "panelsJSON": [
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "layout": "horizontal",
+                        "links": [
+                            {
+                                "destinationRefName": "link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+                                "id": "lnk-0001-4a1b-9c2d-000000000110",
+                                "label": "App traffic overview",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 0,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+                                "id": "lnk-0002-4a1b-9c2d-000000000111",
+                                "label": "PHP health",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 1,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+                                "id": "lnk-0003-4a1b-9c2d-000000000112",
+                                "label": "Web server errors",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 2,
+                                "type": "dashboardLink"
+                            },
+                            {
+                                "destinationRefName": "link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+                                "id": "lnk-0004-4a1b-9c2d-000000000113",
+                                "label": "Inventory and posture",
+                                "options": {
+                                    "openInNewTab": false,
+                                    "useCurrentDateRange": true,
+                                    "useCurrentFilters": true
+                                },
+                                "order": 3,
+                                "type": "dashboardLink"
+                            }
+                        ],
+                        "references": [
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7001",
+                                "name": "link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+                                "name": "link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7003",
+                                "name": "link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+                                "type": "dashboard"
+                            },
+                            {
+                                "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+                                "name": "link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+                                "type": "dashboard"
+                            }
+                        ]
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 3,
+                    "i": "nav-0100-4a1b-9c2d-000000000100",
+                    "w": 48,
+                    "x": 0,
+                    "y": 0
+                },
+                "panelIndex": "nav-0100-4a1b-9c2d-000000000100",
+                "title": "",
+                "type": "links"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0070-4a1b-9c2d-000000000070",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0070-4a1b-9c2d-000000000070": {
+                                            "columnOrder": [
+                                                "c-0071-4a1b-9c2d-000000000071"
+                                            ],
+                                            "columns": {
+                                                "c-0071-4a1b-9c2d-000000000071": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.php_access\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "PHP requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 0
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0070-4a1b-9c2d-000000000070",
+                                "layerType": "data",
+                                "metricAccessor": "c-0071-4a1b-9c2d-000000000071",
+                                "subtitle": "php_access"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0072-4a1b-9c2d-000000000072",
+                    "w": 12,
+                    "x": 0,
+                    "y": 3
+                },
+                "panelIndex": "p-0072-4a1b-9c2d-000000000072",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0073-4a1b-9c2d-000000000073",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0073-4a1b-9c2d-000000000073": {
+                                            "columnOrder": [
+                                                "c-0074-4a1b-9c2d-000000000074"
+                                            ],
+                                            "columns": {
+                                                "c-0074-4a1b-9c2d-000000000074": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.php_error\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "PHP errors",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 0
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0073-4a1b-9c2d-000000000073",
+                                "layerType": "data",
+                                "metricAccessor": "c-0074-4a1b-9c2d-000000000074",
+                                "subtitle": "php_error"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0075-4a1b-9c2d-000000000075",
+                    "w": 12,
+                    "x": 12,
+                    "y": 3
+                },
+                "panelIndex": "p-0075-4a1b-9c2d-000000000075",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0076-4a1b-9c2d-000000000076",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0076-4a1b-9c2d-000000000076": {
+                                            "columnOrder": [
+                                                "c-0077-4a1b-9c2d-000000000077"
+                                            ],
+                                            "columns": {
+                                                "c-0077-4a1b-9c2d-000000000077": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "data_stream.dataset: \"serverpilot.php_slow\""
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "Slow requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 0
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0076-4a1b-9c2d-000000000076",
+                                "layerType": "data",
+                                "metricAccessor": "c-0077-4a1b-9c2d-000000000077",
+                                "subtitle": "php_slow"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0078-4a1b-9c2d-000000000078",
+                    "w": 12,
+                    "x": 24,
+                    "y": 3
+                },
+                "panelIndex": "p-0078-4a1b-9c2d-000000000078",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0079-4a1b-9c2d-000000000079",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0079-4a1b-9c2d-000000000079": {
+                                            "columnOrder": [
+                                                "c-0080-4a1b-9c2d-000000000080"
+                                            ],
+                                            "columns": {
+                                                "c-0080-4a1b-9c2d-000000000080": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "95th pct peak memory",
+                                                    "operationType": "percentile",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "bytes",
+                                                            "params": {
+                                                                "decimals": 1
+                                                            }
+                                                        },
+                                                        "percentile": 95
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.memory.peak.bytes"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": ""
+                            },
+                            "visualization": {
+                                "layerId": "l-0079-4a1b-9c2d-000000000079",
+                                "layerType": "data",
+                                "metricAccessor": "c-0080-4a1b-9c2d-000000000080",
+                                "subtitle": "Per request"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsMetric"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 8,
+                    "i": "p-0081-4a1b-9c2d-000000000081",
+                    "w": 12,
+                    "x": 36,
+                    "y": 3
+                },
+                "panelIndex": "p-0081-4a1b-9c2d-000000000081",
+                "title": "",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0082-4a1b-9c2d-000000000082",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0082-4a1b-9c2d-000000000082": {
+                                            "columnOrder": [
+                                                "c-0083-4a1b-9c2d-000000000083",
+                                                "c-0085-4a1b-9c2d-000000000085",
+                                                "c-0084-4a1b-9c2d-000000000084"
+                                            ],
+                                            "columns": {
+                                                "c-0083-4a1b-9c2d-000000000083": {
+                                                    "dataType": "date",
+                                                    "isBucketed": true,
+                                                    "label": "@timestamp",
+                                                    "operationType": "date_histogram",
+                                                    "params": {
+                                                        "dropPartials": false,
+                                                        "includeEmptyRows": true,
+                                                        "interval": "auto"
+                                                    },
+                                                    "scale": "interval",
+                                                    "sourceField": "@timestamp"
+                                                },
+                                                "c-0084-4a1b-9c2d-000000000084": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Errors",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0085-4a1b-9c2d-000000000085": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Level",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0084-4a1b-9c2d-000000000084",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 8
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "log.level"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_error\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "None",
+                                "gridlinesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0084-4a1b-9c2d-000000000084"
+                                        ],
+                                        "layerId": "l-0082-4a1b-9c2d-000000000082",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "bar_stacked",
+                                        "showGridlines": false,
+                                        "splitAccessor": "c-0085-4a1b-9c2d-000000000085",
+                                        "xAccessor": "c-0083-4a1b-9c2d-000000000083"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": true,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "bar_stacked",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "hide"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0086-4a1b-9c2d-000000000086",
+                    "w": 24,
+                    "x": 0,
+                    "y": 11
+                },
+                "panelIndex": "p-0086-4a1b-9c2d-000000000086",
+                "title": "PHP errors over time by level",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0087-4a1b-9c2d-000000000087",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0087-4a1b-9c2d-000000000087": {
+                                            "columnOrder": [
+                                                "c-0088-4a1b-9c2d-000000000088",
+                                                "c-0090-4a1b-9c2d-000000000090",
+                                                "c-0089-4a1b-9c2d-000000000089"
+                                            ],
+                                            "columns": {
+                                                "c-0088-4a1b-9c2d-000000000088": {
+                                                    "dataType": "date",
+                                                    "isBucketed": true,
+                                                    "label": "@timestamp",
+                                                    "operationType": "date_histogram",
+                                                    "params": {
+                                                        "dropPartials": false,
+                                                        "includeEmptyRows": true,
+                                                        "interval": "auto"
+                                                    },
+                                                    "scale": "interval",
+                                                    "sourceField": "@timestamp"
+                                                },
+                                                "c-0089-4a1b-9c2d-000000000089": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Slow requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0090-4a1b-9c2d-000000000090": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "App",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0089-4a1b-9c2d-000000000089",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 10
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.app.name"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_slow\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "None",
+                                "gridlinesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0089-4a1b-9c2d-000000000089"
+                                        ],
+                                        "layerId": "l-0087-4a1b-9c2d-000000000087",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "bar_stacked",
+                                        "showGridlines": false,
+                                        "splitAccessor": "c-0090-4a1b-9c2d-000000000090",
+                                        "xAccessor": "c-0088-4a1b-9c2d-000000000088"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": true,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "bar_stacked",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "hide"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0091-4a1b-9c2d-000000000091",
+                    "w": 24,
+                    "x": 24,
+                    "y": 11
+                },
+                "panelIndex": "p-0091-4a1b-9c2d-000000000091",
+                "title": "Slow requests over time by app",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0092-4a1b-9c2d-000000000092",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0092-4a1b-9c2d-000000000092": {
+                                            "columnOrder": [
+                                                "c-0093-4a1b-9c2d-000000000093",
+                                                "c-0094-4a1b-9c2d-000000000094",
+                                                "c-0095-4a1b-9c2d-000000000095",
+                                                "c-0096-4a1b-9c2d-000000000096"
+                                            ],
+                                            "columns": {
+                                                "c-0093-4a1b-9c2d-000000000093": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "File",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0095-4a1b-9c2d-000000000095",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 20
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "log.origin.file.name"
+                                                },
+                                                "c-0094-4a1b-9c2d-000000000094": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": true,
+                                                    "label": "Line",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0095-4a1b-9c2d-000000000095",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 1
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "log.origin.file.line"
+                                                },
+                                                "c-0095-4a1b-9c2d-000000000095": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Occurrences",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0096-4a1b-9c2d-000000000096": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Apps",
+                                                    "operationType": "unique_count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.app.name"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_error\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0093-4a1b-9c2d-000000000093",
+                                        "isMetric": false,
+                                        "isTransposed": false,
+                                        "width": 420
+                                    },
+                                    {
+                                        "columnId": "c-0094-4a1b-9c2d-000000000094",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0095-4a1b-9c2d-000000000095",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0096-4a1b-9c2d-000000000096",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0092-4a1b-9c2d-000000000092",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 10
+                                },
+                                "sorting": {
+                                    "columnId": "c-0095-4a1b-9c2d-000000000095",
+                                    "direction": "desc"
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0097-4a1b-9c2d-000000000097",
+                    "w": 24,
+                    "x": 0,
+                    "y": 26
+                },
+                "panelIndex": "p-0097-4a1b-9c2d-000000000097",
+                "title": "Top PHP error sites",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0098-4a1b-9c2d-000000000098",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0098-4a1b-9c2d-000000000098": {
+                                            "columnOrder": [
+                                                "c-0099-4a1b-9c2d-000000000099",
+                                                "c-0100-4a1b-9c2d-000000000100",
+                                                "c-0101-4a1b-9c2d-000000000101",
+                                                "c-0102-4a1b-9c2d-000000000102"
+                                            ],
+                                            "columns": {
+                                                "c-0099-4a1b-9c2d-000000000099": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Script",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0100-4a1b-9c2d-000000000100",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 20
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.php.slow.script_filename"
+                                                },
+                                                "c-0100-4a1b-9c2d-000000000100": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Slow requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0101-4a1b-9c2d-000000000101": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Median frames",
+                                                    "operationType": "median",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 0
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.slow.frame_count"
+                                                },
+                                                "c-0102-4a1b-9c2d-000000000102": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Max frames",
+                                                    "operationType": "max",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 0
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.slow.frame_count"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_slow\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0099-4a1b-9c2d-000000000099",
+                                        "isMetric": false,
+                                        "isTransposed": false,
+                                        "width": 440
+                                    },
+                                    {
+                                        "columnId": "c-0100-4a1b-9c2d-000000000100",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0101-4a1b-9c2d-000000000101",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0102-4a1b-9c2d-000000000102",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0098-4a1b-9c2d-000000000098",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 10
+                                },
+                                "sorting": {
+                                    "columnId": "c-0100-4a1b-9c2d-000000000100",
+                                    "direction": "desc"
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0103-4a1b-9c2d-000000000103",
+                    "w": 24,
+                    "x": 24,
+                    "y": 26
+                },
+                "panelIndex": "p-0103-4a1b-9c2d-000000000103",
+                "title": "Slowest scripts",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0104-4a1b-9c2d-000000000104",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0104-4a1b-9c2d-000000000104": {
+                                            "columnOrder": [
+                                                "c-0106-4a1b-9c2d-000000000106",
+                                                "c-0105-4a1b-9c2d-000000000105"
+                                            ],
+                                            "columns": {
+                                                "c-0105-4a1b-9c2d-000000000105": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Slow requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0106-4a1b-9c2d-000000000106": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Function",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0105-4a1b-9c2d-000000000105",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 12
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "log.origin.function"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_slow\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "None",
+                                "gridlinesVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": false,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0105-4a1b-9c2d-000000000105"
+                                        ],
+                                        "layerId": "l-0104-4a1b-9c2d-000000000104",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "bar_horizontal",
+                                        "showGridlines": false,
+                                        "xAccessor": "c-0106-4a1b-9c2d-000000000106"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": false,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "bar_horizontal",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "show"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0107-4a1b-9c2d-000000000107",
+                    "w": 16,
+                    "x": 0,
+                    "y": 41
+                },
+                "panelIndex": "p-0107-4a1b-9c2d-000000000107",
+                "title": "Where slow requests were stalled",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0108-4a1b-9c2d-000000000108",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0108-4a1b-9c2d-000000000108": {
+                                            "columnOrder": [
+                                                "c-0110-4a1b-9c2d-000000000110",
+                                                "c-0109-4a1b-9c2d-000000000109"
+                                            ],
+                                            "columns": {
+                                                "c-0109-4a1b-9c2d-000000000109": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Errors",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0110-4a1b-9c2d-000000000110": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Level",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0109-4a1b-9c2d-000000000109",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 8
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "log.level"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_error\""
+                            },
+                            "visualization": {
+                                "layers": [
+                                    {
+                                        "categoryDisplay": "default",
+                                        "emptySizeRatio": 0.3,
+                                        "layerId": "l-0108-4a1b-9c2d-000000000108",
+                                        "layerType": "data",
+                                        "legendDisplay": "show",
+                                        "legendPosition": "right",
+                                        "legendSize": "auto",
+                                        "metrics": [
+                                            "c-0109-4a1b-9c2d-000000000109"
+                                        ],
+                                        "nestedLegend": false,
+                                        "numberDisplay": "percent",
+                                        "primaryGroups": [
+                                            "c-0110-4a1b-9c2d-000000000110"
+                                        ]
+                                    }
+                                ],
+                                "shape": "donut"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsPie"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0111-4a1b-9c2d-000000000111",
+                    "w": 16,
+                    "x": 16,
+                    "y": 41
+                },
+                "panelIndex": "p-0111-4a1b-9c2d-000000000111",
+                "title": "PHP errors by level",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0112-4a1b-9c2d-000000000112",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0112-4a1b-9c2d-000000000112": {
+                                            "columnOrder": [
+                                                "c-0114-4a1b-9c2d-000000000114",
+                                                "c-0113-4a1b-9c2d-000000000113"
+                                            ],
+                                            "columns": {
+                                                "c-0113-4a1b-9c2d-000000000113": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Events",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0114-4a1b-9c2d-000000000114": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "PHP version",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0113-4a1b-9c2d-000000000113",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 8
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "serverpilot.php.version"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_access\" or data_stream.dataset: \"serverpilot.php_error\" or data_stream.dataset: \"serverpilot.php_slow\""
+                            },
+                            "visualization": {
+                                "layers": [
+                                    {
+                                        "categoryDisplay": "default",
+                                        "emptySizeRatio": 0.3,
+                                        "layerId": "l-0112-4a1b-9c2d-000000000112",
+                                        "layerType": "data",
+                                        "legendDisplay": "show",
+                                        "legendPosition": "right",
+                                        "legendSize": "auto",
+                                        "metrics": [
+                                            "c-0113-4a1b-9c2d-000000000113"
+                                        ],
+                                        "nestedLegend": false,
+                                        "numberDisplay": "percent",
+                                        "primaryGroups": [
+                                            "c-0114-4a1b-9c2d-000000000114"
+                                        ]
+                                    }
+                                ],
+                                "shape": "donut"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsPie"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0115-4a1b-9c2d-000000000115",
+                    "w": 16,
+                    "x": 32,
+                    "y": 41
+                },
+                "panelIndex": "p-0115-4a1b-9c2d-000000000115",
+                "title": "Events by PHP version",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0116-4a1b-9c2d-000000000116",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0116-4a1b-9c2d-000000000116": {
+                                            "columnOrder": [
+                                                "c-0117-4a1b-9c2d-000000000117",
+                                                "c-0118-4a1b-9c2d-000000000118",
+                                                "c-0119-4a1b-9c2d-000000000119",
+                                                "c-0120-4a1b-9c2d-000000000120"
+                                            ],
+                                            "columns": {
+                                                "c-0117-4a1b-9c2d-000000000117": {
+                                                    "dataType": "date",
+                                                    "isBucketed": true,
+                                                    "label": "@timestamp",
+                                                    "operationType": "date_histogram",
+                                                    "params": {
+                                                        "dropPartials": false,
+                                                        "includeEmptyRows": true,
+                                                        "interval": "auto"
+                                                    },
+                                                    "scale": "interval",
+                                                    "sourceField": "@timestamp"
+                                                },
+                                                "c-0118-4a1b-9c2d-000000000118": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "50th pct",
+                                                    "operationType": "percentile",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "bytes",
+                                                            "params": {
+                                                                "decimals": 1
+                                                            }
+                                                        },
+                                                        "percentile": 50
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.memory.peak.bytes"
+                                                },
+                                                "c-0119-4a1b-9c2d-000000000119": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "95th pct",
+                                                    "operationType": "percentile",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "bytes",
+                                                            "params": {
+                                                                "decimals": 1
+                                                            }
+                                                        },
+                                                        "percentile": 95
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.memory.peak.bytes"
+                                                },
+                                                "c-0120-4a1b-9c2d-000000000120": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Max",
+                                                    "operationType": "max",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "bytes",
+                                                            "params": {
+                                                                "decimals": 1
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.memory.peak.bytes"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_access\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "Linear",
+                                "gridlinesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0118-4a1b-9c2d-000000000118",
+                                            "c-0119-4a1b-9c2d-000000000119",
+                                            "c-0120-4a1b-9c2d-000000000120"
+                                        ],
+                                        "layerId": "l-0116-4a1b-9c2d-000000000116",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "line",
+                                        "showGridlines": false,
+                                        "xAccessor": "c-0117-4a1b-9c2d-000000000117"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": true,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "line",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "hide",
+                                "yTitle": "Peak memory"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0121-4a1b-9c2d-000000000121",
+                    "w": 24,
+                    "x": 0,
+                    "y": 56
+                },
+                "panelIndex": "p-0121-4a1b-9c2d-000000000121",
+                "title": "PHP peak memory",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0122-4a1b-9c2d-000000000122",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0122-4a1b-9c2d-000000000122": {
+                                            "columnOrder": [
+                                                "c-0123-4a1b-9c2d-000000000123",
+                                                "c-0124-4a1b-9c2d-000000000124",
+                                                "c-0125-4a1b-9c2d-000000000125",
+                                                "c-0126-4a1b-9c2d-000000000126"
+                                            ],
+                                            "columns": {
+                                                "c-0123-4a1b-9c2d-000000000123": {
+                                                    "dataType": "date",
+                                                    "isBucketed": true,
+                                                    "label": "@timestamp",
+                                                    "operationType": "date_histogram",
+                                                    "params": {
+                                                        "dropPartials": false,
+                                                        "includeEmptyRows": true,
+                                                        "interval": "auto"
+                                                    },
+                                                    "scale": "interval",
+                                                    "sourceField": "@timestamp"
+                                                },
+                                                "c-0124-4a1b-9c2d-000000000124": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Avg user CPU",
+                                                    "operationType": "average",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 2,
+                                                                "suffix": "%"
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.cpu.user.percent"
+                                                },
+                                                "c-0125-4a1b-9c2d-000000000125": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Max user CPU",
+                                                    "operationType": "max",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 2,
+                                                                "suffix": "%"
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.cpu.user.percent"
+                                                },
+                                                "c-0126-4a1b-9c2d-000000000126": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Avg system CPU",
+                                                    "operationType": "average",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "number",
+                                                            "params": {
+                                                                "decimals": 2,
+                                                                "suffix": "%"
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.cpu.system.percent"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_access\""
+                            },
+                            "visualization": {
+                                "axisTitlesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "fittingFunction": "Linear",
+                                "gridlinesVisibilitySettings": {
+                                    "x": false,
+                                    "yLeft": true,
+                                    "yRight": false
+                                },
+                                "labelsOrientation": {
+                                    "x": 0,
+                                    "yLeft": 0,
+                                    "yRight": 0
+                                },
+                                "layers": [
+                                    {
+                                        "accessors": [
+                                            "c-0124-4a1b-9c2d-000000000124",
+                                            "c-0125-4a1b-9c2d-000000000125",
+                                            "c-0126-4a1b-9c2d-000000000126"
+                                        ],
+                                        "layerId": "l-0122-4a1b-9c2d-000000000122",
+                                        "layerType": "data",
+                                        "position": "top",
+                                        "seriesType": "line",
+                                        "showGridlines": false,
+                                        "xAccessor": "c-0123-4a1b-9c2d-000000000123"
+                                    }
+                                ],
+                                "legend": {
+                                    "isVisible": true,
+                                    "position": "right"
+                                },
+                                "preferredSeriesType": "line",
+                                "tickLabelsVisibilitySettings": {
+                                    "x": true,
+                                    "yLeft": true,
+                                    "yRight": true
+                                },
+                                "valueLabels": "hide",
+                                "yTitle": "CPU"
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsXY"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0127-4a1b-9c2d-000000000127",
+                    "w": 24,
+                    "x": 24,
+                    "y": 56
+                },
+                "panelIndex": "p-0127-4a1b-9c2d-000000000127",
+                "title": "PHP CPU per request",
+                "type": "lens"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "description": "",
+                        "references": [
+                            {
+                                "id": "logs-*",
+                                "name": "indexpattern-datasource-layer-l-0128-4a1b-9c2d-000000000128",
+                                "type": "index-pattern"
+                            }
+                        ],
+                        "state": {
+                            "adHocDataViews": {},
+                            "datasourceStates": {
+                                "formBased": {
+                                    "layers": {
+                                        "l-0128-4a1b-9c2d-000000000128": {
+                                            "columnOrder": [
+                                                "c-0129-4a1b-9c2d-000000000129",
+                                                "c-0130-4a1b-9c2d-000000000130",
+                                                "c-0131-4a1b-9c2d-000000000131",
+                                                "c-0132-4a1b-9c2d-000000000132",
+                                                "c-0133-4a1b-9c2d-000000000133"
+                                            ],
+                                            "columns": {
+                                                "c-0129-4a1b-9c2d-000000000129": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Path",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0130-4a1b-9c2d-000000000130",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 20
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "url.path"
+                                                },
+                                                "c-0130-4a1b-9c2d-000000000130": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Requests",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                },
+                                                "c-0131-4a1b-9c2d-000000000131": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "95th pct",
+                                                    "operationType": "percentile",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "duration",
+                                                            "params": {
+                                                                "decimals": 2,
+                                                                "fromUnit": "nanoseconds",
+                                                                "toUnit": "asSeconds"
+                                                            }
+                                                        },
+                                                        "percentile": 95
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "event.duration"
+                                                },
+                                                "c-0132-4a1b-9c2d-000000000132": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "isBucketed": false,
+                                                    "label": "Max memory",
+                                                    "operationType": "max",
+                                                    "params": {
+                                                        "emptyAsNull": true,
+                                                        "format": {
+                                                            "id": "bytes",
+                                                            "params": {
+                                                                "decimals": 1
+                                                            }
+                                                        }
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "serverpilot.php.memory.peak.bytes"
+                                                },
+                                                "c-0133-4a1b-9c2d-000000000133": {
+                                                    "customLabel": true,
+                                                    "dataType": "number",
+                                                    "filter": {
+                                                        "language": "kuery",
+                                                        "query": "http.response.status_code \u003e= 500"
+                                                    },
+                                                    "isBucketed": false,
+                                                    "label": "5xx",
+                                                    "operationType": "count",
+                                                    "params": {
+                                                        "emptyAsNull": true
+                                                    },
+                                                    "scale": "ratio",
+                                                    "sourceField": "___records___"
+                                                }
+                                            },
+                                            "incompleteColumns": {},
+                                            "sampling": 1
+                                        }
+                                    }
+                                }
+                            },
+                            "filters": [],
+                            "internalReferences": [],
+                            "query": {
+                                "language": "kuery",
+                                "query": "data_stream.dataset: \"serverpilot.php_access\""
+                            },
+                            "visualization": {
+                                "columns": [
+                                    {
+                                        "columnId": "c-0129-4a1b-9c2d-000000000129",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0130-4a1b-9c2d-000000000130",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0131-4a1b-9c2d-000000000131",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0132-4a1b-9c2d-000000000132",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0133-4a1b-9c2d-000000000133",
+                                        "isMetric": true,
+                                        "isTransposed": false
+                                    }
+                                ],
+                                "layerId": "l-0128-4a1b-9c2d-000000000128",
+                                "layerType": "data",
+                                "paging": {
+                                    "enabled": true,
+                                    "size": 10
+                                },
+                                "sorting": {
+                                    "columnId": "c-0131-4a1b-9c2d-000000000131",
+                                    "direction": "desc"
+                                }
+                            }
+                        },
+                        "title": "",
+                        "type": "lens",
+                        "visualizationType": "lnsDatatable"
+                    },
+                    "enhancements": {}
+                },
+                "gridData": {
+                    "h": 15,
+                    "i": "p-0134-4a1b-9c2d-000000000134",
+                    "w": 48,
+                    "x": 0,
+                    "y": 71
+                },
+                "panelIndex": "p-0134-4a1b-9c2d-000000000134",
+                "title": "Most expensive PHP requests",
+                "type": "lens"
+            }
+        ],
+        "timeRestore": false,
+        "title": "[Logs ServerPilot] PHP health"
+    },
+    "coreMigrationVersion": "8.8.0",
+    "created_at": "2026-10-24T19:38:40.491Z",
+    "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+    "references": [
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0135-4a1b-9c2d-000000000135:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0136-4a1b-9c2d-000000000136:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0137-4a1b-9c2d-000000000137:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0072-4a1b-9c2d-000000000072:indexpattern-datasource-layer-l-0070-4a1b-9c2d-000000000070",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0075-4a1b-9c2d-000000000075:indexpattern-datasource-layer-l-0073-4a1b-9c2d-000000000073",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0078-4a1b-9c2d-000000000078:indexpattern-datasource-layer-l-0076-4a1b-9c2d-000000000076",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0081-4a1b-9c2d-000000000081:indexpattern-datasource-layer-l-0079-4a1b-9c2d-000000000079",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0086-4a1b-9c2d-000000000086:indexpattern-datasource-layer-l-0082-4a1b-9c2d-000000000082",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0091-4a1b-9c2d-000000000091:indexpattern-datasource-layer-l-0087-4a1b-9c2d-000000000087",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0097-4a1b-9c2d-000000000097:indexpattern-datasource-layer-l-0092-4a1b-9c2d-000000000092",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0103-4a1b-9c2d-000000000103:indexpattern-datasource-layer-l-0098-4a1b-9c2d-000000000098",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0107-4a1b-9c2d-000000000107:indexpattern-datasource-layer-l-0104-4a1b-9c2d-000000000104",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0111-4a1b-9c2d-000000000111:indexpattern-datasource-layer-l-0108-4a1b-9c2d-000000000108",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0115-4a1b-9c2d-000000000115:indexpattern-datasource-layer-l-0112-4a1b-9c2d-000000000112",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0121-4a1b-9c2d-000000000121:indexpattern-datasource-layer-l-0116-4a1b-9c2d-000000000116",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0127-4a1b-9c2d-000000000127:indexpattern-datasource-layer-l-0122-4a1b-9c2d-000000000122",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "p-0134-4a1b-9c2d-000000000134:indexpattern-datasource-layer-l-0128-4a1b-9c2d-000000000128",
+            "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "dashboard",
+    "typeMigrationVersion": "10.3.0"
+}

@@ -1,0 +1,19 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the message was logged for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the message was logged for. Derived from the log file path.
+    - name: apache.module
+      type: keyword
+      description: >-
+        Name of the Apache module that emitted the log record, taken from the `[MODULE:LOG_LEVEL]` token of the log line, for example `core`, `authz_core`, `proxy_fcgi`, `rewrite`, `mpm_event` or `php`. Kept in the vendor namespace because the value is an Apache module name from a fixed, Apache-specific taxonomy rather than an application logger name, which is what ECS `log.logger` describes. Not set when Apache logs a bare `[:LOG_LEVEL]` token for a record that no module claims.
+    - name: apache.error.code
+      type: keyword
+      description: >-
+        `AHxxxxx` diagnostic code Apache prefixes to most error messages, for example `AH01630`. The code identifies the exact log statement inside Apache, so it is the stable key to group or alert on while the message text around it varies. Kept in the vendor namespace because ECS `error.message` is reserved for ingest pipeline failures in this package; the message text the code prefixes is the value of `message`. Not set for the many Apache messages that carry no code.

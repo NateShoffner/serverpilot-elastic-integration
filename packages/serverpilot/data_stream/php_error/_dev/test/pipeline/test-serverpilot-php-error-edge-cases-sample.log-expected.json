@@ -1,0 +1,254 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-04T13:55:10.000-05:00",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:55:10 America/New_York] PHP Warning:  Session cannot be started after headers have already been sent in /srv/users/serverpilot/apps/blogapp/public/session.php on line 12",
+                "severity": 4,
+                "timezone": "America/New_York",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "warning",
+                "origin": {
+                    "file": {
+                        "line": 12,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/session.php"
+                    }
+                }
+            },
+            "message": "Session cannot be started after headers have already been sent in /srv/users/serverpilot/apps/blogapp/public/session.php on line 12",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T09:12:07.000-05:00",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 09:12:07 EST] PHP Notice:  Only variables should be passed by reference in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 94",
+                "severity": 5,
+                "timezone": "EST",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "notice",
+                "origin": {
+                    "file": {
+                        "line": 94,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/lib/helpers.php"
+                    }
+                }
+            },
+            "message": "Only variables should be passed by reference in /srv/users/serverpilot/apps/blogapp/public/lib/helpers.php on line 94",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:56:02.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:56:02 Example/Not_A_Zone] PHP Deprecated:  Calling example_legacy() is deprecated in /srv/users/serverpilot/apps/blogapp/public/legacy.php on line 7",
+                "severity": 5,
+                "timezone": "Example/Not_A_Zone",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "deprecated",
+                "origin": {
+                    "file": {
+                        "line": 7,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/legacy.php"
+                    }
+                }
+            },
+            "message": "Calling example_legacy() is deprecated in /srv/users/serverpilot/apps/blogapp/public/legacy.php on line 7",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:57:11.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:57:11 UTC] PHP Fatal error:  Unable to start session: no storage module chosen",
+                "severity": 3,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "fatal error"
+            },
+            "message": "Unable to start session: no storage module chosen",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:58:44.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:58:44 UTC] PHP Parse error:  syntax error, unexpected token \";\" in /srv/users/serverpilot/apps/blogapp/public/broken.php on line 31",
+                "severity": 3,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "parse error",
+                "origin": {
+                    "file": {
+                        "line": 31,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/broken.php"
+                    }
+                }
+            },
+            "message": "syntax error, unexpected token \";\" in /srv/users/serverpilot/apps/blogapp/public/broken.php on line 31",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T13:59:09.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 13:59:09 UTC] PHP Recoverable fatal error:  Object of class Example could not be converted to string in /srv/users/serverpilot/apps/blogapp/public/render.php on line 77",
+                "severity": 3,
+                "timezone": "UTC",
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                },
+                "level": "recoverable fatal error",
+                "origin": {
+                    "file": {
+                        "line": 77,
+                        "name": "/srv/users/serverpilot/apps/blogapp/public/render.php"
+                    }
+                }
+            },
+            "message": "Object of class Example could not be converted to string in /srv/users/serverpilot/apps/blogapp/public/render.php on line 77",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T14:00:21.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 14:00:21 UTC] PHP message: Example cache warm-up finished for app blogapp",
+                "timezone": "UTC",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                }
+            },
+            "message": "Example cache warm-up finished for app blogapp",
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-04T14:01:30.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[04-Mar-2025 14:01:30 UTC] Example order 10000002 could not be queued, retrying",
+                "timezone": "UTC",
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-error.log"
+                }
+            },
+            "message": "Example order 10000002 could not be queued, retrying",
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

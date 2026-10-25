@@ -1,0 +1,154 @@
+{
+    "@timestamp": "2025-03-07T00:03:34.000Z",
+    "agent": {
+        "ephemeral_id": "6489c1bd-4af5-459e-834d-a2a1b93230a6",
+        "id": "12d4ac8e-1882-40ef-8af1-df863bdc6c6a",
+        "name": "elastic-agent-14143",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "client": {
+        "as": {
+            "number": 64502,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        },
+        "geo": {
+            "city_name": "Madrid",
+            "continent_name": "Europe",
+            "country_iso_code": "ES",
+            "country_name": "Spain",
+            "location": {
+                "coordinates": [
+                    -3.702500034123659,
+                    40.416389987803996
+                ],
+                "type": "Point"
+            },
+            "region_iso_code": "ES-M",
+            "region_name": "Madrid"
+        },
+        "ip": "203.0.113.10"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.nginx_access",
+        "namespace": "70348",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "12d4ac8e-1882-40ef-8af1-df863bdc6c6a",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.nginx_access",
+        "duration": 125000000,
+        "ingested": "2026-10-12T05:31:51Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "203.0.113.10 - - [07/Mar/2025:00:03:34 +0000] \"GET /blog HTTP/1.1\" 302 1395 \"-\" \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\" \"-\" 340 0.125 \"1395\" \"0.125\" \"blogapp.example.com\"",
+        "outcome": "success",
+        "type": [
+            "access"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-14143",
+        "ip": [
+            "192.168.0.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-00-02"
+        ],
+        "name": "elastic-agent-14143",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "http": {
+        "request": {
+            "bytes": 340,
+            "method": "GET"
+        },
+        "response": {
+            "body": {
+                "bytes": 1395
+            },
+            "status_code": 302
+        },
+        "version": "1.1"
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "inode": "6473924467372216",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_nginx.access.log"
+        },
+        "offset": 0
+    },
+    "related": {
+        "ip": [
+            "203.0.113.10"
+        ]
+    },
+    "serverpilot": {
+        "app": {
+            "name": "blogapp"
+        },
+        "nginx": {
+            "upstream": {
+                "response": {
+                    "bytes": 1395,
+                    "duration": 125000000
+                }
+            }
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "source": {
+        "ip": "203.0.113.10"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-nginx-access"
+    ],
+    "url": {
+        "domain": "blogapp.example.com",
+        "original": "/blog",
+        "path": "/blog",
+        "scheme": "http"
+    },
+    "user_agent": {
+        "device": {
+            "name": "Spider"
+        },
+        "name": "Googlebot",
+        "original": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+        "version": "2.1"
+    }
+}

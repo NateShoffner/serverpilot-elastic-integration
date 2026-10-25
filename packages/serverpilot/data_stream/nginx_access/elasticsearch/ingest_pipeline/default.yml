@@ -1,0 +1,423 @@
+---
+description: Pipeline for parsing ServerPilot Nginx access logs.
+processors:
+  - set:
+      field: ecs.version
+      tag: set_ecs_version
+      value: '9.3.0'
+  - rename:
+      field: message
+      tag: rename_message_to_event_original
+      target_field: event.original
+      ignore_missing: true
+      description: Renames the original `message` field to `event.original` to store a copy of the original message. The `event.original` field is not touched if the document already has one; it may happen when Logstash sends the document.
+      if: ctx.event?.original == null
+  - remove:
+      field: message
+      tag: remove_message
+      ignore_missing: true
+      description: The `message` field is no longer required if the document has an `event.original` field.
+      if: ctx.event?.original != null
+
+  # Parses the ServerPilot Nginx access log line. The format is the Nginx combined
+  # format plus five trailing fields:
+  #   IP_ADDRESS - AUTH_USER [DATE_TIME] "REQUEST" RESPONSE_CODE CONTENT_LENGTH
+  #   "HTTP_REFERER" "USER_AGENT" "X_FORWARDED_FOR" REQUEST_LENGTH REQUEST_SECONDS
+  #   "UPSTREAM_CONTENT_LENGTH" "UPSTREAM_REQUEST_SECONDS" "REQUEST_HOST"
+  # Absent values are logged as a literal `-`, so every optional slot uses a
+  # `(?:-|...)` alternation that leaves the target field unset for the sentinel.
+  # The two upstream slots are captured raw because Nginx writes a comma-separated
+  # list of per-attempt values into `$upstream_response_length` and
+  # `$upstream_response_time` whenever it retries a failed upstream; they are
+  # folded into totals further down.
+  #
+  # The pattern anchors with `\A` and `\Z` because six of its captures are lazy
+  # and grok's `$` matches at every line end, so an `event.original` carrying
+  # an embedded newline would match a prefix of itself and lose the remainder.
+  # Anchored, it fails into `on_failure` where it is visible.
+  - grok:
+      field: event.original
+      tag: grok_nginx_access
+      pattern_definitions:
+        SP_UPSTREAM_VALUES: '(?:-|[0-9]+(?:\.[0-9]+)?)(?:\s*,\s*(?:-|[0-9]+(?:\.[0-9]+)?))*'
+      patterns:
+        - >-
+          \A%{IP:source.ip} - (?:-|%{DATA:user.name}) \[%{HTTPDATE:_tmp.time}\]
+          "(?:-|%{DATA:_tmp.request})" %{NUMBER:http.response.status_code:long}
+          (?:-|%{NUMBER:http.response.body.bytes:long}) "(?:-|%{DATA:http.request.referrer})"
+          "(?:-|%{DATA:user_agent.original})" "(?:-|%{DATA:_tmp.x_forwarded_for})"
+          %{NUMBER:http.request.bytes:long} %{NUMBER:_tmp.request_time:double}
+          "(?:-|%{SP_UPSTREAM_VALUES:_tmp.upstream_response_bytes})"
+          "(?:-|%{SP_UPSTREAM_VALUES:_tmp.upstream_response_time})" "(?:-|%{DATA:url.domain})"\Z
+      if: ctx.event?.original != null
+  - grok:
+      field: _tmp.request
+      tag: grok_request_line
+      patterns:
+        - '^%{WORD:http.request.method} %{GREEDYDATA:url.original} HTTP/%{NUMBER:http.version}$'
+        - '^%{WORD:http.request.method} %{GREEDYDATA:url.original}$'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the quoted request line into method, request URI and HTTP version. Malformed request lines are tolerated; the raw line remains available in `event.original`.
+  - grok:
+      field: url.original
+      tag: grok_url_original
+      patterns:
+        - '^%{DATA:url.path}\?%{GREEDYDATA:url.query}$'
+        - '^%{GREEDYDATA:url.path}$'
+      ignore_missing: true
+      ignore_failure: true
+      description: Splits the request URI into its path and query string.
+
+  # ServerPilot records the owning app and system user only in the log file path:
+  #   /srv/users/SYSUSER/log/APPNAME/APPNAME_nginx.access.log
+  # Anchored on the `/srv/users/<sysuser>/log/<app>/` suffix, not the start of
+  # the string, so a test harness mount prefix still matches.
+  #
+  # The first pattern additionally captures the app-name prefix of the file name,
+  # which the scheme rules below compare against the app directory name. It is
+  # anchored on the known file-name suffix (`_nginx.access.log` or
+  # `_nginx.access_ssl.log`) rather than split on the first underscore, because
+  # an app name may itself contain underscores. The second pattern is the
+  # file-name-agnostic fallback: it still yields the system user and the app for
+  # any other file sitting in an app's log directory.
+  - grok:
+      field: log.file.path
+      tag: grok_log_file_path
+      patterns:
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/(?<_tmp.file_app_name>[^/]+)_nginx\.access(?:_ssl)?\.log\Z'
+        - '\A.*/srv/users/(?<serverpilot.sysuser.name>[^/]+)/log/(?<serverpilot.app.name>[^/]+)/[^/]+\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Derives the owning ServerPilot system user and app from the log file path, plus the app-name prefix of the log file name.
+
+  # `serverpilot.app.name` stays the authoritative vendor field; `service.name`
+  # carries the same app name so that log events join with the API-sourced `app`
+  # data stream and with the other streams in this package. When the log file path
+  # does not match the ServerPilot layout the app name is unknown and
+  # `service.name` is simply left unset.
+  - set:
+      field: service.name
+      tag: set_service_name_from_app_name
+      copy_from: serverpilot.app.name
+      if: ctx.serverpilot?.app?.name != null
+      description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
+
+  # The log line carries no scheme, so it is derived from the log file name. Two
+  # ServerPilot vhost layouts are in the field and both are handled:
+  #
+  #   1. The documented layout names the files after the app and marks the TLS
+  #      vhost with an `_ssl` suffix: `APPNAME_nginx.access_ssl.log` is HTTPS and
+  #      `APPNAME_nginx.access.log` is HTTP.
+  #
+  #   2. Older ServerPilot versions generate the TLS vhost from a template whose
+  #      log file name was never parameterised, so the HTTPS vhost of every app
+  #      logs to a fixed name (observed as `mysite_nginx.access.log`) inside that
+  #      app's own log directory, with no `_ssl` anywhere on the server. Such a
+  #      file is recognised by its app-name prefix differing from the app
+  #      directory it sits in, a comparison rather than a hardcoded `mysite`
+  #      match, so it stays correct if the template name differs, and so an app
+  #      genuinely named `mysite` (prefix and directory agree) is still read as
+  #      HTTP.
+  #
+  # Anything else, including a path that does not match the ServerPilot layout
+  # at all, leaves `url.scheme` unset rather than guessing.
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_https_ssl_suffix
+      value: https
+      if: ctx.log?.file?.path != null && ctx.log.file.path.contains('_nginx.access_ssl')
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_https_template_file_name
+      value: https
+      if: >-
+        ctx.url?.scheme == null && ctx._tmp?.file_app_name != null &&
+        ctx.serverpilot?.app?.name != null &&
+        ctx._tmp.file_app_name != ctx.serverpilot.app.name
+      description: Marks the legacy ServerPilot TLS vhost layout, whose unparameterised log file name does not match the app directory it is written to, as HTTPS.
+  - set:
+      field: url.scheme
+      tag: set_url_scheme_http
+      value: http
+      if: ctx.url?.scheme == null && ctx.log?.file?.path != null && ctx.log.file.path.contains('_nginx.access.log')
+
+  - date:
+      field: _tmp.time
+      tag: date_nginx_access_time
+      target_field: '@timestamp'
+      formats:
+        - dd/MMM/yyyy:HH:mm:ss Z
+      if: ctx._tmp?.time != null
+      on_failure:
+        - append:
+            field: error.message
+            tag: append_date_nginx_access_time_failure
+            value: '{{{_ingest.on_failure_message}}}'
+
+  # X-Forwarded-For may be a single IP or a comma-separated chain of proxy hops.
+  # The full chain is preserved in `network.forwarded_ip`; its left-most entry is
+  # the originating client, so it becomes `client.ip`.
+  #
+  # Nginx passes `$http_x_forwarded_for` through verbatim and validates nothing,
+  # so every token here is client-supplied text. `network.forwarded_ip` is
+  # `ip`-mapped, which means a single non-IP token makes Elasticsearch reject the
+  # whole document at *index* time, after this pipeline has already succeeded, so
+  # the pipeline's `on_failure` never sees it and the document is simply lost.
+  # The chain is therefore validated before it is split, with the same `%{IP}`
+  # pattern every other stream in this package uses to derive an IP, and only a
+  # chain that is IP literals end to end is stored.
+  #
+  # The validation is all-or-nothing rather than per-entry on purpose. A chain
+  # with a forged token is not trustworthy in part: dropping the bad entries
+  # would renumber the surviving hops, so `network.forwarded_ip.0` would claim to
+  # be the originating client when the header said something else, and the
+  # position-dependent `client.ip` below is derived from exactly that entry.
+  # Nothing is lost by refusing the chain: the header as received is still in
+  # `event.original`, and the document is tagged so forged headers stay findable.
+  - grok:
+      field: _tmp.x_forwarded_for
+      tag: grok_validate_x_forwarded_for
+      patterns:
+        - '\A(?<_tmp.forwarded_ip_chain>%{IP}(?:\s*,\s*%{IP})*)\Z'
+      ignore_missing: true
+      ignore_failure: true
+      description: Accepts the client-supplied X-Forwarded-For header only when it is a chain of IP literals, so an `ip`-mapped field never receives a value Elasticsearch would reject at index time.
+  - append:
+      field: tags
+      tag: append_invalid_forwarded_ip_chain_tag
+      value: serverpilot_nginx_access_invalid_forwarded_ip
+      allow_duplicates: false
+      if: ctx._tmp?.x_forwarded_for != null && ctx._tmp?.forwarded_ip_chain == null
+      description: Flags a document whose X-Forwarded-For header is not a chain of IP addresses, so a forged header stays findable even though its value is not indexed.
+  - split:
+      field: _tmp.forwarded_ip_chain
+      tag: split_x_forwarded_for
+      separator: '\s*,\s*'
+      target_field: network.forwarded_ip
+      ignore_missing: true
+  - set:
+      field: client.ip
+      tag: set_client_ip_from_forwarded
+      copy_from: network.forwarded_ip.0
+      if: ctx.network?.forwarded_ip != null && ctx.network.forwarded_ip.size() != 0
+  - set:
+      field: client.ip
+      tag: set_client_ip_from_source
+      copy_from: source.ip
+      if: ctx.client?.ip == null && ctx.source?.ip != null
+
+  # X-Forwarded-For is client-controlled and carries no guarantee of being an
+  # IP address. `client.ip` and `network.forwarded_ip` are both `ip`-mapped, and
+  # the geoip processors below throw on a value that is not an IP literal, which
+  # would fail the whole document into `on_failure`. Validate here instead: a
+  # non-IP left-most hop falls back to the connecting address and is tagged so
+  # the forged header is still findable.
+  #
+  # With the chain gate above in place no forged value reaches `client.ip` by
+  # that route any more, so this is the backstop rather than the first line of
+  # defence. It is kept because it guards the field itself rather than one way of
+  # populating it: anything that later writes `client.ip` from an unvalidated
+  # source is caught here instead of at the geoip processors.
+  - convert:
+      field: client.ip
+      tag: convert_client_ip_validate
+      type: ip
+      ignore_missing: true
+      on_failure:
+        - remove:
+            field: client.ip
+            tag: remove_invalid_client_ip
+            ignore_missing: true
+        - set:
+            field: client.ip
+            tag: set_client_ip_from_source_after_invalid_forwarded
+            copy_from: source.ip
+            if: ctx.source?.ip != null
+        - append:
+            field: tags
+            tag: append_invalid_forwarded_ip_tag
+            value: serverpilot_nginx_access_invalid_forwarded_ip
+            allow_duplicates: false
+
+  # ECS requires durations in nanoseconds; Nginx logs fractional seconds.
+  #
+  # Both upstream fields may hold a comma-separated list of per-attempt values
+  # instead of a single value, because Nginx appends one entry per upstream
+  # attempt when it retries a failed upstream (which is exactly what happens on
+  # the 502 and 504 responses operators care about most). The entries are summed:
+  # the total bytes received from the upstreams and the total time spent waiting
+  # on them are the figures that stay comparable with the single-attempt case and
+  # with `event.duration`. An individual `-` entry marks an attempt that produced
+  # no value and is skipped; when no entry is numeric the target field is left
+  # unset rather than reported as zero.
+  - script:
+      lang: painless
+      tag: script_normalize_request_and_upstream_metrics
+      description: Converts the request time to nanoseconds and totals the upstream response length and upstream response time, either of which may be a comma-separated list of per-attempt values.
+      if: ctx._tmp != null && (ctx._tmp.request_time != null || ctx._tmp.upstream_response_bytes != null || ctx._tmp.upstream_response_time != null)
+      source: |-
+        def total(String raw) {
+          double sum = 0.0;
+          boolean found = false;
+          for (String entry : raw.splitOnToken(',')) {
+            String value = entry.trim();
+            if (value.isEmpty() || '-'.equals(value)) {
+              continue;
+            }
+            try {
+              sum += Double.parseDouble(value);
+              found = true;
+            } catch (NumberFormatException e) {
+              // An entry that is not a number carries no value and is skipped.
+            }
+          }
+          if (!found) {
+            return null;
+          }
+          return sum;
+        }
+        if (ctx._tmp.request_time != null) {
+          ctx._tmp.event_duration = Math.round(ctx._tmp.request_time * 1000000000.0);
+        }
+        if (ctx._tmp.upstream_response_bytes != null) {
+          def bytes = total(ctx._tmp.upstream_response_bytes);
+          if (bytes != null) {
+            ctx._tmp.upstream_bytes = Math.round(bytes);
+          }
+        }
+        if (ctx._tmp.upstream_response_time != null) {
+          def seconds = total(ctx._tmp.upstream_response_time);
+          if (seconds != null) {
+            ctx._tmp.upstream_duration = Math.round(seconds * 1000000000.0);
+          }
+        }
+  - rename:
+      field: _tmp.event_duration
+      tag: rename_event_duration
+      target_field: event.duration
+      ignore_missing: true
+  - rename:
+      field: _tmp.upstream_bytes
+      tag: rename_upstream_response_bytes
+      target_field: serverpilot.nginx.upstream.response.bytes
+      ignore_missing: true
+  - rename:
+      field: _tmp.upstream_duration
+      tag: rename_upstream_response_duration
+      target_field: serverpilot.nginx.upstream.response.duration
+      ignore_missing: true
+
+  - user_agent:
+      field: user_agent.original
+      tag: user_agent_original
+      ignore_missing: true
+      if: ctx.user_agent?.original != null
+
+  - geoip:
+      field: client.ip
+      tag: geoip_client_geo
+      target_field: client.geo
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.geo == null
+  - geoip:
+      database_file: GeoLite2-ASN.mmdb
+      field: client.ip
+      tag: geoip_client_asn
+      target_field: client.as
+      properties:
+        - asn
+        - organization_name
+      ignore_missing: true
+      if: ctx.client?.ip != null && ctx.client.as == null
+  - rename:
+      field: client.as.asn
+      tag: rename_client_as_number
+      target_field: client.as.number
+      ignore_missing: true
+  - rename:
+      field: client.as.organization_name
+      tag: rename_client_as_organization_name
+      target_field: client.as.organization.name
+      ignore_missing: true
+
+  - set:
+      field: event.kind
+      tag: set_event_kind
+      value: event
+  - append:
+      field: event.category
+      tag: append_event_category_web
+      value: web
+      allow_duplicates: false
+  - append:
+      field: event.type
+      tag: append_event_type_access
+      value: access
+      allow_duplicates: false
+  - set:
+      field: event.outcome
+      tag: set_event_outcome_success
+      value: success
+      if: ctx.http?.response?.status_code != null && ctx.http.response.status_code < 400
+  - set:
+      field: event.outcome
+      tag: set_event_outcome_failure
+      value: failure
+      if: ctx.http?.response?.status_code != null && ctx.http.response.status_code >= 400
+
+  - append:
+      field: related.ip
+      tag: append_source_ip_to_related_ip
+      value: '{{{source.ip}}}'
+      allow_duplicates: false
+      if: ctx.source?.ip != null
+  - append:
+      field: related.ip
+      tag: append_client_ip_to_related_ip
+      value: '{{{client.ip}}}'
+      allow_duplicates: false
+      if: ctx.client?.ip != null
+  - foreach:
+      field: network.forwarded_ip
+      tag: foreach_forwarded_ip_to_related_ip
+      ignore_missing: true
+      processor:
+        append:
+          field: related.ip
+          tag: append_forwarded_ip_to_related_ip
+          value: '{{{_ingest._value}}}'
+          allow_duplicates: false
+  - append:
+      field: related.user
+      tag: append_user_name_to_related_user
+      value: '{{{user.name}}}'
+      allow_duplicates: false
+      if: ctx.user?.name != null
+
+  - remove:
+      field: _tmp
+      tag: remove_tmp
+      ignore_missing: true
+  - append:
+      field: tags
+      tag: append_preserve_original_event_on_error
+      value: preserve_original_event
+      allow_duplicates: false
+      if: ctx.error?.message != null
+
+on_failure:
+  - append:
+      field: error.message
+      value: >-
+        Processor '{{{ _ingest.on_failure_processor_type }}}'
+        {{{#_ingest.on_failure_processor_tag}}}with tag '{{{ _ingest.on_failure_processor_tag }}}'
+        {{{/_ingest.on_failure_processor_tag}}}failed with message '{{{ _ingest.on_failure_message }}}'
+  - set:
+      field: event.kind
+      tag: set_pipeline_error_to_event_kind
+      value: pipeline_error
+  - append:
+      field: tags
+      value: preserve_original_event
+      allow_duplicates: false

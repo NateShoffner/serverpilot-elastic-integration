@@ -1,0 +1,152 @@
+{
+    "@timestamp": "2025-03-06T18:06:39.000Z",
+    "agent": {
+        "ephemeral_id": "26762add-2fcd-4c32-bee9-91aef5e2cdc9",
+        "id": "4d7196b5-7ae4-4363-ab90-5dffab060153",
+        "name": "elastic-agent-32941",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "client": {
+        "as": {
+            "number": 64502,
+            "organization": {
+                "name": "Documentation ASN"
+            }
+        },
+        "geo": {
+            "city_name": "Madrid",
+            "continent_name": "Europe",
+            "country_iso_code": "ES",
+            "country_name": "Spain",
+            "location": {
+                "coordinates": [
+                    -3.702500034123659,
+                    40.416389987803996
+                ],
+                "type": "Point"
+            },
+            "region_iso_code": "ES-M",
+            "region_name": "Madrid"
+        },
+        "ip": "203.0.113.10"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.nginx_error",
+        "namespace": "47558",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "4d7196b5-7ae4-4363-ab90-5dffab060153",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.nginx_error",
+        "ingested": "2026-10-12T08:51:00Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "2025/03/06 18:06:39 [error] 1859207#0: *1379265 open() \"/srv/users/serverpilot/apps/blogapp/public/favicon.ico\" failed (2: No such file or directory), client: 203.0.113.10, server: blogapp.example.com, request: \"GET /favicon.ico HTTP/1.1\", host: \"blogapp.example.com\"",
+        "severity": 3,
+        "timezone": "+00:00",
+        "type": [
+            "error"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-32941",
+        "ip": [
+            "192.168.128.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-80-02"
+        ],
+        "name": "elastic-agent-32941",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "http": {
+        "request": {
+            "method": "GET"
+        },
+        "version": "1.1"
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "fingerprint": "301ef872a9b0ff15dfb42f909433526d2754fef76d8d2f3fa143cb977192bd17",
+            "inode": "3659174700966448",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_nginx.error.log"
+        },
+        "level": "error",
+        "offset": 0
+    },
+    "message": "open() \"/srv/users/serverpilot/apps/blogapp/public/favicon.ico\" failed (2: No such file or directory)",
+    "process": {
+        "pid": 1859207,
+        "thread": {
+            "id": 0
+        }
+    },
+    "related": {
+        "ip": [
+            "203.0.113.10"
+        ]
+    },
+    "server": {
+        "domain": "blogapp.example.com"
+    },
+    "serverpilot": {
+        "app": {
+            "name": "blogapp"
+        },
+        "nginx": {
+            "connection": {
+                "id": "1379265"
+            },
+            "error": {
+                "code": "2",
+                "message": "No such file or directory"
+            }
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "source": {
+        "ip": "203.0.113.10"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-nginx-error"
+    ],
+    "url": {
+        "domain": "blogapp.example.com",
+        "original": "/favicon.ico",
+        "path": "/favicon.ico",
+        "scheme": "http"
+    }
+}

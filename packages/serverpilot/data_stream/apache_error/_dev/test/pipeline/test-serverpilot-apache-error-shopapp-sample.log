@@ -1,0 +1,2 @@
+[Thu Mar 06 16:12:33.004417 2025] [rewrite:error] [pid 5701:tid 139635493631750] [client 203.0.113.131:0] AH00670: Options FollowSymLinks and SymLinksIfOwnerMatch are both off, so the RewriteRule directive is also forbidden due to its similar ability to circumvent directory restrictions
+[Thu Mar 06 16:18:09.772300 2025] [php:warn] [pid 5702:tid 139635493631751] [client 192.0.2.244:0] PHP Warning:  Undefined array key "example_key" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57

@@ -1,0 +1,116 @@
+---
+# Mock of the ServerPilot v1 management API for the `sysuser` data stream.
+#
+# GET /sysusers has no pagination, no cursor and no "changed since" filter: the
+# complete system user collection comes back in a single response wrapped in a
+# `data` key. There is therefore no multi-page flow to model. The rules below
+# model the response variants the CEL program must handle, selected by
+# prefixing the base URL:
+#
+#   {url} = http://host:port           -> 200, three system users (happy path)
+#   {url} = http://host:port/empty     -> 200, empty `data` array
+#   {url} = http://host:port/error     -> 500 server error
+#   {url} = http://host:port/malformed -> 200 with a non-JSON body
+#   any base URL without valid Basic auth -> 401 Unauthorized
+#
+# The system test uses the unprefixed base URL and valid credentials, so it
+# always takes the happy path.
+#
+# All data is synthetic. The `serverid` values match the servers in
+# config-server.yml, and the user names match the sysusers in the filestream
+# data streams' sample logs, so the four API streams and the seven log streams
+# form one coherent example estate.
+# The Basic credential matched below is
+# base64("example-client-id:example-api-key").
+rules:
+  # --- Empty collection. ---
+  - path: /empty/sysusers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"data":[]}
+  # --- Server-side failure. ---
+  - path: /error/sysusers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 500
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Internal Server Error"}}
+  # --- Malformed body: 200 status but not JSON. ---
+  - path: /malformed/sysusers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'text/html'
+        body: |-
+          <html><head><title>502 Bad Gateway</title></head><body>502 Bad Gateway</body></html>
+  # --- Happy path: the full system user inventory.
+  #
+  # `serverpilot` is the user every ServerPilot server has by default.
+  # The third user omits `datecreated`, which the API reference documents as
+  # optional, so the pipeline must tolerate its absence.
+  - path: /sysusers
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {{ minify_json `
+          {
+            "data": [
+              {
+                "id": "s1Y2z3A4b5C6d7E8",
+                "name": "serverpilot",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "datecreated": 1700000000
+              },
+              {
+                "id": "s9F0g1H2i3J4k5L6",
+                "name": "appowner",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "datecreated": 1710000000
+              },
+              {
+                "id": "s7M8n9O0p1Q2r3S4",
+                "name": "legacyowner",
+                "serverid": "i9J0k1L2m3N4o5P6"
+              }
+            ]
+          }
+          ` }}
+  # --- Catch-all for any /sysusers request without valid Basic credentials.
+  #
+  # Must stay last: elastic/stream matches top-down, first match wins, and this
+  # rule places no constraint on the Authorization header.
+  - path: /sysusers
+    methods: ['GET']
+    responses:
+      - status_code: 401
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Unauthorized"}}

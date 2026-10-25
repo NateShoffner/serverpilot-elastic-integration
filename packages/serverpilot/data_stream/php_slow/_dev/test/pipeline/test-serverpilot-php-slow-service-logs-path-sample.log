@@ -1,0 +1,4 @@
+[04-Mar-2025 19:37:19]  [pool blogapp] pid 3969
+script_filename = /srv/users/serverpilot/apps/blogapp/public/index.php
+[0x00007f185ee134e0] mysqli_query() /srv/users/serverpilot/apps/blogapp/public/db.php:789
+[0x00007f185ee13400] getBlogPostTags() /srv/users/serverpilot/apps/blogapp/public/example.php:123

@@ -1,0 +1,377 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T00:20:11.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.77"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 432000000,
+                "kind": "event",
+                "original": "198.51.100.77 alice.johnson [07/Mar/2025:00:20:11 +0000] \"GET /index.php\" 200 8192 text/html 2041 31101 0.432 8388608 2.00% 0.75% \"/account/orders\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 8192
+                    },
+                    "status_code": 200
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31101
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.77"
+                ],
+                "user": [
+                    "alice.johnson"
+                ]
+            },
+            "serverpilot": {
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.75
+                        },
+                        "user": {
+                            "percent": 2.0
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 8388608
+                        }
+                    },
+                    "request_uri": "/index.php",
+                    "unlabelled_field": "text/html"
+                }
+            },
+            "source": {
+                "ip": "198.51.100.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/account/orders",
+                "path": "/account/orders"
+            },
+            "user": {
+                "name": "alice.johnson"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:21:05.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.101"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 2000000,
+                "kind": "event",
+                "original": "192.0.2.101 - [07/Mar/2025:00:21:05 +0000] \"-\" 400 0 - 2041 31102 0.002 2097152 0.00% 0.00% \"-\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "response": {
+                    "body": {
+                        "bytes": 0
+                    },
+                    "status_code": 400
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31102
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.101"
+                ]
+            },
+            "serverpilot": {
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.0
+                        },
+                        "user": {
+                            "percent": 0.0
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 2097152
+                        }
+                    }
+                }
+            },
+            "source": {
+                "ip": "192.0.2.101"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-07T00:22:40.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.202"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 12500000000,
+                "kind": "event",
+                "original": "203.0.113.202 - [07/Mar/2025:00:22:40 +0000] \"POST /index.php\" 504 - - 2041 31103 12.500 67108864 118.50% 24.25% \"/api/import?mode=bulk\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "POST"
+                },
+                "response": {
+                    "status_code": 504
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31103
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.202"
+                ]
+            },
+            "serverpilot": {
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 24.25
+                        },
+                        "user": {
+                            "percent": 118.5
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 67108864
+                        }
+                    },
+                    "request_uri": "/index.php"
+                }
+            },
+            "source": {
+                "ip": "203.0.113.202"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/api/import?mode=bulk",
+                "path": "/api/import",
+                "query": "mode=bulk"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:23:15.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.150"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 19000000,
+                "kind": "event",
+                "original": "192.0.2.150 - [07/Mar/2025:00:23:15 +0000] \"GET /index.php?page=2\" 301 0 - 2041 31104 0.019 2097152 0.25% 0.00%  \"/blog/page/2\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 0
+                    },
+                    "status_code": 301
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/php-access.log"
+                }
+            },
+            "process": {
+                "parent": {
+                    "pid": 2041
+                },
+                "pid": 31104
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.150"
+                ]
+            },
+            "serverpilot": {
+                "php": {
+                    "cpu": {
+                        "system": {
+                            "percent": 0.0
+                        },
+                        "user": {
+                            "percent": 0.25
+                        }
+                    },
+                    "memory": {
+                        "peak": {
+                            "bytes": 2097152
+                        }
+                    },
+                    "request_uri": "/index.php?page=2"
+                }
+            },
+            "source": {
+                "ip": "192.0.2.150"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "original": "/blog/page/2",
+                "path": "/blog/page/2"
+            }
+        }
+    ]
+}

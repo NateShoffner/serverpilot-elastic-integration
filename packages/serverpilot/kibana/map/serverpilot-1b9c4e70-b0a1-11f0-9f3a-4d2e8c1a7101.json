@@ -1,0 +1,20 @@
+{
+    "attributes": {
+        "description": "Client locations across the ServerPilot log data streams that carry client.geo, clustered by request count. Narrow to one stream with a data_stream.dataset filter.",
+        "layerListJSON": "[{\"alpha\":1,\"id\":\"sp-basemap-0001\",\"includeInFitToBounds\":true,\"locale\":\"autoselect\",\"maxZoom\":24,\"minZoom\":0,\"sourceDescriptor\":{\"isAutoSelect\":true,\"lightModeDefault\":\"road_map_desaturated_v9\",\"type\":\"EMS_TMS\"},\"style\":{\"color\":\"\",\"type\":\"EMS_VECTOR_TILE\"},\"type\":\"EMS_VECTOR_TILE\",\"visible\":true},{\"alpha\":0.75,\"disableTooltips\":false,\"id\":\"sp-client-clusters-0001\",\"includeInFitToBounds\":true,\"joins\":[],\"label\":\"Client locations\",\"maxZoom\":24,\"minZoom\":0,\"sourceDescriptor\":{\"applyForceRefresh\":true,\"applyGlobalQuery\":true,\"applyGlobalTime\":true,\"geoField\":\"client.geo.location\",\"id\":\"sp-client-clusters-source-0001\",\"indexPatternRefName\":\"layer_1_source_index_pattern\",\"metrics\":[{\"type\":\"count\"}],\"requestType\":\"point\",\"resolution\":\"FINE\",\"type\":\"ES_GEO_GRID\"},\"style\":{\"isTimeAware\":true,\"properties\":{\"fillColor\":{\"options\":{\"field\":{\"name\":\"doc_count\",\"origin\":\"source\"},\"fieldMetaOptions\":{\"isEnabled\":true,\"sigma\":3},\"color\":\"Blues\",\"colorCategory\":\"palette_0\",\"type\":\"ORDINAL\"},\"type\":\"DYNAMIC\"},\"icon\":{\"options\":{\"value\":\"marker\"},\"type\":\"STATIC\"},\"iconOrientation\":{\"options\":{\"orientation\":0},\"type\":\"STATIC\"},\"iconSize\":{\"options\":{\"field\":{\"name\":\"doc_count\",\"origin\":\"source\"},\"fieldMetaOptions\":{\"isEnabled\":true,\"sigma\":3},\"minSize\":8,\"maxSize\":24},\"type\":\"DYNAMIC\"},\"labelBorderColor\":{\"options\":{\"color\":\"#FFFFFF\"},\"type\":\"STATIC\"},\"labelBorderSize\":{\"options\":{\"size\":\"SMALL\"}},\"labelColor\":{\"options\":{\"color\":\"#000000\"},\"type\":\"STATIC\"},\"labelPosition\":{\"options\":{\"position\":\"CENTER\"}},\"labelSize\":{\"options\":{\"size\":14},\"type\":\"STATIC\"},\"labelText\":{\"options\":{\"field\":{\"name\":\"doc_count\",\"origin\":\"source\"}},\"type\":\"DYNAMIC\"},\"labelZoomRange\":{\"options\":{\"maxZoom\":24,\"minZoom\":0,\"useLayerZoomRange\":true}},\"lineColor\":{\"options\":{\"color\":\"#FFF\"},\"type\":\"STATIC\"},\"lineWidth\":{\"options\":{\"size\":0},\"type\":\"STATIC\"},\"symbolizeAs\":{\"options\":{\"value\":\"circle\"}}},\"type\":\"VECTOR\"},\"type\":\"GEOJSON_VECTOR\",\"visible\":true}]",
+        "mapStateJSON": "{\"adHocDataViews\":[],\"center\":{\"lat\":19.94277,\"lon\":0},\"filters\":[],\"query\":{\"language\":\"kuery\",\"query\":\"\"},\"refreshConfig\":{\"interval\":60000,\"isPaused\":true},\"settings\":{\"autoFitToDataBounds\":true,\"backgroundColor\":\"transparent\",\"browserLocation\":{\"zoom\":2},\"customIcons\":[],\"disableInteractive\":false,\"disableTooltipControl\":false,\"fixedLocation\":{\"lat\":0,\"lon\":0,\"zoom\":2},\"hideLayerControl\":false,\"hideToolbarOverlay\":false,\"hideViewControl\":false,\"initialLocation\":\"LAST_SAVED_LOCATION\",\"keydownScrollZoom\":false,\"maxZoom\":24,\"minZoom\":0,\"projection\":\"mercator\",\"showScaleControl\":false,\"showSpatialFilters\":true,\"showTimesliderToggleButton\":true,\"spatialFiltersAlpa\":0.3,\"spatialFiltersFillColor\":\"#DA8B45\",\"spatialFiltersLineColor\":\"#DA8B45\"},\"timeFilters\":{\"from\":\"now-7d\",\"to\":\"now\"},\"zoom\":1.37}",
+        "title": "[Logs ServerPilot] Client locations",
+        "uiStateJSON": "{\"isLayerTOCOpen\":false,\"openTOCDetails\":[]}"
+    },
+    "coreMigrationVersion": "8.8.0",
+    "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7101",
+    "references": [
+        {
+            "id": "logs-*",
+            "name": "layer_1_source_index_pattern",
+            "type": "index-pattern"
+        }
+    ],
+    "type": "map",
+    "typeMigrationVersion": "8.4.0"
+}

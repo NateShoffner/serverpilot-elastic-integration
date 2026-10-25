@@ -1,0 +1,315 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-07T00:14:10.000Z",
+            "client": {
+                "as": {
+                    "number": 64500,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Las Vegas",
+                    "continent_name": "North America",
+                    "country_iso_code": "US",
+                    "country_name": "United States",
+                    "location": {
+                        "lat": 36.17497,
+                        "lon": -115.13722
+                    },
+                    "region_iso_code": "US-NV",
+                    "region_name": "Nevada"
+                },
+                "ip": "192.0.2.55"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 1000000,
+                "kind": "event",
+                "original": "192.0.2.55 - - [07/Mar/2025:00:14:10 +0000] \"GET /search?q=two words HTTP/1.1\" 400 182 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\" \"-\" 264 0.001 \"-\" \"-\" \"blogapp.example.com\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 264,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 182
+                    },
+                    "status_code": 400
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "192.0.2.55"
+                ]
+            },
+            "source": {
+                "ip": "192.0.2.55"
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/search?q=two words",
+                "path": "/search",
+                "query": "q=two words"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "Chrome",
+                "original": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36",
+                "os": {
+                    "full": "Windows 10",
+                    "name": "Windows",
+                    "version": "10"
+                },
+                "version": "133.0.0.0"
+            }
+        },
+        {
+            "@timestamp": "2025-03-07T00:14:33.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.200"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 102000000,
+                "kind": "event",
+                "original": "198.51.100.200 - - [07/Mar/2025:00:14:33 +0000] \"-\" 400 0 \"-\" \"-\" \"-\" 0 0.102 \"-\" \"-\" \"-\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 0
+                },
+                "response": {
+                    "body": {
+                        "bytes": 0
+                    },
+                    "status_code": 400
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.200"
+                ]
+            },
+            "source": {
+                "ip": "198.51.100.200"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-07T00:15:02.000Z",
+            "client": {
+                "as": {
+                    "number": 64502,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Madrid",
+                    "continent_name": "Europe",
+                    "country_iso_code": "ES",
+                    "country_name": "Spain",
+                    "location": {
+                        "lat": 40.41639,
+                        "lon": -3.7025
+                    },
+                    "region_iso_code": "ES-M",
+                    "region_name": "Madrid"
+                },
+                "ip": "203.0.113.77"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 0,
+                "kind": "event",
+                "original": "203.0.113.77 - - [07/Mar/2025:00:15:02 +0000] \"\\x16\\x03\\x01\" 400 0 \"-\" \"-\" \"-\" 0 0.000 \"-\" \"-\" \"-\"",
+                "outcome": "failure",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 0
+                },
+                "response": {
+                    "body": {
+                        "bytes": 0
+                    },
+                    "status_code": 400
+                }
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "203.0.113.77"
+                ]
+            },
+            "source": {
+                "ip": "203.0.113.77"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-07T00:15:41.000Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.14"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "duration": 42000000,
+                "kind": "event",
+                "original": "198.51.100.14 - - [07/Mar/2025:00:15:41 +0000] \"GET /login HTTP/1.1\" 200 1204 \"-\" \"curl/8.5.0\" \"notanip, 203.0.113.5\" 118 0.042 \"1204\" \"0.038\" \"blogapp.example.com\"",
+                "outcome": "success",
+                "type": [
+                    "access"
+                ]
+            },
+            "http": {
+                "request": {
+                    "bytes": 118,
+                    "method": "GET"
+                },
+                "response": {
+                    "body": {
+                        "bytes": 1204
+                    },
+                    "status_code": 200
+                },
+                "version": "1.1"
+            },
+            "log": {
+                "file": {
+                    "path": "/var/log/nginx-access.log"
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.14"
+                ]
+            },
+            "serverpilot": {
+                "nginx": {
+                    "upstream": {
+                        "response": {
+                            "bytes": 1204,
+                            "duration": 38000000
+                        }
+                    }
+                }
+            },
+            "source": {
+                "ip": "198.51.100.14"
+            },
+            "tags": [
+                "preserve_original_event",
+                "serverpilot_nginx_access_invalid_forwarded_ip"
+            ],
+            "url": {
+                "domain": "blogapp.example.com",
+                "original": "/login",
+                "path": "/login"
+            },
+            "user_agent": {
+                "device": {
+                    "name": "Other"
+                },
+                "name": "curl",
+                "original": "curl/8.5.0",
+                "version": "8.5.0"
+            }
+        }
+    ]
+}

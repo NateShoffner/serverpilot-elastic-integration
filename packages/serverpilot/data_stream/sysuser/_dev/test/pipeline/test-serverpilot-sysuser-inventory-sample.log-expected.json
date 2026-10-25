@@ -1,0 +1,117 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "iam"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1700000000,\"id\":\"s1Y2z3A4b5C6d7E8\",\"name\":\"serverpilot\",\"serverid\":\"a1B2c3D4e5F6g7H8\"}",
+                "type": [
+                    "user",
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "serverpilot"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                },
+                "sysuser": {
+                    "created": "2023-11-14T22:13:20.000Z",
+                    "id": "s1Y2z3A4b5C6d7E8",
+                    "name": "serverpilot"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "serverpilot"
+            }
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "iam"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1710000000,\"id\":\"s9F0g1H2i3J4k5L6\",\"name\":\"appowner\",\"serverid\":\"a1B2c3D4e5F6g7H8\"}",
+                "type": [
+                    "user",
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "appowner"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                },
+                "sysuser": {
+                    "created": "2024-03-09T16:00:00.000Z",
+                    "id": "s9F0g1H2i3J4k5L6",
+                    "name": "appowner"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "appowner"
+            }
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "iam"
+                ],
+                "kind": "asset",
+                "original": "{\"id\":\"s7M8n9O0p1Q2r3S4\",\"name\":\"legacyowner\",\"serverid\":\"i9J0k1L2m3N4o5P6\"}",
+                "type": [
+                    "user",
+                    "info"
+                ]
+            },
+            "related": {
+                "user": [
+                    "legacyowner"
+                ]
+            },
+            "serverpilot": {
+                "server": {
+                    "id": "i9J0k1L2m3N4o5P6"
+                },
+                "sysuser": {
+                    "id": "s7M8n9O0p1Q2r3S4",
+                    "name": "legacyowner"
+                }
+            },
+            "tags": [
+                "preserve_original_event"
+            ],
+            "user": {
+                "name": "legacyowner"
+            }
+        }
+    ]
+}

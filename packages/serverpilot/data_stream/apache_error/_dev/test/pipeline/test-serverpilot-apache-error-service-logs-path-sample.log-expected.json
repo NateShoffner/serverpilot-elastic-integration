@@ -1,0 +1,133 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2025-03-06T15:04:02.881Z",
+            "client": {
+                "as": {
+                    "number": 64501,
+                    "organization": {
+                        "name": "Documentation ASN"
+                    }
+                },
+                "geo": {
+                    "city_name": "Amsterdam",
+                    "continent_name": "Europe",
+                    "country_iso_code": "NL",
+                    "country_name": "Netherlands",
+                    "location": {
+                        "lat": 52.37404,
+                        "lon": 4.88969
+                    },
+                    "region_iso_code": "NL-NH",
+                    "region_name": "North Holland"
+                },
+                "ip": "198.51.100.23"
+            },
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:04:02.881204 2025] [authz_core:error] [pid 5668:tid 139635493631745] [client 198.51.100.23:0] AH01630: client denied by server configuration: /srv/users/serverpilot/apps/blogapp/public/wp-config.php",
+                "severity": 3,
+                "type": [
+                    "error"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "error"
+            },
+            "message": "AH01630: client denied by server configuration: /srv/users/serverpilot/apps/blogapp/public/wp-config.php",
+            "process": {
+                "pid": 5668,
+                "thread": {
+                    "id": 139635493631745
+                }
+            },
+            "related": {
+                "ip": [
+                    "198.51.100.23"
+                ]
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH01630"
+                    },
+                    "module": "authz_core"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "source": {
+                "ip": "198.51.100.23"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2025-03-06T15:09:10.552Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "web"
+                ],
+                "kind": "event",
+                "original": "[Thu Mar 06 15:09:10.552001 2025] [mpm_event:notice] [pid 5660:tid 139635493631744] AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations",
+                "severity": 5,
+                "type": [
+                    "info"
+                ]
+            },
+            "log": {
+                "file": {
+                    "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
+                },
+                "level": "notice"
+            },
+            "message": "AH00489: Apache/2.4.58 (Ubuntu) configured -- resuming normal operations",
+            "process": {
+                "pid": 5660,
+                "thread": {
+                    "id": 139635493631744
+                }
+            },
+            "serverpilot": {
+                "apache": {
+                    "error": {
+                        "code": "AH00489"
+                    },
+                    "module": "mpm_event"
+                },
+                "app": {
+                    "name": "blogapp"
+                },
+                "sysuser": {
+                    "name": "serverpilot"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

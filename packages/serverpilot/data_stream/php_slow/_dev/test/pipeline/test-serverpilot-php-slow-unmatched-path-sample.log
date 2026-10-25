@@ -1,0 +1,4 @@
+[04-Mar-2025 21:11:04]  [pool blogapp] pid 4290
+script_filename = /srv/users/serverpilot/apps/blogapp/public/index.php
+[0x00007f185ee14110] preg_match_all() /srv/users/serverpilot/apps/blogapp/public/lib/router.php:118
+[0x00007f185ee14030] example_route() /srv/users/serverpilot/apps/blogapp/public/index.php:12

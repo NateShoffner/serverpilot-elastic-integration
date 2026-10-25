@@ -1,0 +1,7 @@
+[Thu Mar 06 14:58:02.100233 2025] [core:emerg] [pid 5660:tid 139635493631744] AH00072: make_sock: could not bind to address [::]:81
+[Thu Mar 06 15:30:15.884120 2025] [proxy_fcgi:error] [pid 5705:tid 139635493631752] [client 203.0.113.131:0] AH01071: Got error 'PHP message: PHP Fatal error:  Uncaught RuntimeException: Database connection failed in /srv/users/appowner/apps/shopapp/public/lib/db.php:42
+Stack trace:
+#0 /srv/users/appowner/apps/shopapp/public/index.php(18): sp_db_connect()
+#1 {main}
+  thrown in /srv/users/appowner/apps/shopapp/public/lib/db.php on line 42'
+[Thu Mar 06 15:31:00.001122 2025] [authz_core:trace1] [pid 5705:tid 139635493631752] [client 198.51.100.61:0] authorization result of Require all granted: granted

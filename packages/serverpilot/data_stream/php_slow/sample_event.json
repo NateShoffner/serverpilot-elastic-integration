@@ -1,0 +1,122 @@
+{
+    "@timestamp": "2025-03-04T19:37:19.000Z",
+    "agent": {
+        "ephemeral_id": "81fe6114-36d2-4a27-a7b4-55d6f8a8e5bf",
+        "id": "750df469-1f49-4d23-a2d6-282f52a28046",
+        "name": "elastic-agent-43993",
+        "type": "filebeat",
+        "version": "9.5.3"
+    },
+    "data_stream": {
+        "dataset": "serverpilot.php_slow",
+        "namespace": "94285",
+        "type": "logs"
+    },
+    "ecs": {
+        "version": "9.3.0"
+    },
+    "elastic_agent": {
+        "id": "750df469-1f49-4d23-a2d6-282f52a28046",
+        "snapshot": false,
+        "version": "9.5.3"
+    },
+    "event": {
+        "agent_id_status": "verified",
+        "category": [
+            "web"
+        ],
+        "dataset": "serverpilot.php_slow",
+        "ingested": "2026-10-12T09:34:12Z",
+        "kind": "event",
+        "module": "serverpilot",
+        "original": "[04-Mar-2025 19:37:19]  [pool blogapp] pid 3969\nscript_filename = /srv/users/serverpilot/apps/blogapp/public/index.php\n[0x00007f185ee134e0] mysqli_query() /srv/users/serverpilot/apps/blogapp/public/db.php:789\n[0x00007f185ee13400] getBlogPostTags() /srv/users/serverpilot/apps/blogapp/public/example.php:123\n",
+        "timezone": "+00:00",
+        "type": [
+            "info"
+        ]
+    },
+    "host": {
+        "architecture": "x86_64",
+        "containerized": false,
+        "hostname": "elastic-agent-43993",
+        "ip": [
+            "192.168.48.2",
+            "172.24.0.4"
+        ],
+        "mac": [
+            "02-42-AC-18-00-04",
+            "02-42-C0-A8-30-02"
+        ],
+        "name": "elastic-agent-43993",
+        "os": {
+            "family": "",
+            "kernel": "5.10.104-linuxkit",
+            "name": "Wolfi",
+            "platform": "wolfi",
+            "type": "linux",
+            "version": "20230201"
+        }
+    },
+    "input": {
+        "type": "filestream"
+    },
+    "log": {
+        "file": {
+            "device_id": "121",
+            "inode": "6192449491684841",
+            "path": "/tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
+        },
+        "flags": "multiline",
+        "offset": 209,
+        "origin": {
+            "file": {
+                "line": 789,
+                "name": "/srv/users/serverpilot/apps/blogapp/public/db.php"
+            },
+            "function": "mysqli_query"
+        }
+    },
+    "process": {
+        "pid": 3969
+    },
+    "serverpilot": {
+        "app": {
+            "name": "blogapp"
+        },
+        "php": {
+            "slow": {
+                "frame_count": 2,
+                "frames": {
+                    "file": {
+                        "line": [
+                            123,
+                            789
+                        ],
+                        "name": [
+                            "/srv/users/serverpilot/apps/blogapp/public/db.php",
+                            "/srv/users/serverpilot/apps/blogapp/public/example.php"
+                        ]
+                    },
+                    "function": [
+                        "getBlogPostTags",
+                        "mysqli_query"
+                    ]
+                },
+                "pool": "blogapp",
+                "script_filename": "/srv/users/serverpilot/apps/blogapp/public/index.php",
+                "stack_trace": "mysqli_query() /srv/users/serverpilot/apps/blogapp/public/db.php:789\ngetBlogPostTags() /srv/users/serverpilot/apps/blogapp/public/example.php:123"
+            },
+            "version": "8.3"
+        },
+        "sysuser": {
+            "name": "serverpilot"
+        }
+    },
+    "service": {
+        "name": "blogapp"
+    },
+    "tags": [
+        "preserve_original_event",
+        "serverpilot-php-slow"
+    ]
+}

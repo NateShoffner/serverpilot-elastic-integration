@@ -1,0 +1,1 @@
+2025/03/07 01:14:52 [error] 1920145#1920145: *99120 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 203.0.113.21, server: api.example.com, request: "GET /v1/status HTTP/1.1", upstream: "http://127.0.0.1:81/v1/status", host: "api.example.com"

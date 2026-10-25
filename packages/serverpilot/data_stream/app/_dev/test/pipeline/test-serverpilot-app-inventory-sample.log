@@ -1,0 +1,3 @@
+{"datecreated":1700000500,"domains":["blogapp.example.com","www.blogapp.example.com"],"id":"p1T2u3V4w5X6y7Z8","name":"blogapp","runtime":"php8.3","serverid":"a1B2c3D4e5F6g7H8","ssl":{"auto":true,"force":true},"sysuserid":"s1Y2z3A4b5C6d7E8"}
+{"datecreated":1710000500,"domains":["shop.example.com"],"id":"p9A0b1C2d3E4f5G6","name":"shopapp","runtime":"php8.4","serverid":"a1B2c3D4e5F6g7H8","ssl":{"auto":true,"force":false},"sysuserid":"s9F0g1H2i3J4k5L6"}
+{"datecreated":1680000500,"domains":["legacy.example.net"],"id":"p7H8i9J0k1L2m3N4","name":"legacyapp","runtime":"php7.4","serverid":"i9J0k1L2m3N4o5P6","ssl":null,"sysuserid":"s7M8n9O0p1Q2r3S4"}

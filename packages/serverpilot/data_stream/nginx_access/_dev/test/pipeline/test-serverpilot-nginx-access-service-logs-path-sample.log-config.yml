@@ -1,0 +1,6 @@
+fields:
+  tags:
+    - preserve_original_event
+  log:
+    file:
+      path: /tmp/service_logs/srv/users/serverpilot/log/blogapp/blogapp_nginx.access_ssl.log

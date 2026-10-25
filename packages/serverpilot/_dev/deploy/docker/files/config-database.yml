@@ -1,0 +1,125 @@
+---
+# Mock of the ServerPilot v1 management API for the `database` data stream.
+#
+# GET /dbs has no pagination, no cursor and no "changed since" filter: the
+# complete database collection comes back in a single response wrapped in a
+# `data` key. There is therefore no multi-page flow to model. The rules below
+# model the response variants the CEL program must handle, selected by
+# prefixing the base URL:
+#
+#   {url} = http://host:port           -> 200, three databases (happy path)
+#   {url} = http://host:port/empty     -> 200, empty `data` array
+#   {url} = http://host:port/error     -> 500 server error
+#   {url} = http://host:port/malformed -> 200 with a non-JSON body
+#   any base URL without valid Basic auth -> 401 Unauthorized
+#
+# All data is synthetic. `appid` and `serverid` values match config-app.yml and
+# config-server.yml so the four API streams join correctly.
+# The Basic credential matched below is
+# base64("example-client-id:example-api-key").
+#
+# Note on secrets: a database password is accepted by the create and update
+# endpoints but is never returned on a read, so unlike the `app` stream there
+# is no secret for the CEL program to drop here. The `user` object carries only
+# an id and a name.
+rules:
+  # --- Empty collection. ---
+  - path: /empty/dbs
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"data":[]}
+  # --- Server-side failure. ---
+  - path: /error/dbs
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 500
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Internal Server Error"}}
+  # --- Malformed body: 200 status but not JSON. ---
+  - path: /malformed/dbs
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'text/html'
+        body: |-
+          <html><head><title>502 Bad Gateway</title></head><body>502 Bad Gateway</body></html>
+  # --- Happy path: the full database inventory. ---
+  - path: /dbs
+    methods: ['GET']
+    request_headers:
+      Authorization:
+        - 'Basic ZXhhbXBsZS1jbGllbnQtaWQ6ZXhhbXBsZS1hcGkta2V5'
+    responses:
+      - status_code: 200
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {{ minify_json `
+          {
+            "data": [
+              {
+                "id": "d1O2p3Q4r5S6t7U8",
+                "name": "blogapp_wp",
+                "appid": "p1T2u3V4w5X6y7Z8",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "user": {
+                  "id": "u1V2w3X4y5Z6a7B8",
+                  "name": "blogapp_wpuser"
+                }
+              },
+              {
+                "id": "d9V0w1X2y3Z4a5B6",
+                "name": "shopapp_store",
+                "appid": "p9A0b1C2d3E4f5G6",
+                "serverid": "a1B2c3D4e5F6g7H8",
+                "user": {
+                  "id": "u9C0d1E2f3G4h5I6",
+                  "name": "shopapp_storeuser"
+                }
+              },
+              {
+                "id": "d7C8d9E0f1G2h3I4",
+                "name": "legacyapp_data",
+                "appid": "p7H8i9J0k1L2m3N4",
+                "serverid": "i9J0k1L2m3N4o5P6",
+                "user": {
+                  "id": "u7J8k9L0m1N2o3P4",
+                  "name": "legacyapp_datauser"
+                }
+              }
+            ]
+          }
+          ` }}
+  # --- Catch-all for any /dbs request without valid Basic credentials.
+  #
+  # Must stay last: elastic/stream matches top-down, first match wins, and this
+  # rule places no constraint on the Authorization header.
+  - path: /dbs
+    methods: ['GET']
+    responses:
+      - status_code: 401
+        headers:
+          Content-Type:
+            - 'application/json'
+        body: |-
+          {"error":{"message":"Unauthorized"}}

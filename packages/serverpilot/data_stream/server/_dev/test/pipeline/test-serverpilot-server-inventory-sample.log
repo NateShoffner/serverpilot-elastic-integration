@@ -1,0 +1,3 @@
+{"autoupdates":true,"available_runtimes":["php7.4","php8.1","php8.2","php8.3"],"datecreated":1700000000,"deny_unknown_domains":true,"firewall":true,"id":"a1B2c3D4e5F6g7H8","lastaddress":"203.0.113.24","lastconn":1760000000,"name":"web-prod-01","plan":"business"}
+{"autoupdates":false,"available_runtimes":["php8.2","php8.3","php8.4"],"datecreated":1710000000,"deny_unknown_domains":false,"firewall":false,"id":"i9J0k1L2m3N4o5P6","lastaddress":null,"lastconn":1759900000,"name":"web-stage-02","plan":"economy"}
+{"autoupdates":true,"available_runtimes":["php8.3","php8.4","php8.5"],"datecreated":1690000000,"deny_unknown_domains":false,"firewall":true,"id":"q7R8s9T0u1V2w3X4","lastaddress":"198.51.100.57","lastconn":1759800000,"name":"db-prod-01","plan":"first_class"}

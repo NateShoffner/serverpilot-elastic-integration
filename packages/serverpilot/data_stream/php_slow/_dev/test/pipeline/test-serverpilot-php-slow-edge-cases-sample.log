@@ -1,0 +1,24 @@
+[05-Mar-2025 08:01:12]  [pool blogapp] pid 4101
+script_filename = /srv/users/serverpilot/apps/blogapp/public/report.php
+[0x00007f185ee134e0] example_slow_report() /srv/users/serverpilot/apps/blogapp/public/report.php:14
+[05-Mar-2025 08:04:37]  [pool blogapp] pid 4102
+script_filename = /srv/users/serverpilot/apps/blogapp/public/index.php
+[0x00007f185ee13b20] PDO->prepare() /srv/users/serverpilot/apps/blogapp/public/lib/db.php:61
+[0x00007f185ee13a40] Example\Repository::findAll() /srv/users/serverpilot/apps/blogapp/public/lib/repository.php:128
+[0x00007f185ee13960] {closure}() /srv/users/serverpilot/apps/blogapp/public/lib/collection.php:44
+[0x00007f185ee13880] include() /srv/users/serverpilot/apps/blogapp/public/index.php:9
+[05-Mar-2025 08:09:55]  [pool blogapp] pid 4103
+script_filename = /srv/users/serverpilot/apps/blogapp/public/cron.php
+[0x00007f185ee13c10] sleep() unknown:0
+[0x00007f185ee13bf0] example_wait_for_lock()
+[0x00007f185ee13bd0] example_run_cron() /srv/users/serverpilot/apps/blogapp/public/cron.php:21
+[05-Mar-2025 08:14:02]   [pool otherapp] pid 4104
+script_filename = /srv/users/serverpilot/apps/blogapp/public/index.php
+[0x00007f185ee13d40] file_get_contents() /srv/users/serverpilot/apps/blogapp/public/lib/feed.php:33
+[05-Mar-2025 08:19:48]  [pool blogapp] pid 4105
+script_filename = /srv/users/serverpilot/apps/blogapp/public/search.php
++++ dump failed
+[0x00007f185ee13e60] example_search() /srv/users/serverpilot/apps/blogapp/public/search.php:52
+[05-Mar-2025 08:24:16]  [pool blogapp] pid 4106
+script_filename = /srv/users/serverpilot/apps/blogapp/public/upload.php
+[05-Mar-2025 08:29:41]  [pool blogapp] pid 4107

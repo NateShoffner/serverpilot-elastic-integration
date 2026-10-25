@@ -1,0 +1,2 @@
+[04-Mar-2025 14:02:11 UTC] PHP Warning:  Undefined array key "example_key" in /srv/users/appowner/apps/shopapp/public/catalog/controller/example.php on line 57
+[04-Mar-2025 14:09:47 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in /srv/users/appowner/apps/shopapp/public/system/library/example.php on line 211

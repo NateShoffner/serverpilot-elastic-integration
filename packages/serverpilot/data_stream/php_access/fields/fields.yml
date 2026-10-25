@@ -1,0 +1,38 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the request was served for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the request was served for. Derived from the log file path.
+    - name: php.version
+      type: keyword
+      description: >-
+        PHP version of the PHP-FPM pool that served the request, for example `8.3`. ServerPilot runs one PHP-FPM pool per app and embeds the version in the log file name (`APPNAME_php8.3.access.log`); the log line itself carries no version, so the file name is the only signal. Use this field to find every app still being served by an end-of-life PHP release. Not set when the log file name does not embed a version.
+    - name: php.request_uri
+      type: keyword
+      description: >-
+        Request URI, including any query string, that PHP actually executed. ServerPilot calls this `PHP_REQUEST_URI` and documents it as the URI *after* Apache `RewriteRule` processing, so for a front-controller app it is typically the rewrite target (`/index.php`) rather than the URI the client asked for. The URI as originally requested is in ECS `url.original`, decomposed into `url.path` and `url.query`. Compare the two to see what a rewrite resolved to.
+    - name: php.memory.peak.bytes
+      type: long
+      unit: byte
+      description: >-
+        Peak memory **in bytes** that PHP allocated while executing the request. ServerPilot names this field `PEAK_MEMORY_MB` and its documentation states the value is measured in megabytes; **that is wrong and the value must not be rescaled**. PHP-FPM's access log directive `%M` emits bytes (`%{mega}M` is the variant that emits megabytes), and every observed value is an exact power of two in bytes: ServerPilot's own documented sample is `2097152`, which is 2 MiB expressed in bytes, not 2 TiB.
+    - name: php.cpu.user.percent
+      type: double
+      unit: percent
+      description: >-
+        Percentage of CPU time spent in user space while executing the request, **on a 0-100 scale**, not as a 0-1 fraction: PHP-FPM's `4.25%` is stored as `4.25`, with only the `%` stripped. The field is named `.percent` rather than `.pct` on purpose. In Beats and ECS a `.pct` name together with `unit: percent` is the signal for a 0-1 fraction, which is how `system.cpu.total.pct` and the other Elastic `.pct` fields behave, so a consumer reading the metadata of a `.pct` field holding `4.25` would scale it and render 425%. The figure is relative to a single core, so it can in principle exceed 100.
+    - name: php.cpu.system.percent
+      type: double
+      unit: percent
+      description: >-
+        Percentage of CPU time spent in kernel space while executing the request, **on a 0-100 scale**, not as a 0-1 fraction: PHP-FPM's `1.00%` is stored as `1.0`, with only the `%` stripped. The field is named `.percent` rather than `.pct` on purpose. In Beats and ECS a `.pct` name together with `unit: percent` is the signal for a 0-1 fraction, which is how `system.cpu.total.pct` and the other Elastic `.pct` fields behave, so a consumer reading the metadata of a `.pct` field holding `1.0` would scale it and render 100%. The figure is relative to a single core, so it can in principle exceed 100.
+    - name: php.unlabelled_field
+      type: keyword
+      description: >-
+        Value of the field ServerPilot's documented PHP-FPM access log format places between `CONTENT_LENGTH` and `MASTER_PID`. ServerPilot does not name or describe it and it is the absent-value sentinel `-` in every observed sample, so there is nothing to map it to. The slot is parsed as an optional value rather than as a literal dash so that a ServerPilot format change which starts populating it neither breaks the parse nor silently discards the value; this field is unset whenever the sentinel is logged.

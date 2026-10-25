@@ -1,0 +1,53 @@
+services:
+  serverpilot-server-mock:
+    image: docker.elastic.co/observability/stream:v0.22.0
+    hostname: serverpilot-server-mock
+    ports:
+      - 8090
+    volumes:
+      - ./files:/files:ro
+    environment:
+      PORT: '8090'
+    command:
+      - http-server
+      - --addr=:8090
+      - --config=/files/config-server.yml
+  serverpilot-sysuser-mock:
+    image: docker.elastic.co/observability/stream:v0.22.0
+    hostname: serverpilot-sysuser-mock
+    ports:
+      - 8090
+    volumes:
+      - ./files:/files:ro
+    environment:
+      PORT: '8090'
+    command:
+      - http-server
+      - --addr=:8090
+      - --config=/files/config-sysuser.yml
+  serverpilot-app-mock:
+    image: docker.elastic.co/observability/stream:v0.22.0
+    hostname: serverpilot-app-mock
+    ports:
+      - 8090
+    volumes:
+      - ./files:/files:ro
+    environment:
+      PORT: '8090'
+    command:
+      - http-server
+      - --addr=:8090
+      - --config=/files/config-app.yml
+  serverpilot-database-mock:
+    image: docker.elastic.co/observability/stream:v0.22.0
+    hostname: serverpilot-database-mock
+    ports:
+      - 8090
+    volumes:
+      - ./files:/files:ro
+    environment:
+      PORT: '8090'
+    command:
+      - http-server
+      - --addr=:8090
+      - --config=/files/config-database.yml

@@ -1,0 +1,15 @@
+- name: serverpilot
+  type: group
+  fields:
+    - name: sysuser.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot system user that owns the app the diagnostic was logged for. Derived from the log file path.
+    - name: app.name
+      type: keyword
+      description: >-
+        Name of the ServerPilot app the diagnostic was logged for. Derived from the log file path.
+    - name: php.version
+      type: keyword
+      description: >-
+        PHP version of the PHP-FPM pool that raised the diagnostic, for example `8.3`. ServerPilot runs one PHP-FPM pool per app and embeds the version in the log file name (`APPNAME_php8.3.error.log`); the log entry itself carries no version, so the file name is the only signal. Use this field to find every app whose errors are being raised by an end-of-life PHP release. Not set when the log file name does not embed a version.

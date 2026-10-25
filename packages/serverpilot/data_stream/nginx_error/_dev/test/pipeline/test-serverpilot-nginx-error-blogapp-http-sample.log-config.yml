@@ -1,0 +1,8 @@
+fields:
+  tags:
+    - preserve_original_event
+  log:
+    file:
+      path: /srv/users/serverpilot/log/blogapp/blogapp_nginx.error.log
+multiline:
+  first_line_pattern: '^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}'

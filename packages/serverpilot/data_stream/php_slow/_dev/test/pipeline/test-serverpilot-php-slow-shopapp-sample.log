@@ -1,0 +1,5 @@
+[04-Mar-2025 20:05:02]  [pool shopapp] pid 4188
+script_filename = /srv/users/appowner/apps/shopapp/public/index.php
+[0x00007f9a1c0134e0] PDO->query() /srv/users/appowner/apps/shopapp/public/system/library/db/pdo.php:52
+[0x00007f9a1c013400] getProductsByCategory() /srv/users/appowner/apps/shopapp/public/catalog/model/catalog/product.php:318
+[0x00007f9a1c013300] index() /srv/users/appowner/apps/shopapp/public/catalog/controller/product/category.php:77

@@ -1,0 +1,71 @@
+title: "Servers"
+type: logs
+streams:
+  - input: cel
+    title: "Servers"
+    description: "Collect server inventory from the ServerPilot API."
+    template_path: cel.yml.hbs
+    vars:
+      - name: interval
+        type: text
+        title: Interval
+        description: >-
+          How often the ServerPilot API is polled. Supports seconds, minutes and hours. `GET /servers` is a full-snapshot endpoint with no incremental mode, so every poll re-reports every server; a long interval is appropriate.
+        required: true
+        show_user: true
+        default: 1h
+      - name: http_client_timeout
+        type: text
+        title: HTTP client timeout
+        description: Duration before declaring that the HTTP client connection has timed out.
+        required: false
+        show_user: false
+      - name: proxy_url
+        type: text
+        title: Proxy URL
+        description: URL of the proxy to use, in the form `http[s]://<user>:<password>@<server name/ip>:<port>`.
+        required: false
+        show_user: false
+      - name: ssl
+        type: yaml
+        title: SSL configuration
+        description: >-
+          SSL configuration for the HTTP client, for example `certificate_authorities` or `verification_mode`. See [SSL configuration](https://www.elastic.co/guide/en/beats/filebeat/current/configuration-ssl.html#ssl-common-config) for details.
+        required: false
+        show_user: false
+      - name: enable_request_tracer
+        type: bool
+        title: Enable request tracing
+        description: >-
+          The request tracer logs HTTP requests and responses to the agent's local filesystem for debugging. Enabling it compromises security and should only be used for debugging.
+        required: false
+        show_user: false
+        default: false
+      - name: tags
+        type: text
+        title: Tags
+        description: Tags to include in the published event.
+        multi: true
+        required: false
+        show_user: false
+        default:
+          - forwarded
+          - serverpilot-server
+      - name: preserve_original_event
+        type: bool
+        title: Preserve original event
+        description: Preserves a raw copy of the original event, added to the field `event.original`.
+        required: true
+        show_user: true
+        default: false
+      - name: processors
+        type: yaml
+        title: Processors
+        description: >-
+          Processors are used to reduce the number of fields in the exported event or to enhance the event with metadata. This executes in the agent before the logs are parsed. See [Processors](https://www.elastic.co/guide/en/beats/filebeat/current/filtering-and-enhancing-data.html) for details.
+        required: false
+        show_user: false
+elasticsearch:
+  index_template:
+    mappings:
+      subobjects: false

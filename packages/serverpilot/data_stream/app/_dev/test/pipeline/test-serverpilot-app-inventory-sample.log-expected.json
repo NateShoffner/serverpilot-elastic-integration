@@ -1,0 +1,144 @@
+{
+    "expected": [
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "configuration"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1700000500,\"domains\":[\"blogapp.example.com\",\"www.blogapp.example.com\"],\"id\":\"p1T2u3V4w5X6y7Z8\",\"name\":\"blogapp\",\"runtime\":\"php8.3\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"ssl\":{\"auto\":true,\"force\":true},\"sysuserid\":\"s1Y2z3A4b5C6d7E8\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "created": "2023-11-14T22:21:40.000Z",
+                    "domains": [
+                        "blogapp.example.com",
+                        "www.blogapp.example.com"
+                    ],
+                    "id": "p1T2u3V4w5X6y7Z8",
+                    "name": "blogapp",
+                    "runtime": {
+                        "name": "php8.3",
+                        "version": "8.3"
+                    },
+                    "ssl": {
+                        "auto": true,
+                        "enabled": true,
+                        "force": true
+                    }
+                },
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                },
+                "sysuser": {
+                    "id": "s1Y2z3A4b5C6d7E8"
+                }
+            },
+            "service": {
+                "name": "blogapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "configuration"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1710000500,\"domains\":[\"shop.example.com\"],\"id\":\"p9A0b1C2d3E4f5G6\",\"name\":\"shopapp\",\"runtime\":\"php8.4\",\"serverid\":\"a1B2c3D4e5F6g7H8\",\"ssl\":{\"auto\":true,\"force\":false},\"sysuserid\":\"s9F0g1H2i3J4k5L6\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "created": "2024-03-09T16:08:20.000Z",
+                    "domains": [
+                        "shop.example.com"
+                    ],
+                    "id": "p9A0b1C2d3E4f5G6",
+                    "name": "shopapp",
+                    "runtime": {
+                        "name": "php8.4",
+                        "version": "8.4"
+                    },
+                    "ssl": {
+                        "auto": true,
+                        "enabled": true,
+                        "force": false
+                    }
+                },
+                "server": {
+                    "id": "a1B2c3D4e5F6g7H8"
+                },
+                "sysuser": {
+                    "id": "s9F0g1H2i3J4k5L6"
+                }
+            },
+            "service": {
+                "name": "shopapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        },
+        {
+            "@timestamp": "2026-10-12T00:00:00.000Z",
+            "ecs": {
+                "version": "9.3.0"
+            },
+            "event": {
+                "category": [
+                    "configuration"
+                ],
+                "kind": "asset",
+                "original": "{\"datecreated\":1680000500,\"domains\":[\"legacy.example.net\"],\"id\":\"p7H8i9J0k1L2m3N4\",\"name\":\"legacyapp\",\"runtime\":\"php7.4\",\"serverid\":\"i9J0k1L2m3N4o5P6\",\"ssl\":null,\"sysuserid\":\"s7M8n9O0p1Q2r3S4\"}",
+                "type": [
+                    "info"
+                ]
+            },
+            "serverpilot": {
+                "app": {
+                    "created": "2023-03-28T10:48:20.000Z",
+                    "domains": [
+                        "legacy.example.net"
+                    ],
+                    "id": "p7H8i9J0k1L2m3N4",
+                    "name": "legacyapp",
+                    "runtime": {
+                        "name": "php7.4",
+                        "version": "7.4"
+                    },
+                    "ssl": {
+                        "enabled": false
+                    }
+                },
+                "server": {
+                    "id": "i9J0k1L2m3N4o5P6"
+                },
+                "sysuser": {
+                    "id": "s7M8n9O0p1Q2r3S4"
+                }
+            },
+            "service": {
+                "name": "legacyapp"
+            },
+            "tags": [
+                "preserve_original_event"
+            ]
+        }
+    ]
+}

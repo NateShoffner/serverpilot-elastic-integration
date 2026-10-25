@@ -1,0 +1,32 @@
+paths:
+{{#each paths as |path i|}}
+  - {{path}}
+{{/each}}
+{{#if exclude_files}}
+prospector.scanner.exclude_files:
+{{#each exclude_files as |pattern i|}}
+  - {{pattern}}
+{{/each}}
+{{/if}}
+parsers:
+  - multiline:
+      type: pattern
+      pattern: '^\[\d{2}-[A-Za-z]{3}-\d{4} \d{2}:\d{2}:\d{2}'
+      negate: true
+      match: after
+      max_lines: 1000
+      timeout: 5s
+tags:
+{{#if preserve_original_event}}
+  - preserve_original_event
+{{/if}}
+{{#each tags as |tag i|}}
+  - {{tag}}
+{{/each}}
+{{#contains "forwarded" tags}}
+publisher_pipeline.disable_host: true
+{{/contains}}
+{{#if processors}}
+processors:
+{{processors}}
+{{/if}}

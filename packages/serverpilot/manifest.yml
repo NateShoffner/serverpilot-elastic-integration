@@ -1,7 +1,7 @@
 format_version: "3.4.2"
 name: serverpilot
 title: ServerPilot
-version: 0.1.0
+version: 0.2.0
 source:
   license: "Elastic-2.0"
 description: Collect and parse per-app Nginx, Apache, and PHP-FPM logs from ServerPilot-managed servers, plus server, app, database, and system user inventory from the ServerPilot API.
@@ -24,10 +24,10 @@ screenshots:
     size: 1800x1298
     type: image/png
 icons:
-  - src: /img/serverpilot-logo.png
+  - src: /img/serverpilot-logo.svg
     title: ServerPilot logo
-    size: 180x180
-    type: image/png
+    size: 32x32
+    type: image/svg+xml
 policy_templates:
   - name: app_logs
     title: ServerPilot App Logs

@@ -1,4 +1,6 @@
 fields:
+  host:
+    name: web-01
   tags:
     - preserve_original_event
   log:

@@ -38,6 +38,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "bytes": 340,
@@ -63,7 +66,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "nginx": {
                     "upstream": {
@@ -139,6 +143,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "bytes": 412,
@@ -165,7 +172,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "sysuser": {
                     "name": "serverpilot"
@@ -238,6 +246,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "bytes": 389,
@@ -271,7 +282,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "nginx": {
                     "upstream": {
@@ -350,6 +362,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "bytes": 298,
@@ -372,7 +387,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "nginx": {
                     "upstream": {

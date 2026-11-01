@@ -1,6 +1,20 @@
 # newer versions go on top
+- version: "0.2.0"
+  changes:
+    - description: Add a Host control to the log dashboards and split per-app charts by host, so apps with the same name on different servers, such as `0default`, are no longer merged.
+      type: enhancement
+      link: https://github.com/NateShoffner/serverpilot-elastic-integration/pull/1
+    - description: Add `serverpilot.app.qualified_name` (`HOST/APP`) to the log data streams, use it for the dashboards' app counts, and split Requests by system user by host.
+      type: enhancement
+      link: https://github.com/NateShoffner/serverpilot-elastic-integration/pull/1
+    - description: Fix the navigation bar linking the dashboards, which rendered blank, and simplify the dashboard descriptions.
+      type: bugfix
+      link: https://github.com/NateShoffner/serverpilot-elastic-integration/pull/1
+    - description: Replace the PNG icon with the official ServerPilot mark as SVG.
+      type: enhancement
+      link: https://github.com/NateShoffner/serverpilot-elastic-integration/pull/1
 - version: "0.1.0"
   changes:
     - description: Initial release with six per-app log data streams, four API inventory data streams and four dashboards.
       type: enhancement
-      link: https://github.com/NateShoffner/serverpilot-elastic-integration/issues/1
+      link: https://github.com/NateShoffner/serverpilot-elastic-integration/pull/1

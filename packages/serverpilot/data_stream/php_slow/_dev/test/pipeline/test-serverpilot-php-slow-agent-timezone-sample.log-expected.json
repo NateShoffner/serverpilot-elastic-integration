@@ -16,6 +16,9 @@
                     "info"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "log": {
                 "file": {
                     "path": "/srv/users/serverpilot/log/blogapp/blogapp_php8.3.slow.log"
@@ -33,7 +36,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "php": {
                     "slow": {

@@ -38,6 +38,9 @@
                     "error"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "POST"
@@ -67,7 +70,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "nginx": {
                     "connection": {
@@ -132,6 +136,9 @@
                     "error"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "GET"
@@ -161,7 +168,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "nginx": {
                     "connection": {

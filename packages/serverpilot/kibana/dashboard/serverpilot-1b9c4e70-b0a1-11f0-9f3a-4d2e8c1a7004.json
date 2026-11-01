@@ -58,7 +58,7 @@
                 }
             }
         },
-        "description": "Servers, apps, databases and system users from the ServerPilot API, with their security posture flags.",
+        "description": "Servers, apps, databases and system users from the ServerPilot API, with their security settings.",
         "kibanaSavedObjectMeta": {
             "searchSourceJSON": {
                 "filter": [
@@ -1608,6 +1608,26 @@
             "id": "logs-*",
             "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
             "type": "index-pattern"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7001",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7003",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+            "type": "dashboard"
         }
     ],
     "type": "dashboard",

@@ -38,6 +38,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "GET"
@@ -67,7 +70,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "php": {
                     "cpu": {
@@ -142,6 +146,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "GET"
@@ -171,7 +178,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "php": {
                     "cpu": {
@@ -246,6 +254,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "POST"
@@ -275,7 +286,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "php": {
                     "cpu": {
@@ -350,6 +362,9 @@
                     "access"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "http": {
                 "request": {
                     "method": "GET"
@@ -379,7 +394,8 @@
             },
             "serverpilot": {
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "php": {
                     "cpu": {

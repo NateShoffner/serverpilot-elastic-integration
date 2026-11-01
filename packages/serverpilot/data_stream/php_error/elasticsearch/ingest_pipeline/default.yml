@@ -205,6 +205,17 @@ processors:
       if: ctx.serverpilot?.app?.name != null
       description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
 
+  # App names are only unique per server, and every ServerPilot server has a
+  # `0default` app, so `serverpilot.app.name` alone cannot count or tell apart
+  # apps across several hosts. The host-qualified name can. It is left unset
+  # when either part is unknown.
+  - set:
+      field: serverpilot.app.qualified_name
+      tag: set_app_qualified_name
+      value: '{{{host.name}}}/{{{serverpilot.app.name}}}'
+      if: ctx.serverpilot?.app?.name != null && ctx.host?.name instanceof String && ctx.host.name != ''
+      description: Sets `serverpilot.app.qualified_name` to `HOST/APP`, which identifies an app across several ServerPilot servers.
+
   # PHP's timezone identifiers and the JDK's are almost the same set, because
   # both come from the IANA database, but the JDK's compiler drops the handful of
   # fixed-offset legacy zones whose names collide with timezone *abbreviations*,

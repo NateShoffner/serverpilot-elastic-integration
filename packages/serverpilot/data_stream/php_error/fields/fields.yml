@@ -9,6 +9,10 @@
       type: keyword
       description: >-
         Name of the ServerPilot app the diagnostic was logged for. Derived from the log file path.
+    - name: app.qualified_name
+      type: keyword
+      description: >-
+        Host-qualified app name, `HOST/APP`, built from `host.name` and `serverpilot.app.name`, for example `web-01/0default`. App names are only unique per server and every ServerPilot server has a `0default` app, so use this field to count or group apps across several hosts. Unset when either part is unknown.
     - name: php.version
       type: keyword
       description: >-

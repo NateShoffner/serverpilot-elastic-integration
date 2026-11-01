@@ -22,7 +22,7 @@
                         "width": "medium"
                     },
                     "grow": true,
-                    "order": 0,
+                    "order": 1,
                     "type": "optionsListControl",
                     "width": "medium"
                 },
@@ -37,7 +37,7 @@
                         "width": "small"
                     },
                     "grow": true,
-                    "order": 1,
+                    "order": 2,
                     "type": "optionsListControl",
                     "width": "small"
                 },
@@ -52,13 +52,28 @@
                         "width": "small"
                     },
                     "grow": true,
-                    "order": 2,
+                    "order": 3,
                     "type": "optionsListControl",
                     "width": "small"
+                },
+                "ctl-0302-4a1b-9c2d-000000000302": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "host.name",
+                        "grow": true,
+                        "id": "ctl-0302-4a1b-9c2d-000000000302",
+                        "searchTechnique": "prefix",
+                        "title": "Host",
+                        "width": "medium"
+                    },
+                    "grow": true,
+                    "order": 0,
+                    "type": "optionsListControl",
+                    "width": "medium"
                 }
             }
         },
-        "description": "PHP errors, slow requests, and per-request memory and CPU usage across apps.",
+        "description": "PHP errors, slow requests, and memory and CPU use per app.",
         "kibanaSavedObjectMeta": {
             "searchSourceJSON": {
                 "filter": [
@@ -724,7 +739,7 @@
                                                     "customLabel": true,
                                                     "dataType": "string",
                                                     "isBucketed": true,
-                                                    "label": "App",
+                                                    "label": "App on host",
                                                     "operationType": "terms",
                                                     "params": {
                                                         "exclude": [],
@@ -739,8 +754,11 @@
                                                         "orderDirection": "desc",
                                                         "otherBucket": false,
                                                         "parentFormat": {
-                                                            "id": "terms"
+                                                            "id": "multi_terms"
                                                         },
+                                                        "secondaryFields": [
+                                                            "host.name"
+                                                        ],
                                                         "size": 10
                                                     },
                                                     "scale": "ordinal",
@@ -918,7 +936,7 @@
                                                         "emptyAsNull": true
                                                     },
                                                     "scale": "ratio",
-                                                    "sourceField": "serverpilot.app.name"
+                                                    "sourceField": "serverpilot.app.qualified_name"
                                                 }
                                             },
                                             "incompleteColumns": {},
@@ -2133,6 +2151,31 @@
             "id": "logs-*",
             "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
             "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0302-4a1b-9c2d-000000000302:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7001",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7003",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+            "type": "dashboard"
         }
     ],
     "type": "dashboard",

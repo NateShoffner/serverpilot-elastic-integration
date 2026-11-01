@@ -22,7 +22,7 @@
                         "width": "medium"
                     },
                     "grow": true,
-                    "order": 0,
+                    "order": 1,
                     "type": "optionsListControl",
                     "width": "medium"
                 },
@@ -37,7 +37,7 @@
                         "width": "small"
                     },
                     "grow": true,
-                    "order": 1,
+                    "order": 2,
                     "type": "optionsListControl",
                     "width": "small"
                 },
@@ -52,13 +52,28 @@
                         "width": "medium"
                     },
                     "grow": true,
-                    "order": 2,
+                    "order": 3,
+                    "type": "optionsListControl",
+                    "width": "medium"
+                },
+                "ctl-0303-4a1b-9c2d-000000000303": {
+                    "explicitInput": {
+                        "enhancements": {},
+                        "fieldName": "host.name",
+                        "grow": true,
+                        "id": "ctl-0303-4a1b-9c2d-000000000303",
+                        "searchTechnique": "prefix",
+                        "title": "Host",
+                        "width": "medium"
+                    },
+                    "grow": true,
+                    "order": 0,
                     "type": "optionsListControl",
                     "width": "medium"
                 }
             }
         },
-        "description": "Nginx and Apache error log entries by severity, app, path and client.",
+        "description": "Nginx and Apache errors by app, severity and path.",
         "kibanaSavedObjectMeta": {
             "searchSourceJSON": {
                 "filter": [
@@ -388,7 +403,7 @@
                                                         "emptyAsNull": true
                                                     },
                                                     "scale": "ratio",
-                                                    "sourceField": "serverpilot.app.name"
+                                                    "sourceField": "serverpilot.app.qualified_name"
                                                 }
                                             },
                                             "incompleteColumns": {},
@@ -777,6 +792,7 @@
                                         "l-0159-4a1b-9c2d-000000000159": {
                                             "columnOrder": [
                                                 "c-0160-4a1b-9c2d-000000000160",
+                                                "c-0304-4a1b-9c2d-000000000304",
                                                 "c-0161-4a1b-9c2d-000000000161",
                                                 "c-0162-4a1b-9c2d-000000000162",
                                                 "c-0163-4a1b-9c2d-000000000163",
@@ -860,6 +876,32 @@
                                                     },
                                                     "scale": "ratio",
                                                     "sourceField": "url.path"
+                                                },
+                                                "c-0304-4a1b-9c2d-000000000304": {
+                                                    "customLabel": true,
+                                                    "dataType": "string",
+                                                    "isBucketed": true,
+                                                    "label": "Host",
+                                                    "operationType": "terms",
+                                                    "params": {
+                                                        "exclude": [],
+                                                        "excludeIsRegex": false,
+                                                        "include": [],
+                                                        "includeIsRegex": false,
+                                                        "missingBucket": false,
+                                                        "orderBy": {
+                                                            "columnId": "c-0161-4a1b-9c2d-000000000161",
+                                                            "type": "column"
+                                                        },
+                                                        "orderDirection": "desc",
+                                                        "otherBucket": false,
+                                                        "parentFormat": {
+                                                            "id": "terms"
+                                                        },
+                                                        "size": 10
+                                                    },
+                                                    "scale": "ordinal",
+                                                    "sourceField": "host.name"
                                                 }
                                             },
                                             "incompleteColumns": {},
@@ -878,6 +920,11 @@
                                 "columns": [
                                     {
                                         "columnId": "c-0160-4a1b-9c2d-000000000160",
+                                        "isMetric": false,
+                                        "isTransposed": false
+                                    },
+                                    {
+                                        "columnId": "c-0304-4a1b-9c2d-000000000304",
                                         "isMetric": false,
                                         "isTransposed": false
                                     },
@@ -1015,7 +1062,7 @@
                                                         "emptyAsNull": true
                                                     },
                                                     "scale": "ratio",
-                                                    "sourceField": "serverpilot.app.name"
+                                                    "sourceField": "serverpilot.app.qualified_name"
                                                 }
                                             },
                                             "incompleteColumns": {},
@@ -1564,6 +1611,31 @@
             "id": "logs-*",
             "name": "kibanaSavedObjectMeta.searchSourceJSON.filter[0].meta.index",
             "type": "index-pattern"
+        },
+        {
+            "id": "logs-*",
+            "name": "controlGroup_ctl-0303-4a1b-9c2d-000000000303:optionsListDataView",
+            "type": "index-pattern"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7001",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0001-4a1b-9c2d-000000000110_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7002",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0002-4a1b-9c2d-000000000111_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7003",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0003-4a1b-9c2d-000000000112_dashboard",
+            "type": "dashboard"
+        },
+        {
+            "id": "serverpilot-1b9c4e70-b0a1-11f0-9f3a-4d2e8c1a7004",
+            "name": "nav-0100-4a1b-9c2d-000000000100:link_lnk-0004-4a1b-9c2d-000000000113_dashboard",
+            "type": "dashboard"
         }
     ],
     "type": "dashboard",

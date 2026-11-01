@@ -103,6 +103,17 @@ processors:
       if: ctx.serverpilot?.app?.name != null
       description: Sets `service.name` to the ServerPilot app name so log events share a join key with the other data streams in this package.
 
+  # App names are only unique per server, and every ServerPilot server has a
+  # `0default` app, so `serverpilot.app.name` alone cannot count or tell apart
+  # apps across several hosts. The host-qualified name can. It is left unset
+  # when either part is unknown.
+  - set:
+      field: serverpilot.app.qualified_name
+      tag: set_app_qualified_name
+      value: '{{{host.name}}}/{{{serverpilot.app.name}}}'
+      if: ctx.serverpilot?.app?.name != null && ctx.host?.name instanceof String && ctx.host.name != ''
+      description: Sets `serverpilot.app.qualified_name` to `HOST/APP`, which identifies an app across several ServerPilot servers.
+
   # The log line carries no scheme, so it is derived from the log file name. Two
   # ServerPilot vhost layouts are in the field and both are handled:
   #

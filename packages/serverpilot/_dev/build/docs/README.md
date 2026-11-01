@@ -178,14 +178,16 @@ There is one exception worth understanding. The **Enable request tracing** optio
 
 ### Dashboards
 
-Four dashboards ship with the integration. Each is scoped by a `data_stream.dataset` filter pill shown in the filter bar, so it reads only the data streams it covers, and each carries Options list controls for narrowing to a single app, system user or severity. A navigation bar at the top of every dashboard links to the other three, carrying the current time range and filters across, so you can follow one app from its traffic to its PHP errors without re-selecting it.
+Four dashboards ship with the integration. Each one shows only its own data streams, and a navigation bar at the top links to the other three, keeping your time range and filters.
 
-| Dashboard | Data streams | What it answers |
+The log dashboards have controls for host, app and other fields. Pick a host first and the app list shows only that host's apps. App names are only unique per server (every server has a `0default` app), so the per-app charts split each app by host and app counts treat the same name on two hosts as two apps. They count `serverpilot.app.qualified_name` (`HOST/APP`), which is only set on data ingested by version 0.2.0 or later.
+
+| Dashboard | Data streams | Shows |
 |---|---|---|
-| **App traffic overview** | `nginx_access` | How much traffic each app is serving, what share of it is failing, which paths and clients dominate, and how request time is trending. |
-| **PHP health** | `php_access`, `php_error`, `php_slow` | Which files are producing errors, which scripts are running slowly and where they stall, and how much memory and CPU each request costs. |
-| **Web server errors** | `nginx_error`, `apache_error` | What the web servers are complaining about, at what severity, for which app, path and client. |
-| **Inventory and posture** | `server`, `app`, `database`, `sysuser` | What exists in the account, which apps run an end-of-life PHP release, and which servers have the firewall, unattended updates or forced HTTPS turned off. |
+| **App traffic overview** | `nginx_access` | Traffic, errors and response times per app, plus top paths and clients. |
+| **PHP health** | `php_access`, `php_error`, `php_slow` | PHP errors, slow requests and where they stall, and memory and CPU use per request. |
+| **Web server errors** | `nginx_error`, `apache_error` | Nginx and Apache errors by app, severity, path and client. |
+| **Inventory and posture** | `server`, `app`, `database`, `sysuser` | What's in the account, which apps run an end-of-life PHP version, and which servers have the firewall, automatic updates or forced HTTPS turned off. |
 
 ### Map
 

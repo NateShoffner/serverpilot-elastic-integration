@@ -38,6 +38,9 @@
                     "error"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "log": {
                 "file": {
                     "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
@@ -61,7 +64,8 @@
                     "module": "core"
                 },
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "sysuser": {
                     "name": "serverpilot"
@@ -94,6 +98,9 @@
                     "info"
                 ]
             },
+            "host": {
+                "name": "web-01"
+            },
             "log": {
                 "file": {
                     "path": "/srv/users/serverpilot/log/blogapp/blogapp_apache.error.log"
@@ -115,7 +122,8 @@
                     "module": "mpm_event"
                 },
                 "app": {
-                    "name": "blogapp"
+                    "name": "blogapp",
+                    "qualified_name": "web-01/blogapp"
                 },
                 "sysuser": {
                     "name": "serverpilot"
